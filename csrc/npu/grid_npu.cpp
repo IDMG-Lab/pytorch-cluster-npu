@@ -30,11 +30,11 @@ torch::Tensor grid_npu(torch::Tensor pos,
 
   // Use pos min/max as default bounds when not provided
   at::Tensor start = optional_start.has_value()
-                         ? optional_start.value()
-                         : pos.min(0).values;
+                         ? optional_start.value().contiguous()
+                         : std::get<0>(pos.min(0));
   at::Tensor end = optional_end.has_value()
-                       ? optional_end.value()
-                       : pos.max(0).values;
+                       ? optional_end.value().contiguous()
+                       : std::get<0>(pos.max(0));
 
   EXEC_NPU_CMD(aclnnVoxelGrid, pos, size, start, end, out);
 

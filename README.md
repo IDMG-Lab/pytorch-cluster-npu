@@ -1,301 +1,150 @@
-[pypi-image]: https://badge.fury.io/py/torch-cluster.svg
-[pypi-url]: https://pypi.python.org/pypi/torch-cluster
-[testing-image]: https://github.com/rusty1s/pytorch_cluster/actions/workflows/testing.yml/badge.svg
-[testing-url]: https://github.com/rusty1s/pytorch_cluster/actions/workflows/testing.yml
-[linting-image]: https://github.com/rusty1s/pytorch_cluster/actions/workflows/linting.yml/badge.svg
-[linting-url]: https://github.com/rusty1s/pytorch_cluster/actions/workflows/linting.yml
-[coverage-image]: https://codecov.io/gh/rusty1s/pytorch_cluster/branch/master/graph/badge.svg
-[coverage-url]: https://codecov.io/github/rusty1s/pytorch_cluster?branch=master
+# pytorch-cluster-npu
 
-# PyTorch Cluster
+**pytorch-cluster-npu** 是 [pytorch_cluster](https://github.com/rusty1s/pytorch_cluster) 的昇腾 NPU 适配版本，实现了 PyTorch C++ Extension 中间层，使图聚类算子能够在华为昇腾 NPU 上运行。
 
-[![PyPI Version][pypi-image]][pypi-url]
-[![Testing Status][testing-image]][testing-url]
-[![Linting Status][linting-image]][linting-url]
-[![Code Coverage][coverage-image]][coverage-url]
+---
 
---------------------------------------------------------------------------------
-
-This package consists of a small extension library of highly optimized graph cluster algorithms for the use in [PyTorch](http://pytorch.org/).
-The package consists of the following clustering algorithms:
-
-* **[Graclus](#graclus)** from Dhillon *et al.*: [Weighted Graph Cuts without Eigenvectors: A Multilevel Approach](http://www.cs.utexas.edu/users/inderjit/public_papers/multilevel_pami.pdf) (PAMI 2007)
-* **[Voxel Grid Pooling](#voxelgrid)** from, *e.g.*, Simonovsky and Komodakis: [Dynamic Edge-Conditioned Filters in Convolutional Neural Networks on Graphs](https://arxiv.org/abs/1704.02901) (CVPR 2017)
-* **[Iterative Farthest Point Sampling](#farthestpointsampling)** from, *e.g.* Qi *et al.*: [PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space](https://arxiv.org/abs/1706.02413) (NIPS 2017)
-* **[k-NN](#knn-graph)** and **[Radius](#radius-graph)** graph generation
-* Clustering based on **[Nearest](#nearest)** points
-* **[Random Walk Sampling](#randomwalk-sampling)** from, *e.g.*, Grover and Leskovec: [node2vec: Scalable Feature Learning for Networks](https://arxiv.org/abs/1607.00653) (KDD 2016)
-
-All included operations work on varying data types and are implemented both for CPU and GPU.
-
-## Installation
-
-### Binaries
-
-We provide pip wheels for all major OS/PyTorch/CUDA combinations, see [here](https://data.pyg.org/whl).
-
-#### PyTorch 2.11
-
-To install the binaries for PyTorch 2.11, simply run
+## 项目结构
 
 ```
-pip install torch-cluster -f https://data.pyg.org/whl/torch-2.11.0+${CUDA}.html
+pytorch-cluster-npu/
+├── csrc/
+│   ├── fps.cpp            # FPS算子分发（CPU/CUDA/NPU三路分发）
+│   ├── graclus.cpp        # Graclus算子分发
+│   ├── grid.cpp           # VoxelGrid算子分发
+│   ├── knn.cpp            # KNN算子分发
+│   ├── nearest.cpp        # Nearest算子分发
+│   ├── radius.cpp         # Radius算子分发
+│   ├── rw.cpp             # RandomWalk算子分发
+│   ├── sampler.cpp        # NeighborSampler算子分发
+│   ├── cpu/               # 原始CPU实现（来自pytorch_cluster）
+│   ├── cuda/              # 原始CUDA实现（来自pytorch_cluster）
+│   └── npu/               # NPU适配层（本项目新增）
+│       ├── include/
+│       │   └── pytorch_npu_helper.hpp   # EXEC_NPU_CMD宏及类型转换工具
+│       ├── fps_npu.h / fps_npu.cpp      # FPS NPU中间层
+│       ├── graclus_npu.h / graclus_npu.cpp
+│       ├── grid_npu.h / grid_npu.cpp
+│       ├── knn_npu.h / knn_npu.cpp
+│       ├── nearest_npu.h / nearest_npu.cpp
+│       ├── radius_npu.h / radius_npu.cpp
+│       ├── rw_npu.h / rw_npu.cpp
+│       ├── sampler_npu.h / sampler_npu.cpp
+│       └── impl/                        # 算子原型定义（JSON）
+│           ├── fps_npu.json
+│           ├── graclus_npu.json
+│           ├── grid_npu.json
+│           ├── knn_npu.json
+│           ├── nearest_npu.json
+│           ├── radius_npu.json
+│           ├── rw_npu.json
+│           └── sampler_npu.json
+├── torch_cluster/         # Python包（复用原始接口）
+├── CMakeLists.txt
+├── setup.py
+└── README.md
 ```
 
-where `${CUDA}` should be replaced by either `cpu`, `cu126`, `cu128`, or `cu130` depending on your PyTorch installation.
+---
 
-|             | `cpu` | `cu126` | `cu128` | `cu130` |
-|-------------|-------|---------|---------|---------|
-| **Linux**   | ✅    | ✅      | ✅      | ✅      |
-| **Windows** | ✅    | ✅      | ✅      | ✅      |
-| **macOS**   | ✅    |         |         |         |
+## 算子映射
 
-#### PyTorch 2.10
+| pytorch_cluster 算子 | NPU CANN 算子名 | JSON 定义文件 |
+|---|---|---|
+| `fps` (Farthest Point Sampling) | `aclnnFarthestPointSampling` | `impl/fps_npu.json` |
+| `graclus` (Graclus Clustering) | `aclnnGraclus` | `impl/graclus_npu.json` |
+| `grid` (VoxelGrid Clustering) | `aclnnVoxelGrid` | `impl/grid_npu.json` |
+| `knn` (K-Nearest Neighbors) | `aclnnKNNSearch` | `impl/knn_npu.json` |
+| `nearest` (Nearest Neighbor Assignment) | `aclnnNearestNeighbor` | `impl/nearest_npu.json` |
+| `radius` (Radius Search) | `aclnnRadiusSearch` | `impl/radius_npu.json` |
+| `random_walk` (Node2Vec Random Walk) | `aclnnRandomWalk` | `impl/rw_npu.json` |
+| `neighbor_sampler` (Neighbor Sampler) | `aclnnNeighborSampler` | `impl/sampler_npu.json` |
 
-To install the binaries for PyTorch 2.10, simply run
+---
 
-```
-pip install torch-cluster -f https://data.pyg.org/whl/torch-2.10.0+${CUDA}.html
-```
+## 架构说明
 
-where `${CUDA}` should be replaced by either `cpu`, `cu126`, `cu128`, or `cu130` depending on your PyTorch installation.
+### 中间层适配设计
 
-|             | `cpu` | `cu126` | `cu128` | `cu130` |
-|-------------|-------|---------|---------|---------|
-| **Linux**   | ✅    | ✅      | ✅      | ✅      |
-| **Windows** | ✅    | ✅      | ✅      | ✅      |
-| **macOS**   | ✅    |         |         |         |
-
-#### PyTorch 2.9
-
-To install the binaries for PyTorch 2.9, simply run
+本项目仅实现 **PyTorch C++ Extension 中间层**，不包含具体的算子内核实现。架构如下：
 
 ```
-pip install torch-cluster -f https://data.pyg.org/whl/torch-2.9.0+${CUDA}.html
+Python 调用层
+    ↓
+csrc/*.cpp  (设备分发：CPU / CUDA / NPU)
+    ↓  [WITH_NPU]
+csrc/npu/*_npu.cpp  (NPU中间层)
+    ↓  EXEC_NPU_CMD 宏
+aclnn算子 API  (CANN运行时，由具体算子工程提供)
+    ↓
+昇腾 NPU 硬件
 ```
 
-where `${CUDA}` should be replaced by either `cpu`, `cu126`, `cu128`, or `cu130` depending on your PyTorch installation.
+### EXEC_NPU_CMD 宏
 
-|             | `cpu` | `cu126` | `cu128` | `cu130` |
-|-------------|-------|---------|---------|---------|
-| **Linux**   | ✅    | ✅      | ✅      | ✅      |
-| **Windows** | ✅    | ✅      | ✅      | ✅      |
-| **macOS**   | ✅    |         |         |         |
+`pytorch_npu_helper.hpp` 中定义的 `EXEC_NPU_CMD` 宏封装了调用 CANN aclnn 算子的完整流程：
 
-**Note:** Binaries of older versions are also provided for PyTorch 1.4.0, PyTorch 1.5.0, PyTorch 1.6.0, PyTorch 1.7.0/1.7.1, PyTorch 1.8.0/1.8.1, PyTorch 1.9.0, PyTorch 1.10.0/1.10.1/1.10.2, PyTorch 1.11.0, PyTorch 1.12.0/1.12.1, PyTorch 1.13.0/1.13.1, PyTorch 2.0.0/2.0.1, PyTorch 2.1.0/2.1.1/2.1.2, PyTorch 2.2.0/2.2.1/2.2.2, PyTorch 2.3.0/2.3.1, PyTorch 2.4.0/2.4.1, PyTorch 2.5.0/2.5.1, PyTorch 2.6.0, PyTorch 2.7.0/2.7.1, and PyTorch 2.8.0 (following the same procedure).
-For older versions, you need to explicitly specify the latest supported version number or install via `pip install --no-index` in order to prevent a manual installation from source.
-You can look up the latest supported version number [here](https://data.pyg.org/whl).
+1. 动态查找算子函数地址（dlsym，结果缓存）
+2. 调用 `GetWorkspaceSize` 确定工作空间大小
+3. 在 NPU 上分配工作空间
+4. 将 ATen 张量转换为 ACL 类型
+5. 在当前 NPU stream 上异步执行算子
+6. 销毁临时 ACL 对象
 
-### From source
-
-Ensure that at least PyTorch 1.4.0 is installed and verify that `cuda/bin` and `cuda/include` are in your `$PATH` and `$CPATH` respectively, *e.g.*:
-
-```
-$ python -c "import torch; print(torch.__version__)"
->>> 1.4.0
-
-$ python -c "import torch; print(torch.__version__)"
->>> 1.1.0
-
-$ echo $PATH
->>> /usr/local/cuda/bin:...
-
-$ echo $CPATH
->>> /usr/local/cuda/include:...
+```cpp
+// 示例：调用 FPS NPU 算子
+EXEC_NPU_CMD(aclnnFarthestPointSampling, src, ptr, ratio, random_start, out);
 ```
 
-Then run:
+### 算子工程 JSON 定义
 
-```
-pip install torch-cluster
-```
+`csrc/npu/impl/` 目录下每个 `.json` 文件对应一个算子的原型定义，用于通过 `msOpGen` 工具生成算子开发工程：
 
-When running in a docker container without NVIDIA driver, PyTorch needs to evaluate the compute capabilities and may fail.
-In this case, ensure that the compute capabilities are set via `TORCH_CUDA_ARCH_LIST`, *e.g.*:
-
-```
-export TORCH_CUDA_ARCH_LIST = "6.0 6.1 7.2+PTX 7.5+PTX"
-```
-
-## Functions
-
-### Graclus
-
-A greedy clustering algorithm of picking an unmarked vertex and matching it with one its unmarked neighbors (that maximizes its edge weight).
-The GPU algorithm is adapted from Fagginger Auer and Bisseling: [A GPU Algorithm for Greedy Graph Matching](http://www.staff.science.uu.nl/~bisse101/Articles/match12.pdf) (LNCS 2012)
-
-```python
-import torch
-from torch_cluster import graclus_cluster
-
-row = torch.tensor([0, 1, 1, 2])
-col = torch.tensor([1, 0, 2, 1])
-weight = torch.tensor([1., 1., 1., 1.])  # Optional edge weights.
-
-cluster = graclus_cluster(row, col, weight)
+```bash
+msopgen gen -i csrc/npu/impl/fps_npu.json \
+            -f pytorch \
+            -c ai_core-Ascend910B \
+            -lan cpp \
+            -out ./op_projects/fps
 ```
 
-```
-print(cluster)
-tensor([0, 0, 1])
-```
+---
 
-### VoxelGrid
+## 编译安装
 
-A clustering algorithm, which overlays a regular grid of user-defined size over a point cloud and clusters all points within a voxel.
+### 前提条件
 
-```python
-import torch
-from torch_cluster import grid_cluster
+- Python >= 3.8
+- PyTorch >= 1.13
+- torch_npu（昇腾 NPU 环境）
+- CANN Toolkit >= 7.0
+- 昇腾 NPU 硬件（Atlas 训练系列或推理系列）
 
-pos = torch.tensor([[0., 0.], [11., 9.], [2., 8.], [2., 2.], [8., 3.]])
-size = torch.Tensor([5, 5])
+### 安装步骤
 
-cluster = grid_cluster(pos, size)
-```
+```bash
+# 1. 克隆本仓库
+git clone https://github.com/IDMG-Lab/pytorch-cluster-npu.git
+cd pytorch-cluster-npu
 
-```
-print(cluster)
-tensor([0, 5, 3, 0, 1])
-```
 
-### FarthestPointSampling
-
-A sampling algorithm, which iteratively samples the most distant point with regard to the rest points.
-
-```python
-import torch
-from torch_cluster import fps
-
-x = torch.tensor([[-1., -1.], [-1., 1.], [1., -1.], [1., 1.]])
-batch = torch.tensor([0, 0, 0, 0])
-index = fps(x, batch, ratio=0.5, random_start=False)
+# 2. 安装
+pip install -e . --no-build-isolation
 ```
 
-```
-print(index)
-tensor([0, 3])
-```
+---
 
-### kNN-Graph
+## 算子开发指引
 
-Computes graph edges to the nearest *k* points.
+1. 使用 `csrc/npu/impl/` 目录下对应的 JSON 文件，通过 `msOpGen` 生成算子工程
+2. 在生成的工程 `op_kernel/` 目录中实现 Ascend C 内核代码
+3. 编译部署算子包（`.run` 文件）到 NPU 运行环境
 
-**Args:**
+---
 
-* **x** *(Tensor)*: Node feature matrix of shape `[N, F]`.
-* **k** *(int)*: The number of neighbors.
-* **batch** *(LongTensor, optional)*: Batch vector of shape `[N]`, which assigns each node to a specific example. `batch` needs to be sorted. (default: `None`)
-* **loop** *(bool, optional)*: If `True`, the graph will contain self-loops. (default: `False`)
-* **flow** *(string, optional)*: The flow direction when using in combination with message passing (`"source_to_target"` or `"target_to_source"`). (default: `"source_to_target"`)
-* **cosine** *(boolean, optional)*: If `True`, will use the Cosine distance instead of Euclidean distance to find nearest neighbors. (default: `False`)
-* **num_workers** *(int)*: Number of workers to use for computation. Has no effect in case `batch` is not `None`, or the input lies on the GPU. (default: `1`)
+## 参考项目
 
-```python
-import torch
-from torch_cluster import knn_graph
-
-x = torch.tensor([[-1., -1.], [-1., 1.], [1., -1.], [1., 1.]])
-batch = torch.tensor([0, 0, 0, 0])
-edge_index = knn_graph(x, k=2, batch=batch, loop=False)
-```
-
-```
-print(edge_index)
-tensor([[1, 2, 0, 3, 0, 3, 1, 2],
-        [0, 0, 1, 1, 2, 2, 3, 3]])
-```
-
-### Radius-Graph
-
-Computes graph edges to all points within a given distance.
-
-**Args:**
-
-* **x** *(Tensor)*: Node feature matrix of shape `[N, F]`.
-* **r** *(float)*: The radius.
-* **batch** *(LongTensor, optional)*: Batch vector of shape `[N]`, which assigns each node to a specific example. `batch` needs to be sorted. (default: `None`)
-* **loop** *(bool, optional)*: If `True`, the graph will contain self-loops. (default: `False`)
-* **max_num_neighbors** *(int, optional)*: The maximum number of neighbors to return for each element. If the number of actual neighbors is greater than `max_num_neighbors`, returned neighbors are picked randomly. (default: `32`)
-* **flow** *(string, optional)*: The flow direction when using in combination with message passing (`"source_to_target"` or `"target_to_source"`). (default: `"source_to_target"`)
-* **num_workers** *(int)*: Number of workers to use for computation. Has no effect in case `batch` is not `None`, or the input lies on the GPU. (default: `1`)
-
-```python
-import torch
-from torch_cluster import radius_graph
-
-x = torch.tensor([[-1., -1.], [-1., 1.], [1., -1.], [1., 1.]])
-batch = torch.tensor([0, 0, 0, 0])
-edge_index = radius_graph(x, r=2.5, batch=batch, loop=False)
-```
-
-```
-print(edge_index)
-tensor([[1, 2, 0, 3, 0, 3, 1, 2],
-        [0, 0, 1, 1, 2, 2, 3, 3]])
-```
-
-### Nearest
-
-Clusters points in *x* together which are nearest to a given query point in *y*.
-`batch_{x,y}` vectors need to be sorted.
-
-```python
-import torch
-from torch_cluster import nearest
-
-x = torch.Tensor([[-1, -1], [-1, 1], [1, -1], [1, 1]])
-batch_x = torch.tensor([0, 0, 0, 0])
-y = torch.Tensor([[-1, 0], [1, 0]])
-batch_y = torch.tensor([0, 0])
-cluster = nearest(x, y, batch_x, batch_y)
-```
-
-```
-print(cluster)
-tensor([0, 0, 1, 1])
-```
-
-### RandomWalk-Sampling
-
-Samples random walks of length `walk_length` from all node indices in `start` in the graph given by `(row, col)`.
-
-```python
-import torch
-from torch_cluster import random_walk
-
-row = torch.tensor([0, 1, 1, 1, 2, 2, 3, 3, 4, 4])
-col = torch.tensor([1, 0, 2, 3, 1, 4, 1, 4, 2, 3])
-start = torch.tensor([0, 1, 2, 3, 4])
-
-walk = random_walk(row, col, start, walk_length=3)
-```
-
-```
-print(walk)
-tensor([[0, 1, 2, 4],
-        [1, 3, 4, 2],
-        [2, 4, 2, 1],
-        [3, 4, 2, 4],
-        [4, 3, 1, 0]])
-```
-
-## Running tests
-
-```
-pytest
-```
-
-## C++ API
-
-`torch-cluster` also offers a C++ API that contains C++ equivalent of python models.
-
-```
-export Torch_DIR=`python -c 'import torch;print(torch.utils.cmake_prefix_path)'`
-mkdir build
-cd build
-# Add -DWITH_CUDA=on support for the CUDA if needed
-cmake ..
-make
-make install
-```
+- [pytorch_cluster](https://github.com/rusty1s/pytorch_cluster) — 原始算子实现
+- [pytorch-sparse-npu](https://github.com/IDMG-Lab/pytorch-sparse-npu) — 参考 NPU 适配架构
+- [torch_npu](https://github.com/Ascend/pytorch) — 昇腾 PyTorch 适配插件
+- CANN 社区版 8.5.0 算子开发工具用户指南 — JSON 配置格式参考

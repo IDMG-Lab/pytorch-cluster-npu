@@ -32,7 +32,7 @@ CLUSTER_API torch::Tensor knn(torch::Tensor x, torch::Tensor y,
                                int64_t k, bool cosine, int64_t num_workers) {
   if (x.device().is_cuda()) {
 #ifdef WITH_CUDA
-    return knn_cuda(x, y, ptr_x, ptr_y, k, cosine, num_workers);
+    return knn_cuda(x, y, ptr_x, ptr_y, k, cosine);
 #else
     AT_ERROR("Not compiled with CUDA support");
 #endif
@@ -43,7 +43,9 @@ CLUSTER_API torch::Tensor knn(torch::Tensor x, torch::Tensor y,
     AT_ERROR("Not compiled with NPU support");
 #endif
   } else {
-    return knn_cpu(x, y, ptr_x, ptr_y, k, cosine, num_workers);
+    if (cosine)
+      AT_ERROR("`cosine` argument not supported on CPU");
+    return knn_cpu(x, y, ptr_x, ptr_y, k, num_workers);
   }
 }
 

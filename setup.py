@@ -15,6 +15,7 @@ import torch_npu
 from torch_npu.utils.cpp_extension import NpuExtension
 
 PYTORCH_NPU_INSTALL_PATH = os.path.dirname(os.path.abspath(torch_npu.__file__))
+print(PYTORCH_NPU_INSTALL_PATH)
 
 WITH_NPU = False
 if torch_npu.npu.is_available():
