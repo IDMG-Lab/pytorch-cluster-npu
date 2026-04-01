@@ -5,34 +5,34 @@
       {
         "name": "rowptr",
         "param_type": "required",
-        "format": ["ND"],
+        "format": ["ND", "ND"],
         "type": ["int64", "int32"]
       },
       {
         "name": "col",
         "param_type": "required",
-        "format": ["ND"],
+        "format": ["ND", "ND"],
         "type": ["int64", "int32"]
       },
       {
         "name": "start",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int32"]
       }
     ],
     "output_desc": [
       {
         "name": "walks",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int32"]
       },
       {
         "name": "e_ids",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int32"]
       }
     ],
     "attr": [

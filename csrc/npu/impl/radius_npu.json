@@ -5,34 +5,34 @@
       {
         "name": "x",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["float", "fp16", "float32"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       },
       {
         "name": "y",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["float", "fp16", "float32"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       },
       {
         "name": "ptr_x",
         "param_type": "optional",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int64"]
       },
       {
         "name": "ptr_y",
         "param_type": "optional",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int64"]
       }
     ],
     "output_desc": [
       {
         "name": "edge_index",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int64"]
       }
     ],
     "attr": [

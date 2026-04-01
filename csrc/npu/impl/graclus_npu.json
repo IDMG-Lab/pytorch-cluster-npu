@@ -5,28 +5,28 @@
       {
         "name": "rowptr",
         "param_type": "required",
-        "format": ["ND"],
+        "format": ["ND", "ND"],
         "type": ["int64", "int32"]
       },
       {
         "name": "col",
         "param_type": "required",
-        "format": ["ND"],
+        "format": ["ND", "ND"],
         "type": ["int64", "int32"]
       },
       {
         "name": "weight",
         "param_type": "optional",
-        "format": ["ND"],
-        "type": ["float", "fp16"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       }
     ],
     "output_desc": [
       {
         "name": "cluster",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int32"]
       }
     ],
     "attr": []

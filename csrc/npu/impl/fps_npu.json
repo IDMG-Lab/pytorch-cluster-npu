@@ -5,28 +5,28 @@
       {
         "name": "src",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["float", "fp16"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       },
       {
         "name": "ptr",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int64"]
       },
       {
         "name": "ratio",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["float"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       }
     ],
     "output_desc": [
       {
         "name": "out",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int64"]
       }
     ],
     "attr": [

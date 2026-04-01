@@ -5,13 +5,13 @@
       {
         "name": "start",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int32"]
       },
       {
         "name": "rowptr",
         "param_type": "required",
-        "format": ["ND"],
+        "format": ["ND", "ND"],
         "type": ["int64", "int32"]
       }
     ],
@@ -19,8 +19,8 @@
       {
         "name": "sampled_nodes",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int32"]
       }
     ],
     "attr": [

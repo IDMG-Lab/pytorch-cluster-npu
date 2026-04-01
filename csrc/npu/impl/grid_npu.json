@@ -5,34 +5,34 @@
       {
         "name": "pos",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["float", "fp16", "float32"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       },
       {
         "name": "size",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["float", "float32"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       },
       {
         "name": "start",
         "param_type": "optional",
-        "format": ["ND"],
-        "type": ["float", "float32"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       },
       {
         "name": "end",
         "param_type": "optional",
-        "format": ["ND"],
-        "type": ["float", "float32"]
+        "format": ["ND", "ND"],
+        "type": ["float32", "float16"]
       }
     ],
     "output_desc": [
       {
         "name": "cluster",
         "param_type": "required",
-        "format": ["ND"],
-        "type": ["int64"]
+        "format": ["ND", "ND"],
+        "type": ["int64", "int64"]
       }
     ],
     "attr": []
