@@ -1,0 +1,52 @@
+[
+  {
+    "op": "KNNSearch",
+    "input_desc": [
+      {
+        "name": "x",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "fp16", "float32"]
+      },
+      {
+        "name": "y",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "fp16", "float32"]
+      },
+      {
+        "name": "ptr_x",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["int64"]
+      },
+      {
+        "name": "ptr_y",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "output_desc": [
+      {
+        "name": "edge_index",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "attr": [
+      {
+        "name": "k",
+        "param_type": "required",
+        "type": "int"
+      },
+      {
+        "name": "cosine",
+        "param_type": "optional",
+        "type": "bool",
+        "default_value": false
+      }
+    ]
+  }
+]

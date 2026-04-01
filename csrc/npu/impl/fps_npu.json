@@ -1,0 +1,41 @@
+[
+  {
+    "op": "FarthestPointSampling",
+    "input_desc": [
+      {
+        "name": "src",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "fp16"]
+      },
+      {
+        "name": "ptr",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      },
+      {
+        "name": "ratio",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float"]
+      }
+    ],
+    "output_desc": [
+      {
+        "name": "out",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "attr": [
+      {
+        "name": "random_start",
+        "param_type": "optional",
+        "type": "bool",
+        "default_value": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "op": "Graclus",
+    "input_desc": [
+      {
+        "name": "rowptr",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64", "int32"]
+      },
+      {
+        "name": "col",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64", "int32"]
+      },
+      {
+        "name": "weight",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["float", "fp16"]
+      }
+    ],
+    "output_desc": [
+      {
+        "name": "cluster",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "attr": []
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "op": "VoxelGrid",
+    "input_desc": [
+      {
+        "name": "pos",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "fp16", "float32"]
+      },
+      {
+        "name": "size",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "float32"]
+      },
+      {
+        "name": "start",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["float", "float32"]
+      },
+      {
+        "name": "end",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["float", "float32"]
+      }
+    ],
+    "output_desc": [
+      {
+        "name": "cluster",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "attr": []
+  }
+]

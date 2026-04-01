@@ -1,0 +1,40 @@
+[
+  {
+    "op": "NeighborSampler",
+    "input_desc": [
+      {
+        "name": "start",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      },
+      {
+        "name": "rowptr",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64", "int32"]
+      }
+    ],
+    "output_desc": [
+      {
+        "name": "sampled_nodes",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "attr": [
+      {
+        "name": "count",
+        "param_type": "required",
+        "type": "int"
+      },
+      {
+        "name": "factor",
+        "param_type": "optional",
+        "type": "float",
+        "default_value": 1.0
+      }
+    ]
+  }
+]

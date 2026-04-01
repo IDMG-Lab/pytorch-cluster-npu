@@ -1,3 +1,4 @@
+// sampler.cpp  (NPU-aware version)
 #ifdef WITH_PYTHON
 #include <Python.h>
 #endif
@@ -5,28 +6,36 @@
 
 #include "cpu/sampler_cpu.h"
 
+// Note: original sampler.cpp has no CUDA implementation
+#ifdef WITH_NPU
+#include "npu/sampler_npu.h"
+#endif
+
 #ifdef _WIN32
 #ifdef WITH_PYTHON
-#ifdef WITH_CUDA
-PyMODINIT_FUNC PyInit__sampler_cuda(void) { return NULL; }
-#else
 PyMODINIT_FUNC PyInit__sampler_cpu(void) { return NULL; }
 #endif
 #endif
-#endif
 
-CLUSTER_API torch::Tensor neighbor_sampler(torch::Tensor start, torch::Tensor rowptr,
-                               int64_t count, double factor) {
-  if (rowptr.device().is_cuda()) {
-#ifdef WITH_CUDA
-    AT_ERROR("No CUDA version supported");
+#define CLUSTER_API
+
+CLUSTER_API torch::Tensor neighbor_sampler(torch::Tensor start,
+                                            torch::Tensor rowptr,
+                                            int64_t count,
+                                            double factor) {
+  if (start.device().is_cuda()) {
+    AT_ERROR("neighbor_sampler: CUDA implementation not available");
+  } else if (start.device().type() == c10::DeviceType::PrivateUse1) {
+#ifdef WITH_NPU
+    return neighbor_sampler_npu(start, rowptr, count, factor);
 #else
-    AT_ERROR("Not compiled with CUDA support");
+    AT_ERROR("Not compiled with NPU support");
 #endif
   } else {
     return neighbor_sampler_cpu(start, rowptr, count, factor);
   }
 }
 
-static auto registry = torch::RegisterOperators().op(
-    "torch_cluster::neighbor_sampler", &neighbor_sampler);
+static auto registry =
+    torch::RegisterOperators().op("torch_cluster::neighbor_sampler",
+                                  &neighbor_sampler);

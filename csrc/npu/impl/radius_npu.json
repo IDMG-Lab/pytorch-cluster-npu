@@ -1,0 +1,58 @@
+[
+  {
+    "op": "RadiusSearch",
+    "input_desc": [
+      {
+        "name": "x",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "fp16", "float32"]
+      },
+      {
+        "name": "y",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["float", "fp16", "float32"]
+      },
+      {
+        "name": "ptr_x",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["int64"]
+      },
+      {
+        "name": "ptr_y",
+        "param_type": "optional",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "output_desc": [
+      {
+        "name": "edge_index",
+        "param_type": "required",
+        "format": ["ND"],
+        "type": ["int64"]
+      }
+    ],
+    "attr": [
+      {
+        "name": "r",
+        "param_type": "required",
+        "type": "float"
+      },
+      {
+        "name": "max_num_neighbors",
+        "param_type": "optional",
+        "type": "int",
+        "default_value": 32
+      },
+      {
+        "name": "ignore_same_index",
+        "param_type": "optional",
+        "type": "bool",
+        "default_value": false
+      }
+    ]
+  }
+]

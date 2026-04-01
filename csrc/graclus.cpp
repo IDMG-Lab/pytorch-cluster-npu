@@ -1,3 +1,4 @@
+// graclus.cpp  (NPU-aware version)
 #ifdef WITH_PYTHON
 #include <Python.h>
 #endif
@@ -7,6 +8,10 @@
 
 #ifdef WITH_CUDA
 #include "cuda/graclus_cuda.h"
+#endif
+
+#ifdef WITH_NPU
+#include "npu/graclus_npu.h"
 #endif
 
 #ifdef _WIN32
@@ -19,13 +24,21 @@ PyMODINIT_FUNC PyInit__graclus_cpu(void) { return NULL; }
 #endif
 #endif
 
+#define CLUSTER_API
+
 CLUSTER_API torch::Tensor graclus(torch::Tensor rowptr, torch::Tensor col,
-                      std::optional<torch::Tensor> optional_weight) {
+                                   std::optional<torch::Tensor> optional_weight) {
   if (rowptr.device().is_cuda()) {
 #ifdef WITH_CUDA
     return graclus_cuda(rowptr, col, optional_weight);
 #else
     AT_ERROR("Not compiled with CUDA support");
+#endif
+  } else if (rowptr.device().type() == c10::DeviceType::PrivateUse1) {
+#ifdef WITH_NPU
+    return graclus_npu(rowptr, col, optional_weight);
+#else
+    AT_ERROR("Not compiled with NPU support");
 #endif
   } else {
     return graclus_cpu(rowptr, col, optional_weight);
