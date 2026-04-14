@@ -9,11 +9,13 @@ for library in [
         '_version', '_grid', '_graclus', '_fps', '_rw', '_sampler', '_nearest',
         '_knn', '_radius'
 ]:
+    npu_spec = importlib.machinery.PathFinder().find_spec(
+            f'{library}_npu', [osp.dirname(__file__)])
     cuda_spec = importlib.machinery.PathFinder().find_spec(
         f'{library}_cuda', [osp.dirname(__file__)])
     cpu_spec = importlib.machinery.PathFinder().find_spec(
         f'{library}_cpu', [osp.dirname(__file__)])
-    spec = cuda_spec or cpu_spec
+    spec = npu_spec or cuda_spec or cpu_spec
     if spec is not None:
         torch.ops.load_library(spec.origin)
     else:  # pragma: no cover
