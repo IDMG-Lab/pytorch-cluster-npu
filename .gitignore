@@ -1,6 +1,10 @@
 __pycache__/
 _ext/
 build/
+build_out/
+cmake-build-*/
+cmake-build-debug/
+cmake-build-release/
 dist/
 alpha/
 .cache/
@@ -8,3 +12,4 @@ alpha/
 *.egg-info/
 .coverage
 *.so
+op_projects/grid/build_out/
