@@ -1,15 +1,65 @@
+
+# =========================
+# Python
+# =========================
 __pycache__/
-_ext/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+test/extra-info/
+
+# =========================
+# Build system
+# =========================
 build/
 build_out/
+dist/
+eggs/
+*.egg-info/
+.eggs/
+
 cmake-build-*/
 cmake-build-debug/
 cmake-build-release/
-dist/
-alpha/
+
+CMakeCache.txt
+CMakeFiles/
+
+# =========================
+# Ascend / NPU artifacts
+# =========================
+**/build_out/
+**/kernel_meta/
+**/op_proto.cc
+**/tiling_data.h
+**/gen/
+**/tmp/
+
+# =========================
+# Binary artifacts
+# =========================
+**/*.o
+**/*.a
+**/*.so
+**/*.so.*
+
+# =========================
+# Logs / runtime dump
+# =========================
+*.log
+dump/
+log/
 .cache/
-.eggs/
-*.egg-info/
 .coverage
-*.so
-op_projects/grid/build_out/
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS
+# =========================
+.DS_Store
