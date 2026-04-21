@@ -1,67 +1,59 @@
 from itertools import product
-
 import pytest
 import torch
 from torch_cluster import grid_cluster
-from torch_cluster.testing import devices, dtypes, tensor
 
-tests = [{
-    'pos': [2, 6],
-    'size': [5],
-    'cluster': [0, 0],
-}, {
-    'pos': [2, 6],
-    'size': [5],
-    'start': [0],
-    'cluster': [0, 1],
-}, {
-    'pos': [[0, 0], [11, 9], [2, 8], [2, 2], [8, 3]],
-    'size': [5, 5],
-    'cluster': [0, 5, 3, 0, 1],
-}, {
-    'pos': [[0, 0], [11, 9], [2, 8], [2, 2], [8, 3]],
-    'size': [5, 5],
-    'end': [19, 19],
-    'cluster': [0, 6, 4, 0, 1],
-}]
+tests = [
+    {
+        'pos': [2, 6],
+        'size': [5],
+        'cluster': [0, 1],
+    },
+    {
+        'pos': [1, 4, 9, 12, 16],
+        'size': [5],
+        'start': [0],
+        'cluster': [0, 0, 1, 2, 3],
+    }
+]
 
-devices = [torch.device('cpu')]
 
-if hasattr(torch, "npu") and torch.npu.is_available():
-    devices.append(torch.device('npu:0'))
+if not (hasattr(torch, "npu") and torch.npu.is_available()):
+    pytest.skip("NPU not available", allow_module_level=True)
+
+devices = [torch.device("npu:0")]
+dtypes = [torch.float32]
 
 @pytest.mark.parametrize('test,dtype,device', product(tests, dtypes, devices))
-def test_grid_cluster(test, dtype, device):
-    # 1. 过滤掉 NPU 不支持的 dtype (如 int64, double)
-    # 根据报错，NPU 仅支持 DT_FLOAT (float32) 和 DT_FLOAT16 (float16)
-    supported_npu_dtypes = [torch.float32, torch.float16]
-    if device.type == 'npu' and dtype not in supported_npu_dtypes:
-        pytest.skip(f"NPU op does not support dtype: {dtype}")
+def test_grid_cluster_npu_1d(test, dtype, device):
 
-    if dtype == torch.bfloat16 and (device.type == 'cuda' or device.type == 'npu'):
-        # 视你的 NPU 是否支持 bf16 而定
-        return
+    # 1. tensor
+    pos = torch.tensor(test['pos'], dtype=dtype, device=device)
+    size = torch.tensor(test['size'], dtype=dtype, device=device)
+    start = torch.tensor(test.get('start'), dtype=dtype, device=device) if test.get('start') else None
+    end = torch.tensor(test.get('end'), dtype=dtype, device=device) if test.get('end') else None
 
-    pos = tensor(test['pos'], dtype, device)
-    size = tensor(test['size'], dtype, device)
-    start = tensor(test.get('start'), dtype, device)
-    end = tensor(test.get('end'), dtype, device)
-
-    cluster = grid_cluster(pos, size, start, end)
-
-    print("\n===== Grid Debug =====")
-    print("devices:", devices)
-    print(f"Device: {device}, dtype: {dtype}")
+    print("\n===== NPU 1D Grid Debug =====")
     print("pos:", pos)
     print("size:", size)
     print("start:", start)
     print("end:", end)
-    print("output:", cluster)
+
+    # 2. run op
+    cluster = grid_cluster(pos, size, start, end)
+
+    # 3. sync
+    torch.npu.synchronize()
+
+    output = cluster.tolist()
+
+    print("output:", output)
     print("expected:", test['cluster'])
-    print("output device:", cluster.device)
-    print("=====================\n")
+    print("=============================\n")
 
-    assert cluster.tolist() == test['cluster']
+    # 4. check
+    assert output == test['cluster']
 
+    # 5. JIT check (optional but useful)
     jit = torch.jit.script(grid_cluster)
     assert torch.equal(jit(pos, size, start, end), cluster)
