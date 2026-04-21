@@ -148,9 +148,9 @@ set(CMAKE_DEPEND_INFO_FILES
   "op_host/CMakeFiles/cust_optiling.dir/DependInfo.cmake"
   "op_host/CMakeFiles/cust_opapi.dir/DependInfo.cmake"
   "op_host/CMakeFiles/optiling_compat.dir/DependInfo.cmake"
-  "op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/DependInfo.cmake"
+  "op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/DependInfo.cmake"
   "op_kernel/CMakeFiles/binary.dir/DependInfo.cmake"
-  "op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/DependInfo.cmake"
-  "op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/DependInfo.cmake"
+  "op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/DependInfo.cmake"
+  "op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/DependInfo.cmake"
   "op_kernel/CMakeFiles/npu_supported_ops.dir/DependInfo.cmake"
   )

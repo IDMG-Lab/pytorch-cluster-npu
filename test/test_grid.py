@@ -32,7 +32,14 @@ if hasattr(torch, "npu") and torch.npu.is_available():
 
 @pytest.mark.parametrize('test,dtype,device', product(tests, dtypes, devices))
 def test_grid_cluster(test, dtype, device):
-    if dtype == torch.bfloat16 and device == torch.device('cuda:0'):
+    # 1. 过滤掉 NPU 不支持的 dtype (如 int64, double)
+    # 根据报错，NPU 仅支持 DT_FLOAT (float32) 和 DT_FLOAT16 (float16)
+    supported_npu_dtypes = [torch.float32, torch.float16]
+    if device.type == 'npu' and dtype not in supported_npu_dtypes:
+        pytest.skip(f"NPU op does not support dtype: {dtype}")
+
+    if dtype == torch.bfloat16 and (device.type == 'cuda' or device.type == 'npu'):
+        # 视你的 NPU 是否支持 bf16 而定
         return
 
     pos = tensor(test['pos'], dtype, device)

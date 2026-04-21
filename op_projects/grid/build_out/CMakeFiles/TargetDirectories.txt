@@ -28,10 +28,10 @@
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_host/CMakeFiles/install.dir
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_host/CMakeFiles/install/local.dir
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_host/CMakeFiles/install/strip.dir
-/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/ops_info_gen_ascend910.dir
+/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/binary.dir
-/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir
-/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/VoxelGrid_ascend910.dir
+/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir
+/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/npu_supported_ops.dir
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/package.dir
 /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/CMakeFiles/package_source.dir

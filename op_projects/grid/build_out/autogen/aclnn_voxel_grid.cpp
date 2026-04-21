@@ -45,7 +45,7 @@ enum NnopbaseAttrDtype {
     kNnopbaseString,
     kNnopbaseAttrEnd
 };
-uint32_t socSupportList[] = {SOC_VERSION_ASCEND910A};
+uint32_t socSupportList[] = {SOC_VERSION_ASCEND910B};
 uint32_t socSupportListLen = 1;
 
 TensorDesc inputDesc0_0[4] =

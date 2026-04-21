@@ -43,7 +43,7 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/packages/vendors/customize/op_impl/ai_core/tbe/config/ascend910" TYPE FILE FILES "/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/tbe/op_info_cfg/ai_core/ascend910/aic-ascend910-ops-info.json")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/packages/vendors/customize/op_impl/ai_core/tbe/config/ascend910b" TYPE FILE FILES "/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/tbe/op_info_cfg/ai_core/ascend910b/aic-ascend910b-ops-info.json")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -55,7 +55,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/packages/vendors/customize/op_impl/ai_core/tbe//kernel/ascend910/" TYPE DIRECTORY FILES "/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/binary/ascend910/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/packages/vendors/customize/op_impl/ai_core/tbe//kernel/ascend910b/" TYPE DIRECTORY FILES "/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/op_kernel/binary/ascend910b/")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)

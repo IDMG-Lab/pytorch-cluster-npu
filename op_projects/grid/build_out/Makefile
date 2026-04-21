@@ -260,17 +260,17 @@ optiling_compat/fast:
 .PHONY : optiling_compat/fast
 
 #=============================================================================
-# Target rules for targets named ops_info_gen_ascend910
+# Target rules for targets named ops_info_gen_ascend910b
 
 # Build rule for target.
-ops_info_gen_ascend910: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ops_info_gen_ascend910
-.PHONY : ops_info_gen_ascend910
+ops_info_gen_ascend910b: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ops_info_gen_ascend910b
+.PHONY : ops_info_gen_ascend910b
 
 # fast build rule for target.
-ops_info_gen_ascend910/fast:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build
-.PHONY : ops_info_gen_ascend910/fast
+ops_info_gen_ascend910b/fast:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build
+.PHONY : ops_info_gen_ascend910b/fast
 
 #=============================================================================
 # Target rules for targets named binary
@@ -286,30 +286,30 @@ binary/fast:
 .PHONY : binary/fast
 
 #=============================================================================
-# Target rules for targets named ascendc_bin_ascend910_gen_ops_config
+# Target rules for targets named ascendc_bin_ascend910b_gen_ops_config
 
 # Build rule for target.
-ascendc_bin_ascend910_gen_ops_config: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ascendc_bin_ascend910_gen_ops_config
-.PHONY : ascendc_bin_ascend910_gen_ops_config
+ascendc_bin_ascend910b_gen_ops_config: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ascendc_bin_ascend910b_gen_ops_config
+.PHONY : ascendc_bin_ascend910b_gen_ops_config
 
 # fast build rule for target.
-ascendc_bin_ascend910_gen_ops_config/fast:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build
-.PHONY : ascendc_bin_ascend910_gen_ops_config/fast
+ascendc_bin_ascend910b_gen_ops_config/fast:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build
+.PHONY : ascendc_bin_ascend910b_gen_ops_config/fast
 
 #=============================================================================
-# Target rules for targets named VoxelGrid_ascend910
+# Target rules for targets named VoxelGrid_ascend910b
 
 # Build rule for target.
-VoxelGrid_ascend910: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 VoxelGrid_ascend910
-.PHONY : VoxelGrid_ascend910
+VoxelGrid_ascend910b: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 VoxelGrid_ascend910b
+.PHONY : VoxelGrid_ascend910b
 
 # fast build rule for target.
-VoxelGrid_ascend910/fast:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build
-.PHONY : VoxelGrid_ascend910/fast
+VoxelGrid_ascend910b/fast:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build
+.PHONY : VoxelGrid_ascend910b/fast
 
 #=============================================================================
 # Target rules for targets named npu_supported_ops
@@ -338,13 +338,13 @@ help:
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
-	@echo "... VoxelGrid_ascend910"
-	@echo "... ascendc_bin_ascend910_gen_ops_config"
+	@echo "... VoxelGrid_ascend910b"
+	@echo "... ascendc_bin_ascend910b_gen_ops_config"
 	@echo "... binary"
 	@echo "... gen_version_info"
 	@echo "... modify_vendor"
 	@echo "... npu_supported_ops"
-	@echo "... ops_info_gen_ascend910"
+	@echo "... ops_info_gen_ascend910b"
 	@echo "... optiling_compat"
 	@echo "... cust_op_proto"
 	@echo "... cust_opapi"

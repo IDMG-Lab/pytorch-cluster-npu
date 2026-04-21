@@ -124,7 +124,7 @@ op_host/clean: op_host/CMakeFiles/optiling_compat.dir/clean
 # Directory level rules for directory op_kernel
 
 # Recursive "all" directory target.
-op_kernel/all: op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/all
+op_kernel/all: op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/all
 op_kernel/all: op_kernel/CMakeFiles/npu_supported_ops.dir/all
 .PHONY : op_kernel/all
 
@@ -133,10 +133,10 @@ op_kernel/preinstall:
 .PHONY : op_kernel/preinstall
 
 # Recursive "clean" directory target.
-op_kernel/clean: op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/clean
+op_kernel/clean: op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/clean
 op_kernel/clean: op_kernel/CMakeFiles/binary.dir/clean
-op_kernel/clean: op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/clean
-op_kernel/clean: op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/clean
+op_kernel/clean: op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/clean
+op_kernel/clean: op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/clean
 op_kernel/clean: op_kernel/CMakeFiles/npu_supported_ops.dir/clean
 .PHONY : op_kernel/clean
 
@@ -297,36 +297,36 @@ op_host/CMakeFiles/optiling_compat.dir/clean:
 .PHONY : op_host/CMakeFiles/optiling_compat.dir/clean
 
 #=============================================================================
-# Target rules for target op_kernel/CMakeFiles/ops_info_gen_ascend910.dir
+# Target rules for target op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir
 
 # All Build rule for target.
-op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/all:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/depend
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num=10 "Built target ops_info_gen_ascend910"
-.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/all
+op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/all:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/depend
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num=10 "Built target ops_info_gen_ascend910b"
+.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/all
 
 # Build rule for subdir invocation for target.
-op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule: cmake_check_build_system
+op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles 1
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles 0
-.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule
+.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule
 
 # Convenience name for target.
-ops_info_gen_ascend910: op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule
-.PHONY : ops_info_gen_ascend910
+ops_info_gen_ascend910b: op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule
+.PHONY : ops_info_gen_ascend910b
 
 # clean rule for target.
-op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/clean:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/clean
-.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/clean
+op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/clean:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/clean
+.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/clean
 
 #=============================================================================
 # Target rules for target op_kernel/CMakeFiles/binary.dir
 
 # All Build rule for target.
-op_kernel/CMakeFiles/binary.dir/all: op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/all
+op_kernel/CMakeFiles/binary.dir/all: op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/all
 	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/binary.dir/build.make op_kernel/CMakeFiles/binary.dir/depend
 	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/binary.dir/build.make op_kernel/CMakeFiles/binary.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num= "Built target binary"
@@ -349,57 +349,57 @@ op_kernel/CMakeFiles/binary.dir/clean:
 .PHONY : op_kernel/CMakeFiles/binary.dir/clean
 
 #=============================================================================
-# Target rules for target op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir
+# Target rules for target op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir
 
 # All Build rule for target.
-op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/all: op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/all
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/depend
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num= "Built target ascendc_bin_ascend910_gen_ops_config"
-.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/all
+op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/all: op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/all
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/depend
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num= "Built target ascendc_bin_ascend910b_gen_ops_config"
+.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/all
 
 # Build rule for subdir invocation for target.
-op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule: cmake_check_build_system
+op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles 0
-.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule
+.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule
 
 # Convenience name for target.
-ascendc_bin_ascend910_gen_ops_config: op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule
-.PHONY : ascendc_bin_ascend910_gen_ops_config
+ascendc_bin_ascend910b_gen_ops_config: op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule
+.PHONY : ascendc_bin_ascend910b_gen_ops_config
 
 # clean rule for target.
-op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/clean:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/clean
-.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/clean
+op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/clean:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/clean
+.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/clean
 
 #=============================================================================
-# Target rules for target op_kernel/CMakeFiles/VoxelGrid_ascend910.dir
+# Target rules for target op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir
 
 # All Build rule for target.
-op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/all: op_host/CMakeFiles/cust_optiling.dir/all
-op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/all: op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/all
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/depend
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num= "Built target VoxelGrid_ascend910"
-.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/all
+op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/all: op_host/CMakeFiles/cust_optiling.dir/all
+op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/all: op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/all
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/depend
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles --progress-num= "Built target VoxelGrid_ascend910b"
+.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/all
 
 # Build rule for subdir invocation for target.
-op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule: cmake_check_build_system
+op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out/CMakeFiles 0
-.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule
+.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule
 
 # Convenience name for target.
-VoxelGrid_ascend910: op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule
-.PHONY : VoxelGrid_ascend910
+VoxelGrid_ascend910b: op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule
+.PHONY : VoxelGrid_ascend910b
 
 # clean rule for target.
-op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/clean:
-	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/clean
-.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/clean
+op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/clean:
+	$(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/clean
+.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/clean
 
 #=============================================================================
 # Target rules for target op_kernel/CMakeFiles/npu_supported_ops.dir

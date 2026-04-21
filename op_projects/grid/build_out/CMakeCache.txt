@@ -18,7 +18,7 @@
 ASCEND_CANN_PACKAGE_PATH:PATH=/home/ma-user/Ascend/ascend-toolkit/latest
 
 //No help, variable specified on the command line.
-ASCEND_COMPUTE_UNIT:STRING=ascend910
+ASCEND_COMPUTE_UNIT:STRING=ascend910b
 
 //No help, variable specified on the command line.
 ASCEND_PACK_SHARED_LIBRARY:BOOL=False

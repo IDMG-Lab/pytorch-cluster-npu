@@ -14,7 +14,7 @@ SOC_ALL = '__ALLSOC__'
 SOC_TO_SHORT_SOC_MAP = {
     "ascend910a": "ascend910",
     "ascend910proa": "ascend910",
-    "ascend910b": "ascend910",
+    "ascend910b": "ascend910b",
     "ascend910prob": "ascend910",
     "ascend910premiuma": "ascend910",
     "ascend910b1": "ascend910b",

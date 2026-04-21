@@ -182,18 +182,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule:
-	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule
-.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule
+op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule:
+	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule
+.PHONY : op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule
 
 # Convenience name for target.
-ops_info_gen_ascend910: op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/rule
-.PHONY : ops_info_gen_ascend910
+ops_info_gen_ascend910b: op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/rule
+.PHONY : ops_info_gen_ascend910b
 
 # fast build rule for target.
-ops_info_gen_ascend910/fast:
-	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910.dir/build
-.PHONY : ops_info_gen_ascend910/fast
+ops_info_gen_ascend910b/fast:
+	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build.make op_kernel/CMakeFiles/ops_info_gen_ascend910b.dir/build
+.PHONY : ops_info_gen_ascend910b/fast
 
 # Convenience name for target.
 op_kernel/CMakeFiles/binary.dir/rule:
@@ -210,32 +210,32 @@ binary/fast:
 .PHONY : binary/fast
 
 # Convenience name for target.
-op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule:
-	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule
-.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule
+op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule:
+	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule
+.PHONY : op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule
 
 # Convenience name for target.
-ascendc_bin_ascend910_gen_ops_config: op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/rule
-.PHONY : ascendc_bin_ascend910_gen_ops_config
+ascendc_bin_ascend910b_gen_ops_config: op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/rule
+.PHONY : ascendc_bin_ascend910b_gen_ops_config
 
 # fast build rule for target.
-ascendc_bin_ascend910_gen_ops_config/fast:
-	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910_gen_ops_config.dir/build
-.PHONY : ascendc_bin_ascend910_gen_ops_config/fast
+ascendc_bin_ascend910b_gen_ops_config/fast:
+	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build.make op_kernel/CMakeFiles/ascendc_bin_ascend910b_gen_ops_config.dir/build
+.PHONY : ascendc_bin_ascend910b_gen_ops_config/fast
 
 # Convenience name for target.
-op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule:
-	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule
-.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule
+op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule:
+	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule
+.PHONY : op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule
 
 # Convenience name for target.
-VoxelGrid_ascend910: op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/rule
-.PHONY : VoxelGrid_ascend910
+VoxelGrid_ascend910b: op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/rule
+.PHONY : VoxelGrid_ascend910b
 
 # fast build rule for target.
-VoxelGrid_ascend910/fast:
-	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910.dir/build
-.PHONY : VoxelGrid_ascend910/fast
+VoxelGrid_ascend910b/fast:
+	cd /home/ma-user/work/pytorch-cluster-npu/op_projects/grid/build_out && $(MAKE) $(MAKESILENT) -f op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build.make op_kernel/CMakeFiles/VoxelGrid_ascend910b.dir/build
+.PHONY : VoxelGrid_ascend910b/fast
 
 # Convenience name for target.
 op_kernel/CMakeFiles/npu_supported_ops.dir/rule:
@@ -265,11 +265,11 @@ help:
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
-	@echo "... VoxelGrid_ascend910"
-	@echo "... ascendc_bin_ascend910_gen_ops_config"
+	@echo "... VoxelGrid_ascend910b"
+	@echo "... ascendc_bin_ascend910b_gen_ops_config"
 	@echo "... binary"
 	@echo "... npu_supported_ops"
-	@echo "... ops_info_gen_ascend910"
+	@echo "... ops_info_gen_ascend910b"
 .PHONY : help
 
 
