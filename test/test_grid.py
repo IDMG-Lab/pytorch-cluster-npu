@@ -5,15 +5,16 @@ from torch_cluster import grid_cluster
 
 tests = [
     {
-        'pos': [2, 6],
-        'size': [5],
-        'cluster': [0, 1],
-    },
-    {
-        'pos': [1, 4, 9, 12, 16],
+        'pos': [i * 3 % 97 for i in range(64)],
         'size': [5],
         'start': [0],
-        'cluster': [0, 0, 1, 2, 3],
+        'cluster': [(i * 3 % 97) // 5 for i in range(64)],
+    },
+    {
+        'pos': list(range(64)),   # 0~63
+        'size': [5],
+        'start': [0],
+        'cluster': [i // 5 for i in range(64)],
     }
 ]
 
