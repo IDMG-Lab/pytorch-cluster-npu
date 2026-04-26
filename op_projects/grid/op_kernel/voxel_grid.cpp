@@ -17,8 +17,25 @@ public:
         if (this->workPoints == 0)
             return;
 
-        // 必须绑定
+        // ✅ 添加：打印tiling信息
+        printf("=== Tiling Info ===\n");
+        printf("numPoints from tiling = %u\n", tilingData->numPoints);
+        printf("workPoints = %u\n", this->workPoints);
+        printf("==================\n");
+
         posGm.SetGlobalBuffer((__gm__ float*)pos);
+
+        // ✅ 添加：直接从GM读取前几个值和最后几个值验证
+        printf("=== Verify GM Data ===\n");
+        for (int i = 0; i < 5; i++) {
+            printf("posGm[%d] = %f\n", i, posGm.GetValue(i));
+        }
+        printf("...\n");
+        for (int i = 45; i < 50 && i < workPoints; i++) {
+            printf("posGm[%d] = %f\n", i, posGm.GetValue(i));
+        }
+        printf("=====================\n");
+
         clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
 
         sizeGmPtr.SetGlobalBuffer((__gm__ float*)size);
@@ -30,8 +47,10 @@ public:
             valStart = startGmPtr.GetValue(0);
         }
 
-        pipe.InitBuffer(inQuePos, 1, BUFFER_POINTS * sizeof(float));
-        pipe.InitBuffer(outQueCluster, 1, BUFFER_POINTS * sizeof(int64_t));
+        // 双缓冲（为后续 pipeline 做准备）
+        pipe.InitBuffer(inQue, 2, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(outQue, 2, BUFFER_POINTS * sizeof(int64_t));
+        pipe.InitBuffer(tmpQue, 2, BUFFER_POINTS * sizeof(float));
     }
 
     __aicore__ inline void Process() {
@@ -55,60 +74,131 @@ public:
 
 private:
     __aicore__ inline void Compute(uint32_t count, uint32_t offset) {
-        printf("DEBUG offset=%u count=%u workPoints=%u\n", offset, count, workPoints);
-        printf("DEBUG valSize=%f valStart=%f\n", valSize, valStart);
         if (offset >= workPoints)
             return;
-
-        if (offset + count > workPoints) {
+        if (offset + count > workPoints)
             count = workPoints - offset;
+
+        constexpr uint32_t ALIGN_BYTES = 32;
+        constexpr uint32_t ALIGN_FLOATS = ALIGN_BYTES / sizeof(float);  // 8个float
+        constexpr uint32_t ALIGN_INTS = ALIGN_BYTES / sizeof(int64_t);  // 4个int64_t
+
+        // 计算对齐后的总大小（用于buffer分配和向量计算）
+        uint32_t aligned_bytes = ((count * sizeof(float) + ALIGN_BYTES - 1) / ALIGN_BYTES) * ALIGN_BYTES;
+        uint32_t alignedCount = aligned_bytes / sizeof(float);
+
+        // 计算对齐拷贝部分
+        uint32_t aligned_copy_count_float = (count / ALIGN_FLOATS) * ALIGN_FLOATS;
+        uint32_t remainder_float = count % ALIGN_FLOATS;
+
+        uint32_t aligned_copy_count_int64 = (count / ALIGN_INTS) * ALIGN_INTS;
+        uint32_t remainder_int64 = count % ALIGN_INTS;
+
+        bool is_last_call = (offset + count == workPoints);
+        static bool debug_printed = false;
+
+        if (!debug_printed && is_last_call) {
+            printf("\n========== ALIGNED COPY DEBUG ==========\n");
+            printf("count=%u\n", count);
+            printf("aligned_copy_count_float=%u, remainder_float=%u\n",
+                   aligned_copy_count_float, remainder_float);
+            printf("aligned_copy_count_int64=%u, remainder_int64=%u\n",
+                   aligned_copy_count_int64, remainder_int64);
+            printf("alignedCount=%u\n", alignedCount);
+            printf("=========================================\n");
         }
 
-        if (count > BUFFER_POINTS) {
-            count = BUFFER_POINTS;
+        // 分配buffer
+        LocalTensor<float> posLocal = inQue.AllocTensor<float>();
+        LocalTensor<float> tmpLocal = tmpQue.AllocTensor<float>();
+        LocalTensor<int64_t> clusterLocal = outQue.AllocTensor<int64_t>();
+
+        // 清零整个buffer
+        Duplicate(posLocal, 0.0f, alignedCount);
+        Duplicate(tmpLocal, 0.0f, alignedCount);
+
+        // ========= 1. 输入：GM -> UB =========
+        // 第一段：拷贝对齐的部分
+        if (aligned_copy_count_float > 0) {
+            DataCopy(posLocal, posGm[offset], aligned_copy_count_float);
         }
 
-        LocalTensor<float> posLocal = inQuePos.AllocTensor<float>();
-        LocalTensor<int64_t> clusterLocal = outQueCluster.AllocTensor<int64_t>();
-
-        printf("DEBUG GM pos[0]=%f pos[1]=%f\n", posGm[offset], posGm[offset + 1]);
-
-        DataCopy(posLocal, posGm[offset], count);
-        inQuePos.EnQue(posLocal);
-
-        posLocal = inQuePos.DeQue<float>();
-
-        printf("DEBUG LOCAL pos[0]=%f pos[1]=%f\n",
-               posLocal.GetValue(0),
-               posLocal.GetValue(1));
-
-        for (uint32_t i = 0; i < count; i++) {
-            float x = posLocal.GetValue(i);
-
-            float v = (x - valStart) / valSize;
-            int64_t idx = (int64_t)v;
-
-            if (i < 2) {
-                printf("DEBUG i=%u x=%f v=%f idx=%ld\n",
-                       i, x, v, idx);
+        // 第二段：拷贝剩余部分
+        if (remainder_float > 0) {
+            for (uint32_t i = 0; i < remainder_float; i++) {
+                float val = posGm.GetValue(offset + aligned_copy_count_float + i);
+                posLocal.SetValue(aligned_copy_count_float + i, val);
             }
-
-            clusterLocal.SetValue(i, idx);
         }
 
-        outQueCluster.EnQue(clusterLocal);
+        // 等待DMA完成
+        if (aligned_copy_count_float > 0) {
+            inQue.EnQue(posLocal);
+            posLocal = inQue.DeQue<float>();
+        }
 
-        LocalTensor<int64_t> outLocal = outQueCluster.DeQue<int64_t>();
-        DataCopy(clusterGm[offset], outLocal, count);
+        // 调试打印
+        if (!debug_printed && is_last_call && count >= 50) {
+            printf("\n--- After Input Copy ---\n");
+            printf("posLocal[48]=%f, posLocal[49]=%f\n",
+                   posLocal.GetValue(48), posLocal.GetValue(49));
+        }
 
-        inQuePos.FreeTensor(posLocal);
-        outQueCluster.FreeTensor(outLocal);
+        // ========= 2. 计算 =========
+        Muls(tmpLocal, posLocal, 1.0f, alignedCount);
+        Adds(tmpLocal, tmpLocal, -valStart, alignedCount);
+
+        float invSize = 1.0f / valSize;
+        Muls(tmpLocal, tmpLocal, invSize, alignedCount);
+        Cast(clusterLocal, tmpLocal, RoundMode::CAST_TRUNC, alignedCount);
+
+        // ========= 3. 输出：UB -> GM =========
+        // ✅ 修复：正确使用输出队列
+
+        // 先将clusterLocal入队
+        outQue.EnQue(clusterLocal);
+
+        // 获取出队指针（等待之前的传输完成）
+        LocalTensor<int64_t> outLocal = outQue.DeQue<int64_t>();
+
+        // 第一段：使用DataCopy拷贝对齐的部分
+        if (aligned_copy_count_int64 > 0) {
+            DataCopy(clusterGm[offset], outLocal, aligned_copy_count_int64);
+
+            // 等待DMA完成后再处理剩余部分
+            outQue.EnQue(outLocal);
+            outQue.DeQue<int64_t>();
+        }
+
+        // 第二段：拷贝剩余部分（使用标量操作）
+        if (remainder_int64 > 0) {
+            for (uint32_t i = 0; i < remainder_int64; i++) {
+                int64_t val = outLocal.GetValue(aligned_copy_count_int64 + i);
+                clusterGm.SetValue(offset + aligned_copy_count_int64 + i, val);
+            }
+        }
+
+        // 调试打印
+        if (!debug_printed && is_last_call && count >= 50) {
+            printf("\n--- Final Output ---\n");
+            printf("clusterLocal[48]=%lld, clusterLocal[49]=%lld\n",
+                   clusterLocal.GetValue(48), clusterLocal.GetValue(49));
+            debug_printed = true;
+            printf("\n========== END DEBUG ==========\n");
+        }
+
+        // 释放
+        inQue.FreeTensor(posLocal);
+        tmpQue.FreeTensor(tmpLocal);
+        outQue.FreeTensor(outLocal);
     }
 
 private:
     TPipe pipe;
-    TQue<QuePosition::VECIN, 1> inQuePos;
-    TQue<QuePosition::VECOUT, 1> outQueCluster;
+
+    TQue<QuePosition::VECIN, 2> inQue;
+    TQue<QuePosition::VECOUT, 2> outQue;
+    TQue<QuePosition::VECCALC, 2> tmpQue;
 
     GlobalTensor<float> posGm;
     GlobalTensor<int64_t> clusterGm;
