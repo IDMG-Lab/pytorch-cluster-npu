@@ -17,25 +17,7 @@ public:
         if (this->workPoints == 0)
             return;
 
-        // ✅ 添加：打印tiling信息
-        printf("=== Tiling Info ===\n");
-        printf("numPoints from tiling = %u\n", tilingData->numPoints);
-        printf("workPoints = %u\n", this->workPoints);
-        printf("==================\n");
-
         posGm.SetGlobalBuffer((__gm__ float*)pos);
-
-        // ✅ 添加：直接从GM读取前几个值和最后几个值验证
-        printf("=== Verify GM Data ===\n");
-        for (int i = 0; i < 5; i++) {
-            printf("posGm[%d] = %f\n", i, posGm.GetValue(i));
-        }
-        printf("...\n");
-        for (int i = 45; i < 50 && i < workPoints; i++) {
-            printf("posGm[%d] = %f\n", i, posGm.GetValue(i));
-        }
-        printf("=====================\n");
-
         clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
 
         sizeGmPtr.SetGlobalBuffer((__gm__ float*)size);
@@ -94,20 +76,6 @@ private:
         uint32_t aligned_copy_count_int64 = (count / ALIGN_INTS) * ALIGN_INTS;
         uint32_t remainder_int64 = count % ALIGN_INTS;
 
-        bool is_last_call = (offset + count == workPoints);
-        static bool debug_printed = false;
-
-        if (!debug_printed && is_last_call) {
-            printf("\n========== ALIGNED COPY DEBUG ==========\n");
-            printf("count=%u\n", count);
-            printf("aligned_copy_count_float=%u, remainder_float=%u\n",
-                   aligned_copy_count_float, remainder_float);
-            printf("aligned_copy_count_int64=%u, remainder_int64=%u\n",
-                   aligned_copy_count_int64, remainder_int64);
-            printf("alignedCount=%u\n", alignedCount);
-            printf("=========================================\n");
-        }
-
         // 分配buffer
         LocalTensor<float> posLocal = inQue.AllocTensor<float>();
         LocalTensor<float> tmpLocal = tmpQue.AllocTensor<float>();
@@ -137,13 +105,6 @@ private:
             posLocal = inQue.DeQue<float>();
         }
 
-        // 调试打印
-        if (!debug_printed && is_last_call && count >= 50) {
-            printf("\n--- After Input Copy ---\n");
-            printf("posLocal[48]=%f, posLocal[49]=%f\n",
-                   posLocal.GetValue(48), posLocal.GetValue(49));
-        }
-
         // ========= 2. 计算 =========
         Muls(tmpLocal, posLocal, 1.0f, alignedCount);
         Adds(tmpLocal, tmpLocal, -valStart, alignedCount);
@@ -153,9 +114,6 @@ private:
         Cast(clusterLocal, tmpLocal, RoundMode::CAST_TRUNC, alignedCount);
 
         // ========= 3. 输出：UB -> GM =========
-        // ✅ 修复：正确使用输出队列
-
-        // 先将clusterLocal入队
         outQue.EnQue(clusterLocal);
 
         // 获取出队指针（等待之前的传输完成）
@@ -176,15 +134,6 @@ private:
                 int64_t val = outLocal.GetValue(aligned_copy_count_int64 + i);
                 clusterGm.SetValue(offset + aligned_copy_count_int64 + i, val);
             }
-        }
-
-        // 调试打印
-        if (!debug_printed && is_last_call && count >= 50) {
-            printf("\n--- Final Output ---\n");
-            printf("clusterLocal[48]=%lld, clusterLocal[49]=%lld\n",
-                   clusterLocal.GetValue(48), clusterLocal.GetValue(49));
-            debug_printed = true;
-            printf("\n========== END DEBUG ==========\n");
         }
 
         // 释放
