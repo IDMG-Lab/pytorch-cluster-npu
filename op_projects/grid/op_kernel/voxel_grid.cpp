@@ -111,7 +111,7 @@ private:
 
         float invSize = 1.0f / valSize;
         Muls(tmpLocal, tmpLocal, invSize, alignedCount);
-        Cast(clusterLocal, tmpLocal, RoundMode::CAST_TRUNC, alignedCount);
+        Cast(clusterLocal, tmpLocal, RoundMode::CAST_FLOOR, alignedCount);
 
         // ========= 3. 输出：UB -> GM =========
         outQue.EnQue(clusterLocal);
