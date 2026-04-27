@@ -8,6 +8,7 @@ __pycache__/
 *.pyd
 .pytest_cache/
 test/extra-info/
+package/
 
 # =========================
 # Build system
