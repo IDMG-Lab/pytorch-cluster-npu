@@ -2,6 +2,7 @@
 using namespace AscendC;
 
 constexpr uint32_t BUFFER_POINTS = 64;
+constexpr uint32_t BUFFER_NUM = 2;
 
 class KernelVoxelGrid {
 public:
@@ -17,158 +18,172 @@ public:
         if (this->workPoints == 0)
             return;
 
+        // 多核信息
+        uint32_t blockIdx = GetBlockIdx();
+        uint32_t blockNum = GetBlockNum();
+        uint32_t pointsPerCore = tilingData->blockPoints;
+        uint32_t tailPoints = tilingData->tailPoints;
+
+        // 当前Core负责的起始位置
+        coreOffset = blockIdx * pointsPerCore;
+        // 当前Core负责的数据量
+        corePoints = pointsPerCore;
+        // 最后一个Core处理tail
+        if (blockIdx == blockNum - 1) {
+            corePoints += tailPoints;
+        }
+
         posGm.SetGlobalBuffer((__gm__ float*)pos);
         clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
-
         sizeGmPtr.SetGlobalBuffer((__gm__ float*)size);
         valSize = sizeGmPtr.GetValue(0);
-
         valStart = 0.0f;
         if (start != nullptr) {
             startGmPtr.SetGlobalBuffer((__gm__ float*)start);
             valStart = startGmPtr.GetValue(0);
         }
 
-        // 双缓冲（为后续 pipeline 做准备）
-        pipe.InitBuffer(inQue, 2, BUFFER_POINTS * sizeof(float));
-        pipe.InitBuffer(outQue, 2, BUFFER_POINTS * sizeof(int64_t));
-        pipe.InitBuffer(tmpQue, 2, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int64_t));
     }
 
     __aicore__ inline void Process() {
-        if (workPoints == 0)
+        if (corePoints == 0)
             return;
 
-        uint32_t loop = workPoints / BUFFER_POINTS;
-        uint32_t tail = workPoints % BUFFER_POINTS;
+        // 使用corePoints
+        uint32_t loop = (corePoints + BUFFER_POINTS - 1) / BUFFER_POINTS;
+        for (int32_t i = 0; i < loop + BUFFER_NUM; i++) {
+            // CopyIn
+            if (i < loop) {
+                // 全局offset
+                uint32_t offset = coreOffset + i * BUFFER_POINTS;
+                uint32_t count = GetCount(offset);
+                CopyIn(offset, count);
+            }
 
-        uint32_t offset = 0;
+            // Compute
+            if (i >= 1 && i < loop + 1) {
+                uint32_t computeIdx = i - 1;
+                // 全局offset
+                uint32_t offset = coreOffset + computeIdx * BUFFER_POINTS;
+                uint32_t count = GetCount(offset);
+                Compute(count);
+            }
 
-        for (uint32_t i = 0; i < loop; i++) {
-            Compute(BUFFER_POINTS, offset);
-            offset += BUFFER_POINTS;
-        }
-
-        if (tail > 0) {
-            Compute(tail, offset);
+            // CopyOut
+            if (i >= 2) {
+                uint32_t outIdx = i - 2;
+                // 全局offset
+                uint32_t offset = coreOffset + outIdx * BUFFER_POINTS;
+                uint32_t count = GetCount(offset);
+                CopyOut(offset, count);
+            }
         }
     }
 
 private:
-    __aicore__ inline void Compute(uint32_t count, uint32_t offset) {
-        if (offset >= workPoints)
-            return;
-        if (offset + count > workPoints)
-            count = workPoints - offset;
+    // GetCount适配多核
+    __aicore__ inline uint32_t GetCount(uint32_t offset) {
+        uint32_t localOffset = offset - coreOffset;
+        uint32_t remain = corePoints - localOffset;
+        return remain > BUFFER_POINTS ? BUFFER_POINTS : remain;
+    }
 
+    __aicore__ inline void CopyIn(uint32_t offset, uint32_t count) {
         constexpr uint32_t ALIGN_BYTES = 32;
-        constexpr uint32_t ALIGN_FLOATS = ALIGN_BYTES / sizeof(float);  // 8个float
-        constexpr uint32_t ALIGN_INTS = ALIGN_BYTES / sizeof(int64_t);  // 4个int64_t
+        constexpr uint32_t ALIGN_FLOATS = ALIGN_BYTES / sizeof(float);
 
-        // 计算对齐后的总大小（用于buffer分配和向量计算）
+        uint32_t aligned_copy_count = (count / ALIGN_FLOATS) * ALIGN_FLOATS;
+        uint32_t remainder = count % ALIGN_FLOATS;
+
+        LocalTensor<float> posLocal = inQue.AllocTensor<float>();
+        Duplicate(posLocal, 0.0f, BUFFER_POINTS);
+
+        if (aligned_copy_count > 0) {
+            DataCopy(posLocal, posGm[offset], aligned_copy_count);
+        }
+
+        if (remainder > 0) {
+            for (uint32_t i = 0; i < remainder; i++) {
+                float val = posGm.GetValue(offset + aligned_copy_count + i);
+                posLocal.SetValue(aligned_copy_count + i, val);
+            }
+        }
+
+        inQue.EnQue(posLocal);
+    }
+
+    __aicore__ inline void Compute(uint32_t count) {
+        constexpr uint32_t ALIGN_BYTES = 32;
         uint32_t aligned_bytes = ((count * sizeof(float) + ALIGN_BYTES - 1) / ALIGN_BYTES) * ALIGN_BYTES;
         uint32_t alignedCount = aligned_bytes / sizeof(float);
 
-        // 计算对齐拷贝部分
-        uint32_t aligned_copy_count_float = (count / ALIGN_FLOATS) * ALIGN_FLOATS;
-        uint32_t remainder_float = count % ALIGN_FLOATS;
-
-        uint32_t aligned_copy_count_int64 = (count / ALIGN_INTS) * ALIGN_INTS;
-        uint32_t remainder_int64 = count % ALIGN_INTS;
-
-        // 分配buffer
-        LocalTensor<float> posLocal = inQue.AllocTensor<float>();
-        LocalTensor<float> tmpLocal = tmpQue.AllocTensor<float>();
+        LocalTensor<float> posLocal = inQue.DeQue<float>();
         LocalTensor<int64_t> clusterLocal = outQue.AllocTensor<int64_t>();
 
-        // 清零整个buffer
-        Duplicate(posLocal, 0.0f, alignedCount);
-        Duplicate(tmpLocal, 0.0f, alignedCount);
-
-        // ========= 1. 输入：GM -> UB =========
-        // 第一段：拷贝对齐的部分
-        if (aligned_copy_count_float > 0) {
-            DataCopy(posLocal, posGm[offset], aligned_copy_count_float);
-        }
-
-        // 第二段：拷贝剩余部分
-        if (remainder_float > 0) {
-            for (uint32_t i = 0; i < remainder_float; i++) {
-                float val = posGm.GetValue(offset + aligned_copy_count_float + i);
-                posLocal.SetValue(aligned_copy_count_float + i, val);
-            }
-        }
-
-        // 等待DMA完成
-        if (aligned_copy_count_float > 0) {
-            inQue.EnQue(posLocal);
-            posLocal = inQue.DeQue<float>();
-        }
-
-        // ========= 2. 计算 =========
-        Muls(tmpLocal, posLocal, 1.0f, alignedCount);
-        Adds(tmpLocal, tmpLocal, -valStart, alignedCount);
-
+        // (pos - start)
+        Adds(posLocal, posLocal, -valStart, alignedCount);
+        // / size
         float invSize = 1.0f / valSize;
-        Muls(tmpLocal, tmpLocal, invSize, alignedCount);
-        Cast(clusterLocal, tmpLocal, RoundMode::CAST_FLOOR, alignedCount);
+        Muls(posLocal, posLocal, invSize, alignedCount);
+        // floor
+        Cast(clusterLocal, posLocal, RoundMode::CAST_FLOOR, alignedCount);
 
-        // ========= 3. 输出：UB -> GM =========
         outQue.EnQue(clusterLocal);
+        inQue.FreeTensor(posLocal);
+    }
 
-        // 获取出队指针（等待之前的传输完成）
+    __aicore__ inline void CopyOut(uint32_t offset, uint32_t count) {
+        constexpr uint32_t ALIGN_BYTES = 32;
+        constexpr uint32_t ALIGN_INTS = ALIGN_BYTES / sizeof(int64_t);
+
+        uint32_t aligned_copy_count = (count / ALIGN_INTS) * ALIGN_INTS;
+        uint32_t remainder = count % ALIGN_INTS;
+
         LocalTensor<int64_t> outLocal = outQue.DeQue<int64_t>();
 
-        // 第一段：使用DataCopy拷贝对齐的部分
-        if (aligned_copy_count_int64 > 0) {
-            DataCopy(clusterGm[offset], outLocal, aligned_copy_count_int64);
-
-            // 等待DMA完成后再处理剩余部分
-            outQue.EnQue(outLocal);
-            outQue.DeQue<int64_t>();
+        if (aligned_copy_count > 0) {
+            DataCopy(clusterGm[offset], outLocal, aligned_copy_count);
         }
 
-        // 第二段：拷贝剩余部分（使用标量操作）
-        if (remainder_int64 > 0) {
-            for (uint32_t i = 0; i < remainder_int64; i++) {
-                int64_t val = outLocal.GetValue(aligned_copy_count_int64 + i);
-                clusterGm.SetValue(offset + aligned_copy_count_int64 + i, val);
+        if (remainder > 0) {
+            for (uint32_t i = 0; i < remainder; i++) {
+                int64_t val = outLocal.GetValue(aligned_copy_count + i);
+                clusterGm.SetValue(offset + aligned_copy_count + i, val);
             }
         }
 
-        // 释放
-        inQue.FreeTensor(posLocal);
-        tmpQue.FreeTensor(tmpLocal);
         outQue.FreeTensor(outLocal);
     }
 
 private:
     TPipe pipe;
-
-    TQue<QuePosition::VECIN, 2> inQue;
-    TQue<QuePosition::VECOUT, 2> outQue;
-    TQue<QuePosition::VECCALC, 2> tmpQue;
-
+    TQue<QuePosition::VECIN, BUFFER_NUM> inQue;
+    TQue<QuePosition::VECCALC, BUFFER_NUM> tmpQue;
+    TQue<QuePosition::VECOUT, BUFFER_NUM> outQue;
     GlobalTensor<float> posGm;
     GlobalTensor<int64_t> clusterGm;
     GlobalTensor<float> sizeGmPtr;
     GlobalTensor<float> startGmPtr;
-
     uint32_t workPoints;
+    uint32_t coreOffset;
+    uint32_t corePoints;
     float valSize;
     float valStart;
 };
 
-extern "C" __global__ __aicore__ void voxel_grid(
-    GM_ADDR pos,
-    GM_ADDR size,
-    GM_ADDR start,
-    GM_ADDR end,
-    GM_ADDR cluster,
-    GM_ADDR workspace,
-    GM_ADDR tiling) {
+extern "C" __global__
+    __aicore__ void
+    voxel_grid(
+        GM_ADDR pos,
+        GM_ADDR size,
+        GM_ADDR start,
+        GM_ADDR end,
+        GM_ADDR cluster,
+        GM_ADDR workspace,
+        GM_ADDR tiling) {
     GET_TILING_DATA(tiling_data, tiling);
-
     KernelVoxelGrid op;
     op.Init(pos, size, start, cluster, &tiling_data);
     op.Process();

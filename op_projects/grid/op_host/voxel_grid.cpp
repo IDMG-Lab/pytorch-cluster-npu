@@ -12,7 +12,7 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
     uint32_t dim = pos_shape.GetDim(1);        // 坐标维度 D
 
     // 2. 确定核数 (BlockDim)  改进：根据点数动态确定核数，最多使用 8 核 (numPoints < 8) ? 1 : 8;
-    uint32_t blockNum = 1;
+    uint32_t blockNum = (numPoints < 1024) ? 1 : 8;
     context->SetBlockDim(blockNum);
 
     // 3. 计算切分 (按点切分，不打散单个点的 D 维坐标)
