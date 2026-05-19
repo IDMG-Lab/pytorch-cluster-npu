@@ -91,25 +91,17 @@ private:
     }
 
     __aicore__ inline void CopyIn(uint32_t offset, uint32_t count) {
-        constexpr uint32_t ALIGN_BYTES = 32;
-        constexpr uint32_t ALIGN_FLOATS = ALIGN_BYTES / sizeof(float);
-
-        uint32_t aligned_copy_count = (count / ALIGN_FLOATS) * ALIGN_FLOATS;
-        uint32_t remainder = count % ALIGN_FLOATS;
-
         LocalTensor<float> posLocal = inQue.AllocTensor<float>();
-        Duplicate(posLocal, 0.0f, BUFFER_POINTS);
 
-        if (aligned_copy_count > 0) {
-            DataCopy(posLocal, posGm[offset], aligned_copy_count);
-        }
+        // 使用DataCopyPad进行非32B对齐搬运
+        // burstLen单位是Bytes
+        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(float)), 0, 0, 0};
 
-        if (remainder > 0) {
-            for (uint32_t i = 0; i < remainder; i++) {
-                float val = posGm.GetValue(offset + aligned_copy_count + i);
-                posLocal.SetValue(aligned_copy_count + i, val);
-            }
-        }
+        // pad到32B对齐
+        // float类型32B = 8个float
+        DataCopyPadExtParams<float> padParams{true, 0, 0, 0};
+
+        DataCopyPad(posLocal, posGm[offset], copyParams, padParams);
 
         inQue.EnQue(posLocal);
     }
@@ -135,24 +127,12 @@ private:
     }
 
     __aicore__ inline void CopyOut(uint32_t offset, uint32_t count) {
-        constexpr uint32_t ALIGN_BYTES = 32;
-        constexpr uint32_t ALIGN_INTS = ALIGN_BYTES / sizeof(int64_t);
-
-        uint32_t aligned_copy_count = (count / ALIGN_INTS) * ALIGN_INTS;
-        uint32_t remainder = count % ALIGN_INTS;
-
         LocalTensor<int64_t> outLocal = outQue.DeQue<int64_t>();
 
-        if (aligned_copy_count > 0) {
-            DataCopy(clusterGm[offset], outLocal, aligned_copy_count);
-        }
+        // 使用DataCopyPad进行非32B对齐写回
+        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(int64_t)), 0, 0, 0};
 
-        if (remainder > 0) {
-            for (uint32_t i = 0; i < remainder; i++) {
-                int64_t val = outLocal.GetValue(aligned_copy_count + i);
-                clusterGm.SetValue(offset + aligned_copy_count + i, val);
-            }
-        }
+        DataCopyPad(clusterGm[offset], outLocal, copyParams);
 
         outQue.FreeTensor(outLocal);
     }
