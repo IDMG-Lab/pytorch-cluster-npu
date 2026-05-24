@@ -1,8 +1,8 @@
-
 #include "register/op_def_registry.h"
 #include "voxel_grid_tiling.h"
 
 namespace optiling {
+
 static ge::graphStatus TilingFunc(gert::TilingContext* context) {
     VoxelGridTilingData tiling;
 
@@ -13,6 +13,7 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
 
     // 2. 确定核数 (BlockDim)  改进：根据点数动态确定核数，最多使用 8 核 (numPoints < 8) ? 1 : 8;
     uint32_t blockNum = (numPoints < 1024) ? 1 : 8;
+
     context->SetBlockDim(blockNum);
 
     // 3. 计算切分 (按点切分，不打散单个点的 D 维坐标)
@@ -30,6 +31,7 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
 
     return ge::GRAPH_SUCCESS;
 }
+
 }  // namespace optiling
 
 namespace ge {
@@ -47,34 +49,39 @@ static ge::graphStatus InferShape(gert::InferShapeContext* context) {
 static ge::graphStatus InferDataType(gert::InferDataTypeContext* context) {
     // 强制设置输出为 int64，不要跟随输入的 float
     context->SetOutputDataType(0, ge::DT_INT64);
+
     return ge::GRAPH_SUCCESS;
 }
+
 }  // namespace ge
 
 namespace ops {
+
 class VoxelGrid : public OpDef {
 public:
     explicit VoxelGrid(const char* name) : OpDef(name) {
         this->Input("pos")
             .ParamType(REQUIRED)
             .DataType({ge::DT_FLOAT, ge::DT_FLOAT16})
-            .Format({ge::FORMAT_ND, ge::FORMAT_ND})
-            .UnknownShapeFormat({ge::FORMAT_ND, ge::FORMAT_ND});
+            .Format({ge::FORMAT_ND, ge::FORMAT_ND});
+
         this->Input("size")
             .ParamType(REQUIRED)
             .DataType({ge::DT_FLOAT, ge::DT_FLOAT16})
-            .Format({ge::FORMAT_ND, ge::FORMAT_ND})
-            .UnknownShapeFormat({ge::FORMAT_ND, ge::FORMAT_ND});
+            .Format({ge::FORMAT_ND, ge::FORMAT_ND});
+
+        // Host 已保证传入
         this->Input("start")
-            .ParamType(OPTIONAL)
+            .ParamType(REQUIRED)
             .DataType({ge::DT_FLOAT, ge::DT_FLOAT16})
-            .Format({ge::FORMAT_ND, ge::FORMAT_ND})
-            .UnknownShapeFormat({ge::FORMAT_ND, ge::FORMAT_ND});
+            .Format({ge::FORMAT_ND, ge::FORMAT_ND});
+
+        // Host 已保证传入
         this->Input("end")
-            .ParamType(OPTIONAL)
+            .ParamType(REQUIRED)
             .DataType({ge::DT_FLOAT, ge::DT_FLOAT16})
-            .Format({ge::FORMAT_ND, ge::FORMAT_ND})
-            .UnknownShapeFormat({ge::FORMAT_ND, ge::FORMAT_ND});
+            .Format({ge::FORMAT_ND, ge::FORMAT_ND});
+
         this->Output("cluster")
             .ParamType(REQUIRED)
             .DataType({ge::DT_INT64, ge::DT_INT64})
@@ -90,4 +97,5 @@ public:
 };
 
 OP_ADD(VoxelGrid);
+
 }  // namespace ops
