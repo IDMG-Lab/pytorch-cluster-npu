@@ -64,6 +64,10 @@ public:
         // 输出:
         // BUFFER_POINTS 个 int64
         pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int64_t));
+
+        pipe.InitBuffer(tmpBuf1, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(tmpBuf2, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(gridBuf, (BUFFER_POINTS + 8) * sizeof(int64_t));
     }
 
     __aicore__ inline void Process() {
@@ -129,37 +133,102 @@ private:
 
     __aicore__ inline void Compute(uint32_t count) {
         LocalTensor<float> posLocal = inQue.DeQue<float>();
-
         LocalTensor<int64_t> clusterLocal = outQue.AllocTensor<int64_t>();
 
+        // 临时Tensor
+        LocalTensor<float> tmpSub =
+            tmpBuf1.AllocTensor<float>();
+
+        LocalTensor<float> tmpCoord =
+            tmpBuf2.AllocTensor<float>();
+
+        // 初始化cluster
         for (uint32_t i = 0; i < count; i++) {
-            int64_t cluster = 0;
-
-            int64_t stride = 1;
-
-            for (uint32_t d = 0; d < dim; d++) {
-                uint32_t idx = i * dim + d;
-
-                float val = posLocal.GetValue(idx);
-                float sizeVal = sizeGm.GetValue(d);
-                float startVal = startGm.GetValue(d);
-                float endVal = endGm.GetValue(d);
-
-                // CUDA一致
-                float coord = (val - startVal) / sizeVal;
-                int64_t grid = static_cast<int64_t>(coord);
-                if (coord < 0 && coord != grid) {
-                    grid -= 1;
-                }
-
-                cluster += grid * stride;
-
-                int64_t gridSize = static_cast<int64_t>((endVal - startVal) / sizeVal) + 1;
-
-                stride *= gridSize;
-            }
-            clusterLocal.SetValue(i, cluster);
+            clusterLocal.SetValue(i, 0);
         }
+
+        int64_t stride = 1;
+
+        // 提前Alloc
+        LocalTensor<int64_t> gridLocal =
+            gridBuf.AllocTensor<int64_t>();
+
+        for (uint32_t d = 0; d < dim; d++) {
+            float startVal = startGm.GetValue(d);
+
+            float sizeVal = sizeGm.GetValue(d);
+
+            float endVal = endGm.GetValue(d);
+
+            // =========================
+            // 1. 提取当前维度数据
+            // =========================
+
+            for (uint32_t i = 0; i < count; i++) {
+                tmpSub.SetValue(
+                    i,
+                    posLocal.GetValue(i * dim + d));
+            }
+
+            // =========================
+            // 2. Vector: val - start
+            // =========================
+
+            Adds(
+                tmpSub,
+                tmpSub,
+                -startVal,
+                count);
+
+            // =========================
+            // 3. Vector: / size
+            // =========================
+
+            Muls(
+                tmpCoord,
+                tmpSub,
+                1.0f / sizeVal,
+                count);
+
+            // =========================
+            // 4. Vector floor
+            // =========================
+
+            Cast(
+                gridLocal,
+                tmpCoord,
+                RoundMode::CAST_FLOOR,
+                count);
+
+            // =========================
+            // 5. cluster累积
+            // =========================
+
+            for (uint32_t i = 0; i < count; i++) {
+                int64_t grid =
+                    gridLocal.GetValue(i);
+
+                int64_t oldCluster =
+                    clusterLocal.GetValue(i);
+
+                clusterLocal.SetValue(
+                    i,
+                    oldCluster + grid * stride);
+            }
+
+            int64_t gridSize =
+                static_cast<int64_t>(
+                    (endVal - startVal) / sizeVal) +
+                1;
+
+            stride *= gridSize;
+        }
+
+        // Free
+        gridBuf.FreeTensor(gridLocal);
+        tmpBuf1.FreeTensor(tmpSub);
+        tmpBuf2.FreeTensor(tmpCoord);
+
         outQue.EnQue(clusterLocal);
         inQue.FreeTensor(posLocal);
     }
@@ -178,6 +247,11 @@ private:
     TQue<QuePosition::VECIN, BUFFER_NUM> inQue;
     TQue<QuePosition::VECCALC, BUFFER_NUM> tmpQue;
     TQue<QuePosition::VECOUT, BUFFER_NUM> outQue;
+
+    TBuf<QuePosition::VECCALC> tmpBuf1;
+    TBuf<QuePosition::VECCALC> tmpBuf2;
+    TBuf<QuePosition::VECCALC> gridBuf;
+
     GlobalTensor<float> posGm;
     GlobalTensor<int64_t> clusterGm;
     uint32_t workPoints;
