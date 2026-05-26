@@ -6,10 +6,11 @@ namespace optiling {
 static ge::graphStatus TilingFunc(gert::TilingContext* context) {
     VoxelGridTilingData tiling;
 
-    // 1. 获取输入形状 pos: [N, D]
+    // 1. 获取输入形状
+    // SoA布局: pos: [D, N]
     auto pos_shape = context->GetInputShape(0)->GetStorageShape();
-    uint32_t numPoints = pos_shape.GetDim(0);  // 点的数量 N
-    uint32_t dim = pos_shape.GetDim(1);        // 坐标维度 D
+    uint32_t dim = pos_shape.GetDim(0);
+    uint32_t numPoints = pos_shape.GetDim(1);
 
     // 2. 确定核数 (BlockDim)  改进：根据点数动态确定核数，最多使用 8 核 (numPoints < 8) ? 1 : 8;
     uint32_t blockNum = (numPoints < 1024) ? 1 : 8;
@@ -36,12 +37,12 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
 
 namespace ge {
 static ge::graphStatus InferShape(gert::InferShapeContext* context) {
-    const gert::Shape* x1_shape = context->GetInputShape(0);  // [N, D]
+    const gert::Shape* x1_shape = context->GetInputShape(0);  // [D, N]
     gert::Shape* y_shape = context->GetOutputShape(0);
 
-    // 输出应该是 [N]
     y_shape->SetDimNum(1);
-    y_shape->SetDim(0, x1_shape->GetDim(0));
+    // output: [N]
+    y_shape->SetDim(0, x1_shape->GetDim(1));
 
     return GRAPH_SUCCESS;
 }

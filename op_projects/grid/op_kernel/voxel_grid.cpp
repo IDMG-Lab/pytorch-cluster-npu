@@ -15,265 +15,218 @@ public:
         GM_ADDR end,
         GM_ADDR cluster,
         const VoxelGridTilingData* tilingData) {
-        // =========================
-        // 基本信息
-        // =========================
-        this->dim = tilingData->dim;
-        this->workPoints =
-            tilingData->numPoints;
-        if (this->workPoints == 0) {
+        dim = tilingData->dim;
+        workPoints = tilingData->numPoints;
+
+        if (workPoints == 0) {
+            coreOffset = 0;
+            corePoints = 0;
             return;
         }
 
-        // =========================
-        // 多核切分
-        // =========================
         uint32_t blockIdx = GetBlockIdx();
         uint32_t blockNum = GetBlockNum();
+
         uint32_t pointsPerCore = tilingData->blockPoints;
         uint32_t tailPoints = tilingData->tailPoints;
 
-        // 当前Core起始点
         coreOffset = blockIdx * pointsPerCore;
-
-        // 当前Core处理点数
         corePoints = pointsPerCore;
 
-        // 最后一个Core处理tail
         if (blockIdx == blockNum - 1) {
             corePoints += tailPoints;
         }
 
-        // =========================
-        // GM绑定
-        // =========================
+        // SoA: pos shape = [D, N]
         posGm.SetGlobalBuffer((__gm__ float*)pos);
-        clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
         sizeGm.SetGlobalBuffer((__gm__ float*)size);
         startGm.SetGlobalBuffer((__gm__ float*)start);
         endGm.SetGlobalBuffer((__gm__ float*)end);
+        clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
 
-        // =========================
-        // Queue Buffer
-        // =========================
-        // 输入:
-        // BUFFER_POINTS 个点
-        // 每个点 dim 个float
-        pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * dim * sizeof(float));
+        pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int32_t));
 
-        // 输出:
-        // BUFFER_POINTS 个 int64
-        pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int64_t));
-
-        pipe.InitBuffer(tmpBuf1, BUFFER_POINTS * sizeof(float));
-        pipe.InitBuffer(tmpBuf2, BUFFER_POINTS * sizeof(float));
-        pipe.InitBuffer(gridBuf, (BUFFER_POINTS + 8) * sizeof(int64_t));
+        pipe.InitBuffer(tmpBuf, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(gridI32Buf, BUFFER_POINTS * sizeof(int32_t));
+        pipe.InitBuffer(strideBuf, BUFFER_POINTS * sizeof(int32_t));
+        pipe.InitBuffer(castBuf, BUFFER_POINTS * sizeof(int64_t));
     }
 
     __aicore__ inline void Process() {
-        if (corePoints == 0)
+        if (corePoints == 0) {
             return;
+        }
 
-        // 使用corePoints
         uint32_t loop = (corePoints + BUFFER_POINTS - 1) / BUFFER_POINTS;
-        for (int32_t i = 0; i < loop + BUFFER_NUM; i++) {
-            // CopyIn
-            if (i < loop) {
-                // 全局offset
-                uint32_t pointOffset = coreOffset + i * BUFFER_POINTS;
-                uint32_t count = GetCount(pointOffset);
-                CopyIn(pointOffset, count);
+
+        for (uint32_t t = 0; t < loop; ++t) {
+            uint32_t pointOffset = coreOffset + t * BUFFER_POINTS;
+            uint32_t count = GetCount(pointOffset);
+
+            LocalTensor<int32_t> clusterLocal = outQue.AllocTensor<int32_t>();
+
+            Duplicate<int32_t>(clusterLocal, 0, count);
+
+            int32_t stride = 1;
+
+            for (uint32_t d = 0; d < dim; ++d) {
+                CopyIn(pointOffset, count, d);
+                Compute(count, d, stride, clusterLocal);
+
+                float s = sizeGm.GetValue(d);
+                float st = startGm.GetValue(d);
+                float e = endGm.GetValue(d);
+
+                int32_t gridSize =
+                    static_cast<int32_t>((e - st) / s) + 1;
+
+                stride *= gridSize;
             }
 
-            // Compute
-            if (i >= 1 && i < loop + 1) {
-                uint32_t computeIdx = i - 1;
-                // 全局offset
-                uint32_t offset = coreOffset + computeIdx * BUFFER_POINTS;
-                uint32_t count = GetCount(offset);
-                Compute(count);
-            }
-
-            // CopyOut
-            if (i >= 2) {
-                uint32_t outIdx = i - 2;
-                // 全局offset
-                uint32_t offset = coreOffset + outIdx * BUFFER_POINTS;
-                uint32_t count = GetCount(offset);
-                CopyOut(offset, count);
-            }
+            outQue.EnQue(clusterLocal);
+            CopyOut(pointOffset, count);
         }
     }
 
 private:
-    // GetCount适配多核
     __aicore__ inline uint32_t GetCount(uint32_t offset) {
         uint32_t localOffset = offset - coreOffset;
         uint32_t remain = corePoints - localOffset;
         return remain > BUFFER_POINTS ? BUFFER_POINTS : remain;
     }
 
-    __aicore__ inline void CopyIn(uint32_t offset, uint32_t count) {
+    __aicore__ inline void CopyIn(
+        uint32_t offset,
+        uint32_t count,
+        uint32_t d) {
         LocalTensor<float> posLocal = inQue.AllocTensor<float>();
 
-        uint32_t copyCount = count * dim;
+        // SoA contiguous read:
+        // pos[d, offset : offset + count]
+        uint32_t gmOffset = d * workPoints + offset;
 
-        // 使用DataCopyPad进行非32B对齐搬运
-        // burstLen单位是Bytes
-        DataCopyExtParams copyParams{1, static_cast<uint32_t>(copyCount * sizeof(float)), 0, 0, 0};
+        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(float)), 0, 0, 0};
 
-        // pad到32B对齐
-        // float类型32B = 8个float
         DataCopyPadExtParams<float> padParams{true, 0, 0, 0};
 
-        DataCopyPad(posLocal, posGm[offset * dim], copyParams, padParams);
+        DataCopyPad(posLocal, posGm[gmOffset], copyParams, padParams);
 
         inQue.EnQue(posLocal);
     }
 
-    __aicore__ inline void Compute(uint32_t count) {
-        LocalTensor<float> posLocal = inQue.DeQue<float>();
-        LocalTensor<int64_t> clusterLocal = outQue.AllocTensor<int64_t>();
+    __aicore__ inline void Compute(
+        uint32_t count,
+        uint32_t d,
+        int32_t stride,
+        LocalTensor<int32_t>& clusterLocal) {
+        LocalTensor<float> posLocal =
+            inQue.DeQue<float>();
 
-        // 临时Tensor
-        LocalTensor<float> tmpSub =
-            tmpBuf1.AllocTensor<float>();
+        LocalTensor<float> tmpLocal =
+            tmpBuf.Get<float>();
 
-        LocalTensor<float> tmpCoord =
-            tmpBuf2.AllocTensor<float>();
+        LocalTensor<int32_t> gridLocal =
+            gridI32Buf.Get<int32_t>();
 
-        // 初始化cluster
-        for (uint32_t i = 0; i < count; i++) {
-            clusterLocal.SetValue(i, 0);
-        }
+        LocalTensor<int32_t> strideLocal =
+            strideBuf.Get<int32_t>();
 
-        int64_t stride = 1;
+        float startVal = startGm.GetValue(d);
+        float sizeVal = sizeGm.GetValue(d);
 
-        // 提前Alloc
-        LocalTensor<int64_t> gridLocal =
-            gridBuf.AllocTensor<int64_t>();
+        Adds(tmpLocal, posLocal, -startVal, count);
+        Muls(tmpLocal, tmpLocal, 1.0f / sizeVal, count);
 
-        for (uint32_t d = 0; d < dim; d++) {
-            float startVal = startGm.GetValue(d);
+        Cast(
+            gridLocal,
+            tmpLocal,
+            RoundMode::CAST_FLOOR,
+            count);
 
-            float sizeVal = sizeGm.GetValue(d);
+        Duplicate<int32_t>(
+            strideLocal,
+            stride,
+            count);
 
-            float endVal = endGm.GetValue(d);
+        Mul(
+            gridLocal,
+            gridLocal,
+            strideLocal,
+            count);
 
-            // =========================
-            // 1. 提取当前维度数据
-            // =========================
+        Add(
+            clusterLocal,
+            clusterLocal,
+            gridLocal,
+            count);
 
-            for (uint32_t i = 0; i < count; i++) {
-                tmpSub.SetValue(
-                    i,
-                    posLocal.GetValue(i * dim + d));
-            }
-
-            // =========================
-            // 2. Vector: val - start
-            // =========================
-
-            Adds(
-                tmpSub,
-                tmpSub,
-                -startVal,
-                count);
-
-            // =========================
-            // 3. Vector: / size
-            // =========================
-
-            Muls(
-                tmpCoord,
-                tmpSub,
-                1.0f / sizeVal,
-                count);
-
-            // =========================
-            // 4. Vector floor
-            // =========================
-
-            Cast(
-                gridLocal,
-                tmpCoord,
-                RoundMode::CAST_FLOOR,
-                count);
-
-            // =========================
-            // 5. cluster累积
-            // =========================
-
-            for (uint32_t i = 0; i < count; i++) {
-                int64_t grid =
-                    gridLocal.GetValue(i);
-
-                int64_t oldCluster =
-                    clusterLocal.GetValue(i);
-
-                clusterLocal.SetValue(
-                    i,
-                    oldCluster + grid * stride);
-            }
-
-            int64_t gridSize =
-                static_cast<int64_t>(
-                    (endVal - startVal) / sizeVal) +
-                1;
-
-            stride *= gridSize;
-        }
-
-        // Free
-        gridBuf.FreeTensor(gridLocal);
-        tmpBuf1.FreeTensor(tmpSub);
-        tmpBuf2.FreeTensor(tmpCoord);
-
-        outQue.EnQue(clusterLocal);
         inQue.FreeTensor(posLocal);
     }
 
-    __aicore__ inline void CopyOut(uint32_t offset, uint32_t count) {
-        LocalTensor<int64_t> outLocal = outQue.DeQue<int64_t>();
+    __aicore__ inline void CopyOut(
+        uint32_t offset,
+        uint32_t count) {
+        LocalTensor<int32_t> outLocal32 =
+            outQue.DeQue<int32_t>();
 
-        // 使用DataCopyPad进行非32B对齐写回
-        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(int64_t)), 0, 0, 0};
-        DataCopyPad(clusterGm[offset], outLocal, copyParams);
-        outQue.FreeTensor(outLocal);
+        LocalTensor<int64_t> outLocal64 =
+            castBuf.Get<int64_t>();
+
+        Cast(
+            outLocal64,
+            outLocal32,
+            RoundMode::CAST_NONE,
+            count);
+
+        DataCopyExtParams copyParams{
+            1,
+            static_cast<uint32_t>(count * sizeof(int64_t)),
+            0,
+            0,
+            0};
+
+        DataCopyPad(
+            clusterGm[offset],
+            outLocal64,
+            copyParams);
+
+        outQue.FreeTensor(outLocal32);
     }
 
 private:
     TPipe pipe;
+
     TQue<QuePosition::VECIN, BUFFER_NUM> inQue;
-    TQue<QuePosition::VECCALC, BUFFER_NUM> tmpQue;
     TQue<QuePosition::VECOUT, BUFFER_NUM> outQue;
 
-    TBuf<QuePosition::VECCALC> tmpBuf1;
-    TBuf<QuePosition::VECCALC> tmpBuf2;
-    TBuf<QuePosition::VECCALC> gridBuf;
+    TBuf<QuePosition::VECCALC> tmpBuf;
+    TBuf<QuePosition::VECCALC> gridI32Buf;
+    TBuf<QuePosition::VECCALC> strideBuf;
+    TBuf<QuePosition::VECCALC> castBuf;
 
     GlobalTensor<float> posGm;
-    GlobalTensor<int64_t> clusterGm;
-    uint32_t workPoints;
-    uint32_t coreOffset;
-    uint32_t corePoints;
     GlobalTensor<float> sizeGm;
     GlobalTensor<float> startGm;
     GlobalTensor<float> endGm;
-    uint32_t dim;
+    GlobalTensor<int64_t> clusterGm;
+
+    uint32_t workPoints = 0;
+    uint32_t coreOffset = 0;
+    uint32_t corePoints = 0;
+    uint32_t dim = 0;
 };
 
-extern "C" __global__
-    __aicore__ void
-    voxel_grid(
-        GM_ADDR pos,
-        GM_ADDR size,
-        GM_ADDR start,
-        GM_ADDR end,
-        GM_ADDR cluster,
-        GM_ADDR workspace,
-        GM_ADDR tiling) {
+extern "C" __global__ __aicore__ void voxel_grid(
+    GM_ADDR pos,
+    GM_ADDR size,
+    GM_ADDR start,
+    GM_ADDR end,
+    GM_ADDR cluster,
+    GM_ADDR workspace,
+    GM_ADDR tiling) {
     GET_TILING_DATA(tiling_data, tiling);
+
     KernelVoxelGrid op;
     op.Init(pos, size, start, end, cluster, &tiling_data);
     op.Process();

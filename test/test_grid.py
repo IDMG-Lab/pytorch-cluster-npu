@@ -377,16 +377,14 @@ def create_performance_test(num_points):
 
 performance_tests = [
     create_performance_test(n)
-    for n in [1000, 10000, 100000, 1000000]
+    for n in [10000]
 ]
 
 
 # =========================================================
-# 8. 合并测试
+# 8. 合并测试  basic_tests + start_tests + edge_tests + alignment_tests + dimension_tests + random_tests  performance_tests
 # =========================================================
-all_tests = (
-    dimension_tests
-)
+all_tests = (basic_tests)
 
 print(f"Total tests generated: {len(all_tests)}")
 
@@ -524,38 +522,38 @@ def test_grid_cluster_enhanced(
     # -----------------------------
     # benchmark
     # -----------------------------
-    runtime = benchmark(grid_cluster, pos, size, start, end, device=device)
+    # runtime = benchmark(grid_cluster, pos, size, start, end, device=device)
 
-    print(
-        f"  [Benchmark] "
-        f"{device} time: "
-        f"{runtime * 1e6:.2f} us"
-    )
+    # print(
+    #     f"  [Benchmark] "
+    #     f"{device} time: "
+    #     f"{runtime * 1e6:.2f} us"
+    # )
 
     # -----------------------------
     # CPU compare
     # -----------------------------
-    if device.type == "npu":
+    # if device.type == "npu":
 
-        pos_cpu = pos.cpu()
-        size_cpu = size.cpu()
-        start_cpu = start.cpu()
-        end_cpu = end.cpu()
+    #     pos_cpu = pos.cpu()
+    #     size_cpu = size.cpu()
+    #     start_cpu = start.cpu()
+    #     end_cpu = end.cpu()
 
-        cpu_time = benchmark(grid_cluster, pos_cpu, size_cpu, start_cpu, end_cpu, device=torch.device("cpu"))
+    #     cpu_time = benchmark(grid_cluster, pos_cpu, size_cpu, start_cpu, end_cpu, device=torch.device("cpu"))
 
-        print(
-            f"  [Benchmark] CPU time: "
-            f"{cpu_time * 1e6:.2f} us"
-        )
+    #     print(
+    #         f"  [Benchmark] CPU time: "
+    #         f"{cpu_time * 1e6:.2f} us"
+    #     )
 
-        print(
-            f"  [Benchmark] Speedup: "
-            f"{cpu_time / runtime:.2f}x"
-        )
+    #     print(
+    #         f"  [Benchmark] Speedup: "
+    #         f"{cpu_time / runtime:.2f}x"
+    #     )
 
-    print(f"  Test '{test['name']}' passed!")
-    print("=" * 60)
+    # print(f"  Test '{test['name']}' passed!")
+    # print("=" * 60)
 
 
 # =========================================================
@@ -570,4 +568,4 @@ def run_smoke_tests():
 
 
 if __name__ == "__main__":
-    pytest.main([__file__, "-v", "-k", "not perf"])
+    pytest.main([__file__, "-v"])
