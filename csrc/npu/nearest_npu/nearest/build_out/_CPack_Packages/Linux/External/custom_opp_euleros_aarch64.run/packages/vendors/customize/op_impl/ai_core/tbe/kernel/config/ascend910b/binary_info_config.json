@@ -1,0 +1,68 @@
+{
+  "NearestNeighbor": {
+    "dynamicRankSupport": true,
+    "simplifiedKeyMode": 0,
+    "optionalInputMode": "gen_placeholder",
+    "optionalOutputMode": "gen_placeholder",
+    "params": {
+      "inputs": [
+        {
+          "name": "x",
+          "index": 0,
+          "paramType": "required",
+          "formatMode": "static_nd_agnostic"
+        },
+        {
+          "name": "y",
+          "index": 1,
+          "paramType": "required",
+          "formatMode": "static_nd_agnostic"
+        },
+        {
+          "name": "ptr_x",
+          "index": 2,
+          "paramType": "required",
+          "formatMode": "static_nd_agnostic"
+        },
+        {
+          "name": "ptr_y",
+          "index": 3,
+          "paramType": "required",
+          "formatMode": "static_nd_agnostic"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "cluster",
+          "index": 0,
+          "paramType": "required",
+          "formatMode": "static_nd_agnostic"
+        }
+      ]
+    },
+    "binaryList": [
+      {
+        "coreType": 2,
+        "simplifiedKey": [
+          "NearestNeighbor/d=0,p=1/0,2/0,2/9,2/9,2/9,2",
+          "NearestNeighbor/d=0,p=0/0,2/0,2/9,2/9,2/9,2",
+          "NearestNeighbor/d=1,p=1/0,2/0,2/9,2/9,2/9,2",
+          "NearestNeighbor/d=1,p=0/0,2/0,2/9,2/9,2/9,2"
+        ],
+        "binPath": "ascend910b/nearest_neighbor/NearestNeighbor_5b0b625d36648bb7a797131169a17660.o",
+        "jsonPath": "ascend910b/nearest_neighbor/NearestNeighbor_5b0b625d36648bb7a797131169a17660.json"
+      },
+      {
+        "coreType": 2,
+        "simplifiedKey": [
+          "NearestNeighbor/d=0,p=1/1,2/1,2/9,2/9,2/9,2",
+          "NearestNeighbor/d=0,p=0/1,2/1,2/9,2/9,2/9,2",
+          "NearestNeighbor/d=1,p=1/1,2/1,2/9,2/9,2/9,2",
+          "NearestNeighbor/d=1,p=0/1,2/1,2/9,2/9,2/9,2"
+        ],
+        "binPath": "ascend910b/nearest_neighbor/NearestNeighbor_b53c747e3d356dc34eda47b09f5922c8.o",
+        "jsonPath": "ascend910b/nearest_neighbor/NearestNeighbor_b53c747e3d356dc34eda47b09f5922c8.json"
+      }
+    ]
+  }
+}
