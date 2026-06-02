@@ -120,17 +120,13 @@ private:
         uint32_t d,
         int32_t stride,
         LocalTensor<int32_t>& clusterLocal) {
-        LocalTensor<float> posLocal =
-            inQue.DeQue<float>();
+        LocalTensor<float> posLocal = inQue.DeQue<float>();
 
-        LocalTensor<float> tmpLocal =
-            tmpBuf.Get<float>();
+        LocalTensor<float> tmpLocal = tmpBuf.Get<float>();
 
-        LocalTensor<int32_t> gridLocal =
-            gridI32Buf.Get<int32_t>();
+        LocalTensor<int32_t> gridLocal = gridI32Buf.Get<int32_t>();
 
-        LocalTensor<int32_t> strideLocal =
-            strideBuf.Get<int32_t>();
+        LocalTensor<int32_t> strideLocal = strideBuf.Get<int32_t>();
 
         float startVal = startGm.GetValue(d);
         float sizeVal = sizeGm.GetValue(d);
@@ -138,28 +134,13 @@ private:
         Adds(tmpLocal, posLocal, -startVal, count);
         Muls(tmpLocal, tmpLocal, 1.0f / sizeVal, count);
 
-        Cast(
-            gridLocal,
-            tmpLocal,
-            RoundMode::CAST_FLOOR,
-            count);
+        Cast(gridLocal, tmpLocal, RoundMode::CAST_FLOOR, count);
 
-        Duplicate<int32_t>(
-            strideLocal,
-            stride,
-            count);
+        Duplicate<int32_t>(strideLocal, stride, count);
 
-        Mul(
-            gridLocal,
-            gridLocal,
-            strideLocal,
-            count);
+        Mul(gridLocal, gridLocal, strideLocal, count);
 
-        Add(
-            clusterLocal,
-            clusterLocal,
-            gridLocal,
-            count);
+        Add(clusterLocal, clusterLocal, gridLocal, count);
 
         inQue.FreeTensor(posLocal);
     }
@@ -167,29 +148,15 @@ private:
     __aicore__ inline void CopyOut(
         uint32_t offset,
         uint32_t count) {
-        LocalTensor<int32_t> outLocal32 =
-            outQue.DeQue<int32_t>();
+        LocalTensor<int32_t> outLocal32 = outQue.DeQue<int32_t>();
 
-        LocalTensor<int64_t> outLocal64 =
-            castBuf.Get<int64_t>();
+        LocalTensor<int64_t> outLocal64 = castBuf.Get<int64_t>();
 
-        Cast(
-            outLocal64,
-            outLocal32,
-            RoundMode::CAST_NONE,
-            count);
+        Cast(outLocal64, outLocal32, RoundMode::CAST_NONE, count);
 
-        DataCopyExtParams copyParams{
-            1,
-            static_cast<uint32_t>(count * sizeof(int64_t)),
-            0,
-            0,
-            0};
+        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(int64_t)), 0, 0, 0};
 
-        DataCopyPad(
-            clusterGm[offset],
-            outLocal64,
-            copyParams);
+        DataCopyPad(clusterGm[offset], outLocal64, copyParams);
 
         outQue.FreeTensor(outLocal32);
     }
