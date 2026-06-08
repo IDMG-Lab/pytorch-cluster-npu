@@ -1,7 +1,10 @@
 #include "kernel_operator.h"
 using namespace AscendC;
 
-constexpr uint32_t BUFFER_POINTS = 64;
+// BUFFER_POINTS = 4096
+// UB 占用: 4096 × 36B ≈ 144KB (56% of 256KB on 910B)
+// 相比 64 点 (0.9% UB), 循环次数减少 64x, 显著降低循环开销
+constexpr uint32_t BUFFER_POINTS = 4096;
 constexpr uint32_t BUFFER_NUM = 2;
 
 class KernelVoxelGrid {

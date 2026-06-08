@@ -1,4 +1,5 @@
 #include "register/op_def_registry.h"
+#include "tiling/platform/platform_ascendc.h"
 #include "voxel_grid_tiling.h"
 
 namespace optiling {
@@ -12,8 +13,28 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
     uint32_t dim = pos_shape.GetDim(0);
     uint32_t numPoints = pos_shape.GetDim(1);
 
-    // 2. 确定核数 (BlockDim)  改进：根据点数动态确定核数，最多使用 8 核 (numPoints < 8) ? 1 : 8;
-    uint32_t blockNum = (numPoints < 1024) ? 1 : 8;
+    auto ascendcPlatform =
+        platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
+
+    uint32_t coreNum = ascendcPlatform.GetCoreNum();
+
+    // 2. 确定核数 (BlockDim)
+    // 分级自适应: 点数越大使用的核数越多, 每核至少处理 ~4096 点以摊销启动开销
+    // 910B 最多 32 核
+    uint32_t blockNum;
+    if (numPoints < 4096) {
+        blockNum = 1;
+    } else if (numPoints < 16384) {
+        blockNum = 4;
+    } else if (numPoints < 65536) {
+        blockNum = 8;
+    } else if (numPoints < 262144) {
+        blockNum = 16;
+    } else {
+        blockNum = 32;
+    }
+
+    blockNum = std::min(blockNum, coreNum);
 
     context->SetBlockDim(blockNum);
 
