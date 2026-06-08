@@ -1,3 +1,5 @@
+#include <cstdint>
+
 #include "register/op_def_registry.h"
 #include "tiling/platform/platform_ascendc.h"
 #include "voxel_grid_tiling.h"
@@ -47,6 +49,8 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
     tiling.set_dim(dim);
     tiling.set_blockPoints(pointsPerCore);
     tiling.set_tailPoints(tailPoints);
+    tiling.set_reserved(0U);
+    tiling.set_usePrecomputed(dim <= VOXEL_GRID_MAX_TILING_DIM ? 1U : 0U);
 
     tiling.SaveToBuffer(context->GetRawTilingData()->GetData(), context->GetRawTilingData()->GetCapacity());
     context->GetRawTilingData()->SetDataSize(tiling.GetDataSize());

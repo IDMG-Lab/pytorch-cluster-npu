@@ -51,6 +51,24 @@ public:
         endGm.SetGlobalBuffer((__gm__ DTYPE_POS*)end);
         clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
 
+        usePrecomputed = tilingData->usePrecomputed != 0;
+        if (usePrecomputed) {
+            int32_t stride = 1;
+            for (uint32_t d = 0; d < dim; ++d) {
+                float s = static_cast<float>(sizeGm.GetValue(d));
+                float st = static_cast<float>(startGm.GetValue(d));
+                float e = static_cast<float>(endGm.GetValue(d));
+
+                startVals[d] = st;
+                invSizeVals[d] = 1.0f / s;
+                strideVals[d] = stride;
+
+                int32_t gridSize =
+                    static_cast<int32_t>((e - st) / s) + 1;
+                stride *= gridSize;
+            }
+        }
+
         pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * sizeof(DTYPE_POS));
         pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int32_t));
 
@@ -76,20 +94,32 @@ public:
 
             Duplicate<int32_t>(clusterLocal, 0, count);
 
-            int32_t stride = 1;
+            if (usePrecomputed) {
+                for (uint32_t d = 0; d < dim; ++d) {
+                    CopyIn(pointOffset, count, d);
+                    Compute(
+                        count,
+                        strideVals[d],
+                        startVals[d],
+                        invSizeVals[d],
+                        clusterLocal);
+                }
+            } else {
+                int32_t stride = 1;
 
-            for (uint32_t d = 0; d < dim; ++d) {
-                CopyIn(pointOffset, count, d);
-                Compute(count, d, stride, clusterLocal);
+                for (uint32_t d = 0; d < dim; ++d) {
+                    float s = static_cast<float>(sizeGm.GetValue(d));
+                    float st = static_cast<float>(startGm.GetValue(d));
+                    float e = static_cast<float>(endGm.GetValue(d));
 
-                float s = static_cast<float>(sizeGm.GetValue(d));
-                float st = static_cast<float>(startGm.GetValue(d));
-                float e = static_cast<float>(endGm.GetValue(d));
+                    CopyIn(pointOffset, count, d);
+                    Compute(count, stride, st, 1.0f / s, clusterLocal);
 
-                int32_t gridSize =
-                    static_cast<int32_t>((e - st) / s) + 1;
+                    int32_t gridSize =
+                        static_cast<int32_t>((e - st) / s) + 1;
 
-                stride *= gridSize;
+                    stride *= gridSize;
+                }
             }
 
             outQue.EnQue(clusterLocal);
@@ -140,8 +170,9 @@ private:
 
     __aicore__ inline void Compute(
         uint32_t count,
-        uint32_t d,
         int32_t stride,
+        float startVal,
+        float invSizeVal,
         LocalTensor<int32_t>& clusterLocal) {
         LocalTensor<DTYPE_POS> posLocal = inQue.DeQue<DTYPE_POS>();
 
@@ -153,11 +184,8 @@ private:
 
         LocalTensor<int32_t> strideLocal = strideBuf.Get<int32_t>();
 
-        float startVal = static_cast<float>(startGm.GetValue(d));
-        float sizeVal = static_cast<float>(sizeGm.GetValue(d));
-
         Adds(tmpLocal, posFloatLocal, -startVal, count);
-        Muls(tmpLocal, tmpLocal, 1.0f / sizeVal, count);
+        Muls(tmpLocal, tmpLocal, invSizeVal, count);
 
         Cast(gridLocal, tmpLocal, RoundMode::CAST_FLOOR, count);
 
@@ -208,6 +236,10 @@ private:
     uint32_t coreOffset = 0;
     uint32_t corePoints = 0;
     uint32_t dim = 0;
+    bool usePrecomputed = false;
+    float startVals[16] = {};
+    float invSizeVals[16] = {};
+    int32_t strideVals[16] = {};
 };
 
 extern "C" __global__ __aicore__ void voxel_grid(

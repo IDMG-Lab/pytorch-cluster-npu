@@ -1,11 +1,15 @@
 #include "register/tilingdata_base.h"
 
 namespace optiling {
+constexpr uint32_t VOXEL_GRID_MAX_TILING_DIM = 16;
+
 BEGIN_TILING_DATA_DEF(VoxelGridTilingData)
-TILING_DATA_FIELD_DEF(uint32_t, numPoints);    // 总点数 N
-TILING_DATA_FIELD_DEF(uint32_t, dim);          // 坐标维度 D (如 3)
-TILING_DATA_FIELD_DEF(uint32_t, blockPoints);  // 每个 Core 处理的点数
-TILING_DATA_FIELD_DEF(uint32_t, tailPoints);   // 最后一个 Core 处理的点数
+TILING_DATA_FIELD_DEF(uint32_t, numPoints);
+TILING_DATA_FIELD_DEF(uint32_t, dim);
+TILING_DATA_FIELD_DEF(uint32_t, blockPoints);
+TILING_DATA_FIELD_DEF(uint32_t, tailPoints);
+TILING_DATA_FIELD_DEF(uint32_t, usePrecomputed);
+TILING_DATA_FIELD_DEF(uint32_t, reserved);
 END_TILING_DATA_DEF;
 
 REGISTER_TILING_DATA_CLASS(VoxelGrid, VoxelGridTilingData)

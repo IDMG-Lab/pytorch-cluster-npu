@@ -382,9 +382,9 @@ performance_tests = [
 
 
 # =========================================================
-# 8. 合并测试  basic_tests + start_tests + edge_tests + alignment_tests + dimension_tests + random_tests  performance_tests
+# 8. 合并测试  basic_tests + dtype_tests + start_tests + edge_tests + alignment_tests + dimension_tests + random_tests  performance_tests
 # =========================================================
-all_tests = (dtype_tests)
+all_tests = (dimension_tests)
 
 print(f"Total tests generated: {len(all_tests)}")
 
