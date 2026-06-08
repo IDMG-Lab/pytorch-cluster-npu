@@ -1,6 +1,10 @@
 #include "kernel_operator.h"
 using namespace AscendC;
 
+#ifndef DTYPE_POS
+#define DTYPE_POS float
+#endif
+
 // BUFFER_POINTS = 4096
 // UB 占用: 4096 × 36B ≈ 144KB (56% of 256KB on 910B)
 // 相比 64 点 (0.9% UB), 循环次数减少 64x, 显著降低循环开销
@@ -41,16 +45,17 @@ public:
         }
 
         // SoA: pos shape = [D, N]
-        posGm.SetGlobalBuffer((__gm__ float*)pos);
-        sizeGm.SetGlobalBuffer((__gm__ float*)size);
-        startGm.SetGlobalBuffer((__gm__ float*)start);
-        endGm.SetGlobalBuffer((__gm__ float*)end);
+        posGm.SetGlobalBuffer((__gm__ DTYPE_POS*)pos);
+        sizeGm.SetGlobalBuffer((__gm__ DTYPE_POS*)size);
+        startGm.SetGlobalBuffer((__gm__ DTYPE_POS*)start);
+        endGm.SetGlobalBuffer((__gm__ DTYPE_POS*)end);
         clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
 
-        pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * sizeof(DTYPE_POS));
         pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int32_t));
 
         pipe.InitBuffer(tmpBuf, BUFFER_POINTS * sizeof(float));
+        pipe.InitBuffer(posFloatBuf, BUFFER_POINTS * sizeof(float));
         pipe.InitBuffer(gridI32Buf, BUFFER_POINTS * sizeof(int32_t));
         pipe.InitBuffer(strideBuf, BUFFER_POINTS * sizeof(int32_t));
         pipe.InitBuffer(castBuf, BUFFER_POINTS * sizeof(int64_t));
@@ -77,9 +82,9 @@ public:
                 CopyIn(pointOffset, count, d);
                 Compute(count, d, stride, clusterLocal);
 
-                float s = sizeGm.GetValue(d);
-                float st = startGm.GetValue(d);
-                float e = endGm.GetValue(d);
+                float s = static_cast<float>(sizeGm.GetValue(d));
+                float st = static_cast<float>(startGm.GetValue(d));
+                float e = static_cast<float>(endGm.GetValue(d));
 
                 int32_t gridSize =
                     static_cast<int32_t>((e - st) / s) + 1;
@@ -103,19 +108,34 @@ private:
         uint32_t offset,
         uint32_t count,
         uint32_t d) {
-        LocalTensor<float> posLocal = inQue.AllocTensor<float>();
+        LocalTensor<DTYPE_POS> posLocal = inQue.AllocTensor<DTYPE_POS>();
 
         // SoA contiguous read:
         // pos[d, offset : offset + count]
         uint32_t gmOffset = d * workPoints + offset;
 
-        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(float)), 0, 0, 0};
+        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(DTYPE_POS)), 0, 0, 0};
 
-        DataCopyPadExtParams<float> padParams{true, 0, 0, 0};
+        DataCopyPadExtParams<DTYPE_POS> padParams{true, 0, 0, 0};
 
         DataCopyPad(posLocal, posGm[gmOffset], copyParams, padParams);
 
         inQue.EnQue(posLocal);
+    }
+
+    __aicore__ inline LocalTensor<float> ToFloatTensor(
+        LocalTensor<float>& posLocal,
+        uint32_t count) {
+        (void)count;
+        return posLocal;
+    }
+
+    __aicore__ inline LocalTensor<float> ToFloatTensor(
+        LocalTensor<half>& posLocal,
+        uint32_t count) {
+        LocalTensor<float> posFloatLocal = posFloatBuf.Get<float>();
+        Cast(posFloatLocal, posLocal, RoundMode::CAST_NONE, count);
+        return posFloatLocal;
     }
 
     __aicore__ inline void Compute(
@@ -123,18 +143,20 @@ private:
         uint32_t d,
         int32_t stride,
         LocalTensor<int32_t>& clusterLocal) {
-        LocalTensor<float> posLocal = inQue.DeQue<float>();
+        LocalTensor<DTYPE_POS> posLocal = inQue.DeQue<DTYPE_POS>();
 
         LocalTensor<float> tmpLocal = tmpBuf.Get<float>();
+
+        LocalTensor<float> posFloatLocal = ToFloatTensor(posLocal, count);
 
         LocalTensor<int32_t> gridLocal = gridI32Buf.Get<int32_t>();
 
         LocalTensor<int32_t> strideLocal = strideBuf.Get<int32_t>();
 
-        float startVal = startGm.GetValue(d);
-        float sizeVal = sizeGm.GetValue(d);
+        float startVal = static_cast<float>(startGm.GetValue(d));
+        float sizeVal = static_cast<float>(sizeGm.GetValue(d));
 
-        Adds(tmpLocal, posLocal, -startVal, count);
+        Adds(tmpLocal, posFloatLocal, -startVal, count);
         Muls(tmpLocal, tmpLocal, 1.0f / sizeVal, count);
 
         Cast(gridLocal, tmpLocal, RoundMode::CAST_FLOOR, count);
@@ -171,14 +193,15 @@ private:
     TQue<QuePosition::VECOUT, BUFFER_NUM> outQue;
 
     TBuf<QuePosition::VECCALC> tmpBuf;
+    TBuf<QuePosition::VECCALC> posFloatBuf;
     TBuf<QuePosition::VECCALC> gridI32Buf;
     TBuf<QuePosition::VECCALC> strideBuf;
     TBuf<QuePosition::VECCALC> castBuf;
 
-    GlobalTensor<float> posGm;
-    GlobalTensor<float> sizeGm;
-    GlobalTensor<float> startGm;
-    GlobalTensor<float> endGm;
+    GlobalTensor<DTYPE_POS> posGm;
+    GlobalTensor<DTYPE_POS> sizeGm;
+    GlobalTensor<DTYPE_POS> startGm;
+    GlobalTensor<DTYPE_POS> endGm;
     GlobalTensor<int64_t> clusterGm;
 
     uint32_t workPoints = 0;
