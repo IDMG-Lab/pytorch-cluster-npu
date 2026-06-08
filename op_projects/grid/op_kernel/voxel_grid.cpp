@@ -94,15 +94,13 @@ public:
 
             Duplicate<int32_t>(clusterLocal, 0, count);
 
-            if (usePrecomputed) {
+            if (usePrecomputed && dim == 3) {
+                ProcessDim(pointOffset, count, 0, clusterLocal);
+                ProcessDim(pointOffset, count, 1, clusterLocal);
+                ProcessDim(pointOffset, count, 2, clusterLocal);
+            } else if (usePrecomputed) {
                 for (uint32_t d = 0; d < dim; ++d) {
-                    CopyIn(pointOffset, count, d);
-                    Compute(
-                        count,
-                        strideVals[d],
-                        startVals[d],
-                        invSizeVals[d],
-                        clusterLocal);
+                    ProcessDim(pointOffset, count, d, clusterLocal);
                 }
             } else {
                 int32_t stride = 1;
@@ -132,6 +130,20 @@ private:
         uint32_t localOffset = offset - coreOffset;
         uint32_t remain = corePoints - localOffset;
         return remain > BUFFER_POINTS ? BUFFER_POINTS : remain;
+    }
+
+    __aicore__ inline void ProcessDim(
+        uint32_t pointOffset,
+        uint32_t count,
+        uint32_t d,
+        LocalTensor<int32_t>& clusterLocal) {
+        CopyIn(pointOffset, count, d);
+        Compute(
+            count,
+            strideVals[d],
+            startVals[d],
+            invSizeVals[d],
+            clusterLocal);
     }
 
     __aicore__ inline void CopyIn(
