@@ -30,6 +30,7 @@ pytorch-cluster-npu/
 │       ├── radius_npu.h / radius_npu.cpp
 │       ├── rw_npu.h / rw_npu.cpp
 │       ├── sampler_npu.h / sampler_npu.cpp
+│       ├── nearest_npu/                 # nearest NPU算子相关实现
 │       └── impl/                        # 算子原型定义（JSON）
 │           ├── fps_npu.json
 │           ├── graclus_npu.json

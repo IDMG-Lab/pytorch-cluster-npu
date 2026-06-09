@@ -1,0 +1,160 @@
+{
+  "binList": [
+    {
+      "implMode": "high_performance",
+      "int64Mode": false,
+      "simplifiedKeyMode": 0,
+      "simplifiedKey": [
+        "NearestNeighbor/d=0,p=1/0,2/0,2/9,2/9,2/9,2",
+        "NearestNeighbor/d=0,p=0/0,2/0,2/9,2/9,2/9,2",
+        "NearestNeighbor/d=1,p=1/0,2/0,2/9,2/9,2/9,2",
+        "NearestNeighbor/d=1,p=0/0,2/0,2/9,2/9,2/9,2"
+      ],
+      "staticKey": "5338607306cbfd3910d2809c5c663e15dd8ae0091a9aec70342d93588b60182d,d6aa6b4222d08eaf8582251ec09f3cdde68007449d648ca025e09ce167a34151",
+      "inputs": [
+        {
+          "name": "x",
+          "index": 0,
+          "dtype": "float32",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        },
+        {
+          "name": "y",
+          "index": 1,
+          "dtype": "float32",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        },
+        {
+          "name": "ptr_x",
+          "index": 2,
+          "dtype": "int64",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        },
+        {
+          "name": "ptr_y",
+          "index": 3,
+          "dtype": "int64",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "cluster",
+          "index": 0,
+          "dtype": "int64",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        }
+      ],
+      "opMode": "dynamic",
+      "optionalInputMode": "gen_placeholder",
+      "deterministic": "ignore",
+      "optionalOutputMode": "gen_placeholder",
+      "binInfo": {
+        "jsonFilePath": "ascend910b/nearest_neighbor/NearestNeighbor_5b0b625d36648bb7a797131169a17660.json"
+      }
+    },
+    {
+      "implMode": "high_performance",
+      "int64Mode": false,
+      "simplifiedKeyMode": 0,
+      "simplifiedKey": [
+        "NearestNeighbor/d=0,p=1/1,2/1,2/9,2/9,2/9,2",
+        "NearestNeighbor/d=0,p=0/1,2/1,2/9,2/9,2/9,2",
+        "NearestNeighbor/d=1,p=1/1,2/1,2/9,2/9,2/9,2",
+        "NearestNeighbor/d=1,p=0/1,2/1,2/9,2/9,2/9,2"
+      ],
+      "staticKey": "c3c1b32976abba1864e6d9606d0c888f0373a75db7c7f1b8059cab78303baf9d,a6a5a630fd27af838b4c9c4298b874befde0c5a80590533262812d2410ff9792",
+      "inputs": [
+        {
+          "name": "x",
+          "index": 0,
+          "dtype": "float16",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        },
+        {
+          "name": "y",
+          "index": 1,
+          "dtype": "float16",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        },
+        {
+          "name": "ptr_x",
+          "index": 2,
+          "dtype": "int64",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        },
+        {
+          "name": "ptr_y",
+          "index": 3,
+          "dtype": "int64",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "cluster",
+          "index": 0,
+          "dtype": "int64",
+          "format": "ND",
+          "paramType": "required",
+          "shape": [
+            -2
+          ],
+          "format_match_mode": "FormatAgnostic"
+        }
+      ],
+      "opMode": "dynamic",
+      "optionalInputMode": "gen_placeholder",
+      "deterministic": "ignore",
+      "optionalOutputMode": "gen_placeholder",
+      "binInfo": {
+        "jsonFilePath": "ascend910b/nearest_neighbor/NearestNeighbor_b53c747e3d356dc34eda47b09f5922c8.json"
+      }
+    }
+  ]
+}
