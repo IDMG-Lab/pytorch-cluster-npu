@@ -18,7 +18,7 @@
         "name": "ratio",
         "param_type": "required",
         "format": ["ND", "ND"],
-        "type": ["float32", "float16"]
+        "type": ["float32", "float32"]
       }
     ],
     "output_desc": [
