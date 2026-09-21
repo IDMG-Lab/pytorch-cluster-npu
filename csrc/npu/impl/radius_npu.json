@@ -1,38 +1,80 @@
 [
   {
-    "op": "RadiusSearch",
+    "op": "Radius",
     "input_desc": [
       {
         "name": "x",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["float32", "float16"]
+        "format": ["ND", "ND", "ND"],
+        "type": ["float32", "float16", "int32"]
       },
       {
         "name": "y",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["float32", "float16"]
+        "format": ["ND", "ND", "ND"],
+        "type": ["float32", "float16", "int32"]
       },
       {
         "name": "ptr_x",
         "param_type": "optional",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int64"]
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
       },
       {
         "name": "ptr_y",
         "param_type": "optional",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int64"]
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
+      },
+      {
+        "name": "sorted_x",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["float32", "float16", "int32"]
+      },
+      {
+        "name": "order",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
+      },
+      {
+        "name": "cell_start",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
+      },
+      {
+        "name": "cell_start_off",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
+      },
+      {
+        "name": "grid_min",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["float32", "float32", "float32"]
+      },
+      {
+        "name": "grid_g",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
+      },
+      {
+        "name": "use_grid",
+        "param_type": "required",
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
       }
     ],
     "output_desc": [
       {
-        "name": "edge_index",
+        "name": "out",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int64"]
+        "format": ["ND", "ND", "ND"],
+        "type": ["int32", "int32", "int32"]
       }
     ],
     "attr": [

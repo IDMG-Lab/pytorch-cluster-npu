@@ -64,6 +64,15 @@ log/
 # OS
 # =========================
 .DS_Store
+
+# =========================
+# Ascend / generated artifacts (extra guards)
+# =========================
+.ipynb_checkpoints/
+*.run
+**/autogen/
+**/*.whl
+**/packages/
 test/sim_output/OPPROF_20260608113010_DRODVEOAJDCAKNAJ/OpBasicInfo.csv
 test/sim_output/OPPROF_20260608113010_DRODVEOAJDCAKNAJ/PipeUtilization.csv
 test/sim_output/OPPROF_20260608113010_DRODVEOAJDCAKNAJ/visualize_data.bin
