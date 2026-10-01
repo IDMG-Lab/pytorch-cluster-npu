@@ -73,6 +73,7 @@ function(add_ops_info_target)
       COMMAND mkdir -p ${opinfo_file_path}
       COMMAND ${ASCEND_PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/cmake/util/parse_ini_to_json.py
               ${OPINFO_OPS_INFO} ${OPINFO_OUTPUT}
+      DEPENDS ${OPINFO_OPS_INFO}
   )
   add_custom_target(${OPINFO_TARGET} ALL
       DEPENDS ${OPINFO_OUTPUT}

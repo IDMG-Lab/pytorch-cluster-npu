@@ -5,34 +5,84 @@
       {
         "name": "rowptr",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND",
+          "ND"
+        ],
+        "type": [
+          "int64",
+          "int32"
+        ]
       },
       {
         "name": "col",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND",
+          "ND"
+        ],
+        "type": [
+          "int64",
+          "int32"
+        ]
       },
       {
         "name": "start",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND",
+          "ND"
+        ],
+        "type": [
+          "int64",
+          "int32"
+        ]
+      },
+      {
+        "name": "random",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "float32"
+        ]
       }
     ],
     "output_desc": [
       {
         "name": "walks",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND",
+          "ND"
+        ],
+        "type": [
+          "int64",
+          "int32"
+        ]
       },
       {
         "name": "e_ids",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND",
+          "ND"
+        ],
+        "type": [
+          "int64",
+          "int32"
+        ]
+      },
+      {
+        "name": "graph_flags",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int32"
+        ]
       }
     ],
     "attr": [
@@ -52,6 +102,12 @@
         "param_type": "optional",
         "type": "float",
         "default_value": 1.0
+      },
+      {
+        "name": "phase",
+        "param_type": "optional",
+        "type": "int",
+        "default_value": 1
       }
     ]
   }

@@ -7,7 +7,7 @@ __version__ = '1.6.3'
 
 for library in [
         '_version', '_grid', '_graclus', '_fps', '_rw', '_sampler', '_nearest',
-        '_knn', '_radius'
+        '_knn', '_radius', '_subgraph'
 ]:
     npu_spec = importlib.machinery.PathFinder().find_spec(
             f'{library}_npu', [osp.dirname(__file__)])
@@ -45,6 +45,7 @@ from .knn import knn, knn_graph  # noqa
 from .nearest import nearest  # noqa
 from .radius import radius, radius_graph  # noqa
 from .rw import random_walk  # noqa
+from .subgraph import subgraph  # noqa
 from .sampler import neighbor_sampler  # noqa
 
 __all__ = [
@@ -58,5 +59,6 @@ __all__ = [
     'radius_graph',
     'random_walk',
     'neighbor_sampler',
+    'subgraph',
     '__version__',
 ]

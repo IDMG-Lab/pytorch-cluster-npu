@@ -121,6 +121,12 @@ random_walk_cpu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor start,
   auto n_out = torch::empty({start.size(0), walk_length + 1}, start.options());
   auto e_out = torch::empty({start.size(0), walk_length}, start.options());
 
+  CHECK_INPUT(walk_length >= 0);
+  if (walk_length == 0) {
+    n_out.select(1, 0).copy_(start);
+    return std::make_tuple(n_out, e_out);
+  }
+
   auto rowptr_data = rowptr.data_ptr<int64_t>();
   auto col_data = col.data_ptr<int64_t>();
   auto start_data = start.data_ptr<int64_t>();

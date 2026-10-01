@@ -5,30 +5,62 @@
       {
         "name": "rowptr",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       },
       {
         "name": "col",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       },
       {
         "name": "weight",
-        "param_type": "optional",
-        "format": ["ND", "ND"],
-        "type": ["float32", "float16"]
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "float32"
+        ]
+      },
+      {
+        "name": "permutation",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       }
     ],
     "output_desc": [
       {
         "name": "cluster",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int32"]
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       }
     ],
-    "attr": []
+    "attr": [
+      {
+        "name": "weighted",
+        "param_type": "required",
+        "type": "bool"
+      }
+    ]
   }
 ]

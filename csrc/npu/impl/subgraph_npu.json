@@ -1,0 +1,18 @@
+[
+  {
+    "op": "ClusterSubgraph",
+    "input_desc": [
+      {"name": "rowptr", "param_type": "required", "format": ["ND"], "type": ["int64"]},
+      {"name": "col", "param_type": "required", "format": ["ND"], "type": ["int64"]},
+      {"name": "nodes", "param_type": "required", "format": ["ND"], "type": ["int64"]},
+      {"name": "mapping", "param_type": "required", "format": ["ND"], "type": ["int32"]}
+    ],
+    "attr": [{"name": "phase", "param_type": "required", "type": "int"}],
+    "output_desc": [
+      {"name": "out_rowptr", "param_type": "required", "format": ["ND"], "type": ["int64"]},
+      {"name": "out_col", "param_type": "required", "format": ["ND"], "type": ["int64"]},
+      {"name": "out_eid", "param_type": "required", "format": ["ND"], "type": ["int64"]},
+      {"name": "out_count", "param_type": "required", "format": ["ND"], "type": ["int64"]}
+    ]
+  }
+]

@@ -5,34 +5,54 @@
       {
         "name": "x",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["float32", "float16"]
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "float32"
+        ]
       },
       {
         "name": "y",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["float32", "float16"]
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "float32"
+        ]
       },
       {
         "name": "ptr_x",
-        "param_type": "optional",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int64"]
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       },
       {
         "name": "ptr_y",
-        "param_type": "optional",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int64"]
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       }
     ],
     "output_desc": [
       {
         "name": "edge_index",
         "param_type": "required",
-        "format": ["ND", "ND"],
-        "type": ["int64", "int64"]
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int64"
+        ]
       }
     ],
     "attr": [
@@ -43,9 +63,8 @@
       },
       {
         "name": "cosine",
-        "param_type": "optional",
-        "type": "bool",
-        "default_value": false
+        "param_type": "required",
+        "type": "bool"
       }
     ]
   }

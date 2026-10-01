@@ -42,7 +42,8 @@ def random_walk(
     :rtype: :class:`LongTensor`
     """
     if num_nodes is None:
-        num_nodes = max(int(row.max()), int(col.max()), int(start.max())) + 1
+        nonempty = [int(t.max()) for t in (row, col, start) if t.numel()]
+        num_nodes = max(nonempty, default=-1) + 1
 
     if coalesced:
         perm = torch.argsort(row * num_nodes + col)

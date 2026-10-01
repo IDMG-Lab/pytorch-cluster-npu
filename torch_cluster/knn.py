@@ -3,6 +3,62 @@ from typing import Optional
 import torch
 
 
+def _knn_tiled_npu(x: torch.Tensor, y: torch.Tensor, k: int) -> torch.Tensor:
+    # Center before the norm expansion to avoid cancellation from a common
+    # translation. Refine a shortlist with direct differences, and fall back
+    # to the scalar kernel when the exclusion margin is numerically unsafe.
+    # Keep the distance tile near 32 MiB; larger workspaces increase
+    # Add/Mul/TopK memory traffic on large reference sets.
+    tile = max(64, min(1024, 8_388_608 // x.size(0)))
+    shortlist = min(x.size(0), k + 8)
+    origin = x[:1]
+    reference_points = x - origin
+    query_points = y - origin
+    reference_norm = (reference_points * reference_points).sum(1)
+    query_norm = (query_points * query_points).sum(1)
+    transposed = reference_points.t().contiguous()
+    references = []
+    boundaries = []
+    for first in range(0, y.size(0), tile):
+        distances = torch.mm(query_points[first:first + tile], transposed) * -2
+        distances = distances + reference_norm.unsqueeze(0)
+        distances = distances + query_norm[first:first + tile].unsqueeze(1)
+        values, ids = distances.topk(shortlist, dim=1, largest=False, sorted=True)
+        references.append(ids)
+        boundaries.append(values[:, -1])
+    candidates = references[0] if len(references) == 1 else torch.cat(references)
+    # Index ordering followed by a stable distance sort handles exact ties.
+    # FP32 represents the permitted fast-path index range exactly and keeps
+    # this sort on AIV instead of the int64 AICPU sorting fallback.
+    candidates = candidates.to(torch.float32).sort(dim=1).values.to(torch.long)
+    # A flat row gather avoids the broadcasted advanced-indexing path.
+    # index_select owns this buffer, so refinement cannot mutate inputs.
+    neighbors = torch.index_select(x, 0, candidates.reshape(-1)).view(
+        y.size(0), shortlist, x.size(1))
+    neighbors.sub_(y.unsqueeze(1)).square_()
+    exact = neighbors.sum(2)
+    order = exact.argsort(dim=1, stable=True)
+    selected = candidates.gather(1, order[:, :k])
+    if shortlist < x.size(0):
+        boundary = boundaries[0] if len(boundaries) == 1 else torch.cat(boundaries)
+        # Conservative FP32 reduction/matmul error estimate. This also sends
+        # nonfinite norm expansions to the direct-distance baseline.
+        error = (4 * x.size(1) * 1.1920928955078125e-7) * (
+            1 + reference_norm.max() + query_norm)
+        kth = exact.gather(1, order[:, k - 1:k]).reshape(-1)
+        unsafe = ~torch.isfinite(boundary) | (kth >= boundary - error)
+        unsafe_ids = unsafe.nonzero().reshape(-1)
+        if unsafe_ids.numel():
+            fallback = torch.ops.torch_cluster.knn(
+                x, y[unsafe_ids].contiguous(), None, None, k, False, 1)
+            selected[unsafe_ids] = fallback[1].view(-1, k)
+    output = torch.empty((2, y.size(0) * k), dtype=torch.long, device=y.device)
+    output[0].view(-1, k).copy_(
+        torch.arange(y.size(0), device=y.device).view(-1, 1))
+    output[1].copy_(selected.reshape(-1))
+    return output
+
+
 def knn(
     x: torch.Tensor,
     y: torch.Tensor,
@@ -78,8 +134,19 @@ def knn(
         ptr_x = torch.bucketize(arange, batch_x)
         ptr_y = torch.bucketize(arange, batch_y)
 
-    return torch.ops.torch_cluster.knn(x, y, ptr_x, ptr_y, k, cosine,
-                                       num_workers)
+    if (x.device.type == 'npu' and ptr_x is None and not cosine
+            and x.dtype == torch.float32 and y.dtype == torch.float32
+            and k <= x.size(0) <= 16_777_216 and 0 < k <= 100
+            and x.size(0) * y.size(0) * x.size(1) >= 1_048_576):
+        return _knn_tiled_npu(x, y, k)
+
+    out = torch.ops.torch_cluster.knn(x, y, ptr_x, ptr_y, k, cosine,
+                                      num_workers)
+    if x.device.type == 'npu' and (ptr_x is not None or x.size(0) < k):
+        # The fixed-capacity Ascend C output uses -1 for missing neighbors.
+        # A query's batch may contain fewer than k reference points.
+        return out[:, out[1] >= 0]
+    return out
 
 
 def knn_graph(

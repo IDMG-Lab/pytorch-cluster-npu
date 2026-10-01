@@ -26,7 +26,7 @@ PyMODINIT_FUNC PyInit__graclus_cpu(void) { return NULL; }
 
 #define CLUSTER_API
 
-CLUSTER_API torch::Tensor graclus(torch::Tensor rowptr, torch::Tensor col,
+static torch::Tensor graclus_dispatch_npu(torch::Tensor rowptr, torch::Tensor col,
                                    std::optional<torch::Tensor> optional_weight) {
   if (rowptr.device().is_cuda()) {
 #ifdef WITH_CUDA
@@ -46,4 +46,4 @@ CLUSTER_API torch::Tensor graclus(torch::Tensor rowptr, torch::Tensor col,
 }
 
 static auto registry =
-    torch::RegisterOperators().op("torch_cluster::graclus", &graclus);
+    torch::RegisterOperators().op("torch_cluster::graclus", &graclus_dispatch_npu);

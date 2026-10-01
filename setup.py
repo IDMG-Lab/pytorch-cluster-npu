@@ -60,8 +60,21 @@ def get_extensions():
     main_files = glob.glob(osp.join(extensions_dir, '*.cpp'))
     # remove generated 'hip' files, in case of rebuilds
     main_files = [path for path in main_files if 'hip' not in path]
+    only_op = os.getenv('TORCH_CLUSTER_ONLY_OP')
+    if only_op:
+        main_files = [path for path in main_files
+                      if osp.basename(path) == f'{only_op}.cpp']
+        if not main_files:
+            raise ValueError(f'unknown operator: {only_op}')
 
-    for main, suffix in product(main_files, suffices):
+    build_suffixes = suffices
+    only_suffix = os.getenv('TORCH_CLUSTER_ONLY_SUFFIX')
+    if only_suffix:
+        if only_suffix not in suffices:
+            raise ValueError(f'unavailable extension suffix: {only_suffix}')
+        build_suffixes = [only_suffix]
+
+    for main, suffix in product(main_files, build_suffixes):
         define_macros = [('WITH_PYTHON', None)]
         undef_macros = []
 
@@ -158,6 +171,23 @@ test_requires = [
     'pytest-cov',
 ]
 
+
+class IsolatedBuildExtension(BuildExtension):
+    """Keep CPU and NPU objects with different compile flags apart."""
+
+    def build_extensions(self):
+        # build_extension temporarily changes build_temp for each extension.
+        self.parallel = 1
+        super().build_extensions()
+
+    def build_extension(self, ext):
+        original = self.build_temp
+        self.build_temp = osp.join(original, ext.name.replace('.', '_'))
+        try:
+            super().build_extension(ext)
+        finally:
+            self.build_temp = original
+
 # work-around hipify abs paths
 include_package_data = True
 if torch.cuda.is_available() and torch.version.hip:
@@ -186,7 +216,8 @@ setup(
     ext_modules=get_extensions() if not BUILD_DOCS else [],
     cmdclass={
         'build_ext':
-        BuildExtension.with_options(no_python_abi_suffix=True, use_ninja=False)
+        IsolatedBuildExtension.with_options(no_python_abi_suffix=True,
+                                            use_ninja=False)
     },
     packages=find_packages(),
     include_package_data=include_package_data,
