@@ -29,21 +29,61 @@
           "ND"
         ],
         "type": [
-          "float32"
+          "int32"
         ]
       },
       {
-        "name": "permutation",
+        "name": "state",
         "param_type": "required",
         "format": [
           "ND"
         ],
         "type": [
-          "int64"
+          "int32"
+        ]
+      },
+      {
+        "name": "candidate",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int32"
         ]
       }
     ],
     "output_desc": [
+      {
+        "name": "next_state",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int32"
+        ]
+      },
+      {
+        "name": "next_candidate",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int32"
+        ]
+      },
+      {
+        "name": "counts",
+        "param_type": "required",
+        "format": [
+          "ND"
+        ],
+        "type": [
+          "int32"
+        ]
+      },
       {
         "name": "cluster",
         "param_type": "required",
@@ -57,9 +97,19 @@
     ],
     "attr": [
       {
+        "name": "phase",
+        "param_type": "required",
+        "type": "int"
+      },
+      {
         "name": "weighted",
         "param_type": "required",
         "type": "bool"
+      },
+      {
+        "name": "weight_kind",
+        "param_type": "required",
+        "type": "int"
       }
     ]
   }
