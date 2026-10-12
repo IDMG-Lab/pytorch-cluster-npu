@@ -25,7 +25,7 @@ at::Tensor PackWeight(torch::Tensor rowptr, int64_t e,
     auto w = optional_weight.value();
     switch (w.scalar_type()) {
       case at::kHalf: case at::kBFloat16: case at::kFloat:
-        raw = w.to(at::kFloat).contiguous().view(at::kInt); break;
+        raw = at::nan_to_num(w.to(at::kFloat), -1.0, c10::nullopt, c10::nullopt).contiguous().view(at::kInt); break;
       case at::kInt: case at::kLong:
         kind = 1; raw = w.to(at::kLong).contiguous().view(at::kInt); break;
       case at::kDouble:
@@ -82,11 +82,15 @@ torch::Tensor graclus_npu(torch::Tensor rowptr, torch::Tensor col,
     EXEC_NPU_CMD(aclnnGraclus, rp, ci, raw, state, candidate, phase, weighted, kind,
                  next, unused, counts, out);
     phaseCounts[2]++;
+    std::swap(state, next);
+    // Host round-trips (D2H counters + stream sync) dominate small/mid graphs;
+    // inspect every second round. Extra converged rounds are safe no-ops and
+    // Finish still bounds any stalled residual, so matching semantics are unchanged.
+    if ((iteration & 1) == 0 && iteration != 63) continue;
     auto progress = counts.cpu();
     const auto data = progress.data_ptr<int32_t>();
     int64_t remaining = 0, changed = 0;
     for (int i = 0; i < 64; ++i) { remaining += data[i*16]; changed += data[i*16+1]; }
-    std::swap(state, next);
     if (!remaining) { finished = true; break; }
     if (!changed) break;
   }

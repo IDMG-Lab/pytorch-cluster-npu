@@ -160,6 +160,26 @@ def test_noncontiguous_csr_and_wide_weight():
     assert torch.equal(got,matching_reference(rp,col,weight))
 
 
+@pytest.mark.parametrize('n',[65,257,1025,24576])
+def test_resident_commit_simd_preserves_matched_labels_and_tails(n):
+    # Sparse active nodes cross ownership boundaries; labels approach the
+    # resident budget's upper bound and the SIMD tail is deliberately partial.
+    active=torch.tensor([0,7,15,16,31,32,n-2,n-1])
+    small_rp,small_col,weight=complete(active.numel(),torch.float32)
+    row=active[torch.repeat_interleave(torch.arange(active.numel()),small_rp[1:]-small_rp[:-1])]
+    col=active[small_col]
+    rp=torch.cat([torch.zeros(1,dtype=torch.long),torch.bincount(row,minlength=n).cumsum(0)])
+    state=torch.arange(n,dtype=torch.int32);state[active]=-1
+    candidate,after=phase_reference(rp,col,weight,state.tolist())
+    got_candidate,got_after,counts=torch.ops.torch_cluster._graclus_phase(
+        rp.npu(),col.npu(),weight.npu(),state.npu())
+    assert got_candidate.cpu().tolist()==candidate
+    assert got_after.cpu().tolist()==after
+    host_counts=counts.cpu()
+    assert int(host_counts[:,0].sum())==sum(v<0 for v in after)
+    assert int(host_counts[:,1].sum())==sum(a<0 and b>=0 for a,b in zip(state.tolist(),after))
+
+
 @pytest.mark.parametrize('dtype',[torch.float32,torch.float64,torch.int64])
 def test_actual_bitmap_phase_with_sparse_active_rows(dtype):
     n=24577
@@ -185,6 +205,36 @@ def test_actual_bitmap_phase_with_sparse_active_rows(dtype):
     flags=(words[nodes//32]>>(nodes%32))&1
     assert torch.equal(flags.bool(),torch.tensor(expected_state)>=0)
     assert int(words[-1]>>(n%32))==0
+
+
+def test_batched_short_rows_match_reference_with_self_loops_and_special_weights():
+    n=129
+    col=(torch.arange(n)[:,None]+torch.tensor([0,1,5,64,127]))%n
+    col=col.flatten()
+    rp=torch.arange(n+1)*5
+    weight=(torch.arange(n*5)%19).float()
+    weight[::11]=float('nan');weight[::13]=float('inf');weight[::17]=-1
+    state=torch.full((n,),-1,dtype=torch.int32)
+    state[::11]=torch.arange(0,n,11,dtype=torch.int32)
+    expected_candidate,expected_state=phase_reference(rp,col,weight,state.tolist())
+    candidate,after,_=torch.ops.torch_cluster._graclus_phase(
+        rp.npu(),col.npu(),weight.npu(),state.npu())
+    assert candidate.cpu().tolist()==expected_candidate
+    assert after.cpu().tolist()==expected_state
+
+
+@pytest.mark.parametrize('n',[65,66,128,129])
+def test_simd_density_dispatch_matches_exact_phase_reference(n):
+    # E/N crosses both SIMD-repeat boundaries; no case-ID-dependent routing.
+    rp,col,weight=complete(n,torch.float32)
+    weight[::23]=float('nan');weight[::29]=float('inf');weight[::31]=-1
+    state=torch.full((n,),-1,dtype=torch.int32)
+    state[::11]=torch.arange(0,n,11,dtype=torch.int32)
+    candidate,after=phase_reference(rp,col,weight,state.tolist())
+    actual_candidate,actual_after,_=torch.ops.torch_cluster._graclus_phase(
+        rp.npu(),col.npu(),weight.npu(),state.npu())
+    assert actual_candidate.cpu().tolist()==candidate
+    assert actual_after.cpu().tolist()==after
 
 
 @pytest.mark.parametrize('dtype',DTYPES)

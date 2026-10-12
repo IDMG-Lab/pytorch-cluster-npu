@@ -85,6 +85,7 @@ public:
 
     pipe.InitBuffer(xTileBuf, TILE * sizeof(TYPE_X));
     pipe.InitBuffer(xFpBuf, TILE * sizeof(float));
+    pipe.InitBuffer(xAllBuf, 4 * TILE * sizeof(float));
     pipe.InitBuffer(sumBuf, TILE * sizeof(float));
     pipe.InitBuffer(reduceWorkBuf, REDUCE_WORK * sizeof(float));
     pipe.InitBuffer(reduceOutBuf, 8 * sizeof(float));
@@ -139,6 +140,35 @@ private:
                                              LocalTensor<float> &yVal)
   {
     LocalTensor<float> sum = sumBuf.Get<float>();
+    // xAllBuf holds up to 4 feature columns; the grid path guarantees F<=4.
+    // This fast path only exists for float inputs.
+    if constexpr (std::is_same_v<TYPE_X, float>)
+    {
+      if (itemLength <= 4)
+      {
+        // Load every feature column of this tile with the raw DMA engine, then
+        // a single MTE2->V barrier: a tile costs two barriers instead of 2F+1.
+        LocalTensor<float> cols = xAllBuf.Get<float>();
+        for (uint32_t d = 0; d < itemLength; ++d)
+        {
+          DataCopyExtParams cp{1, (uint32_t)(Tn * (int32_t)sizeof(float)), 0, 0, 0};
+          DataCopyPad(cols[(int64_t)d * TILE], gm[(int64_t)d * xSize + ts], cp,
+                      DataCopyPadExtParams<float>{false, 0, 0, 0});
+        }
+        PipeBarrier<PIPE_ALL>();
+        Duplicate(sum, 0.0f, Tn);
+        PipeBarrier<PIPE_V>();
+        for (uint32_t d = 0; d < itemLength; ++d)
+        {
+          LocalTensor<float> xf = cols[(int64_t)d * TILE];
+          Adds(xf, xf, -yVal.GetValue(d), Tn);
+          Mul(xf, xf, xf, Tn);
+          Add(sum, sum, xf, Tn);
+        }
+        PipeBarrier<PIPE_V>();
+        return;
+      }
+    }
     Duplicate(sum, 0.0f, Tn);
     PipeBarrier<PIPE_ALL>();
     for (uint32_t d = 0; d < itemLength; ++d)
@@ -511,7 +541,7 @@ private:
   GlobalTensor<TYPE_X> xGm, yGm, sortedXGm;
   GlobalTensor<int32_t> ptrXGm, ptrYGm, outGm, orderGm, cellStartGm, cellStartOffGm, gridGGm, useGridGm;
   GlobalTensor<float> gridMinGm;
-  TBuf<QuePosition::VECCALC> xTileBuf, xFpBuf, sumBuf, reduceWorkBuf, reduceOutBuf;
+  TBuf<QuePosition::VECCALC> xTileBuf, xFpBuf, xAllBuf, sumBuf, reduceWorkBuf, reduceOutBuf;
   TBuf<QuePosition::VECCALC> bboxMinBuf, bboxMaxBuf, yValBuf, cellDimsBuf, resXBuf, resYBuf;
   float r, r2;
   bool useBbox = false;

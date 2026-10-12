@@ -34,9 +34,10 @@ random_walk_npu(torch::Tensor rowptr,
   TORCH_CHECK(rowptr.device().type() == c10::DeviceType::PrivateUse1 &&
                   col.device() == rowptr.device() && start.device() == rowptr.device(),
               "random_walk_npu: inputs must share an NPU device");
-  TORCH_CHECK(rowptr.scalar_type() == at::kLong && col.scalar_type() == at::kLong &&
-                  start.scalar_type() == at::kLong,
-              "random_walk_npu: CSR inputs must be int64");
+  TORCH_CHECK((rowptr.scalar_type() == at::kLong || rowptr.scalar_type() == at::kInt) &&
+                  col.scalar_type() == rowptr.scalar_type() &&
+                  start.scalar_type() == rowptr.scalar_type(),
+              "random_walk_npu: CSR inputs must have the same int32 or int64 dtype");
   TORCH_CHECK(rowptr.dim() == 1 && col.dim() == 1 && start.dim() == 1 &&
                   rowptr.numel() >= 1, "random_walk_npu: expected 1D CSR inputs");
   TORCH_CHECK(walk_length >= 0 && walk_length <= INT32_MAX,
@@ -50,8 +51,11 @@ random_walk_npu(torch::Tensor rowptr,
   if (walk_length == 0)
     return {start.contiguous().view({count, 1}),
             at::empty({count, 0}, start.options())};
-  const int64_t nodes_pitch = ((walk_length + 1 + 7) / 8) * 8;
-  const int64_t edges_pitch = ((walk_length + 7) / 8) * 8;
+  TORCH_CHECK(rowptr.numel() - 1 <= INT32_MAX && col.numel() <= INT32_MAX &&
+                  count <= INT32_MAX, "random_walk_npu: shape exceeds tiling range");
+  const int64_t line_elements = 64 / start.element_size();
+  const int64_t nodes_pitch = ((walk_length + line_elements) / line_elements) * line_elements;
+  const int64_t edges_pitch = ((walk_length + line_elements - 1) / line_elements) * line_elements;
   auto walks = at::empty({count, nodes_pitch}, start.options());
   auto e_ids = at::empty({count, edges_pitch}, start.options());
   auto random = at::rand({count, walk_length},

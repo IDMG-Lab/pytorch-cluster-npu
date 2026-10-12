@@ -8,9 +8,10 @@ subgraph_npu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor nodes) {
   TORCH_CHECK(rowptr.device().type() == c10::DeviceType::PrivateUse1 &&
                   col.device() == rowptr.device() && nodes.device() == rowptr.device(),
               "subgraph: tensors must share an NPU device");
-  TORCH_CHECK(rowptr.scalar_type() == at::kLong && col.scalar_type() == at::kLong &&
-                  nodes.scalar_type() == at::kLong,
-              "subgraph: rowptr, col and nodes must be int64");
+  TORCH_CHECK((rowptr.scalar_type() == at::kLong || rowptr.scalar_type() == at::kInt) &&
+                  col.scalar_type() == rowptr.scalar_type() &&
+                  nodes.scalar_type() == rowptr.scalar_type(),
+              "subgraph: rowptr, col and nodes must have the same int32 or int64 dtype");
   TORCH_CHECK(rowptr.dim() == 1 && col.dim() == 1 && nodes.dim() == 1 &&
                   rowptr.numel() >= 1,
               "subgraph: expected one-dimensional CSR inputs");
@@ -37,7 +38,12 @@ subgraph_npu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor nodes) {
   if (parallel) {
     // Stream ordering plus per-stage cache flushes publish the shared map
     // and prefix without an extra host synchronization between launches.
+    // When the kernel can hold the whole mapping in UB (uint16), every lookup
+    // phase rebuilds it from `nodes`; the shared global map is never read, so
+    // its build phase is skipped.
+    const bool local16 = q > 0 && q <= 65536 && n <= 65536;
     for (int64_t phase = 0; phase < 4; ++phase) {
+      if (phase == 0 && local16) continue;
       EXEC_NPU_CMD(aclnnClusterSubgraph, rowptr, col, nodes, mapping, phase,
                    out_rowptr, out_col, out_eid, out_count);
     }

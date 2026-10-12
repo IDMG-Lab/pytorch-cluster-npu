@@ -23,9 +23,9 @@ def random_walk(
     :obj:`row` (use the :obj:`coalesced` attribute to force).
 
     Args:
-        row (LongTensor): Source nodes.
-        col (LongTensor): Target nodes.
-        start (LongTensor): Nodes from where random walks start.
+        row (Tensor): Source nodes, with int32 or int64 dtype.
+        col (Tensor): Target nodes, with the same dtype as row.
+        start (Tensor): Starting nodes, with the same dtype as row.
         walk_length (int): The walk length.
         p (float, optional): Likelihood of immediately revisiting a node in the
             walk. (default: :obj:`1`)
@@ -39,23 +39,13 @@ def random_walk(
             the indices of edges traversed during the random walk.
             (default: :obj:`False`)
 
-    :rtype: :class:`LongTensor`
+    Output indices retain the input index dtype.
     """
-    if num_nodes is None:
-        nonempty = [int(t.max()) for t in (row, col, start) if t.numel()]
-        num_nodes = max(nonempty, default=-1) + 1
-
-    if coalesced:
-        perm = torch.argsort(row * num_nodes + col)
-        row, col = row[perm], col[perm]
-
-    deg = row.new_zeros(num_nodes)
-    deg.scatter_add_(0, row, torch.ones_like(row))
-    rowptr = row.new_zeros(num_nodes + 1)
-    torch.cumsum(deg, 0, out=rowptr[1:])
-
-    node_seq, edge_seq = torch.ops.torch_cluster.random_walk(
-        rowptr, col, start, walk_length, p, q)
+    if (row.dtype not in (torch.int32, torch.int64)
+            or col.dtype != row.dtype or start.dtype != row.dtype):
+        raise TypeError("row, col and start must have the same int32 or int64 dtype")
+    node_seq, edge_seq = torch.ops.torch_cluster.random_walk_coo(
+        row, col, start, walk_length, p, q, coalesced, num_nodes)
 
     if return_edge_indices:
         return node_seq, edge_seq

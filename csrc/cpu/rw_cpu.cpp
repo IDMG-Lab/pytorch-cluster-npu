@@ -4,8 +4,9 @@
 
 #include "utils.h"
 
-void uniform_sampling(const int64_t *rowptr, const int64_t *col,
-                      const int64_t *start, int64_t *n_out, int64_t *e_out,
+template <typename IndexT>
+void uniform_sampling(const IndexT *rowptr, const IndexT *col,
+                      const IndexT *start, IndexT *n_out, IndexT *e_out,
                       const int64_t numel, const int64_t walk_length) {
 
   auto rand = torch::rand({numel, walk_length});
@@ -34,7 +35,8 @@ void uniform_sampling(const int64_t *rowptr, const int64_t *col,
   });
 }
 
-bool inline is_neighbor(const int64_t *rowptr, const int64_t *col, int64_t v,
+template <typename IndexT>
+bool inline is_neighbor(const IndexT *rowptr, const IndexT *col, int64_t v,
                         int64_t w) {
   int64_t row_start = rowptr[v], row_end = rowptr[v + 1];
   for (auto i = row_start; i < row_end; i++) {
@@ -45,8 +47,9 @@ bool inline is_neighbor(const int64_t *rowptr, const int64_t *col, int64_t v,
 }
 
 // See: https://louisabraham.github.io/articles/node2vec-sampling.html
-void rejection_sampling(const int64_t *rowptr, const int64_t *col,
-                        int64_t *start, int64_t *n_out, int64_t *e_out,
+template <typename IndexT>
+void rejection_sampling(const IndexT *rowptr, const IndexT *col,
+                        IndexT *start, IndexT *n_out, IndexT *e_out,
                         const int64_t numel, const int64_t walk_length,
                         const double p, const double q) {
 
@@ -107,9 +110,13 @@ void rejection_sampling(const int64_t *rowptr, const int64_t *col,
   });
 }
 
+template <typename IndexT>
 std::tuple<torch::Tensor, torch::Tensor>
-random_walk_cpu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor start,
+random_walk_cpu_impl(torch::Tensor rowptr, torch::Tensor col, torch::Tensor start,
                 int64_t walk_length, double p, double q) {
+  TORCH_CHECK((rowptr.scalar_type() == at::kInt || rowptr.scalar_type() == at::kLong) &&
+                  col.scalar_type() == rowptr.scalar_type() && start.scalar_type() == rowptr.scalar_type(),
+              "random_walk: inputs must have the same int32 or int64 dtype");
   CHECK_CPU(rowptr);
   CHECK_CPU(col);
   CHECK_CPU(start);
@@ -127,11 +134,11 @@ random_walk_cpu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor start,
     return std::make_tuple(n_out, e_out);
   }
 
-  auto rowptr_data = rowptr.data_ptr<int64_t>();
-  auto col_data = col.data_ptr<int64_t>();
-  auto start_data = start.data_ptr<int64_t>();
-  auto n_out_data = n_out.data_ptr<int64_t>();
-  auto e_out_data = e_out.data_ptr<int64_t>();
+  auto rowptr_data = rowptr.data_ptr<IndexT>();
+  auto col_data = col.data_ptr<IndexT>();
+  auto start_data = start.data_ptr<IndexT>();
+  auto n_out_data = n_out.data_ptr<IndexT>();
+  auto e_out_data = e_out.data_ptr<IndexT>();
 
   if (p == 1. && q == 1.) {
     uniform_sampling(rowptr_data, col_data, start_data, n_out_data, e_out_data,
@@ -142,4 +149,12 @@ random_walk_cpu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor start,
   }
 
   return std::make_tuple(n_out, e_out);
+}
+
+std::tuple<torch::Tensor, torch::Tensor>
+random_walk_cpu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor start,
+                int64_t walk_length, double p, double q) {
+  if (rowptr.scalar_type() == at::kInt)
+    return random_walk_cpu_impl<int32_t>(rowptr, col, start, walk_length, p, q);
+  return random_walk_cpu_impl<int64_t>(rowptr, col, start, walk_length, p, q);
 }

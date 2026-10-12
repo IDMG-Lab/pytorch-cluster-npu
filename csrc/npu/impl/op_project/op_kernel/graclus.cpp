@@ -43,8 +43,15 @@ class KernelGraclus {
         Align32(uint64_t(e)*4)+2*Align32(uint64_t(n)*4):32;
     pipe.InitBuffer(residentBuf,residentBytes);
     pipe.InitBuffer(resultBuf,32);
+    pipe.InitBuffer(rowSelBuf,8192);
     offsets=offsetBuf.Get<uint32_t>();
-    for(uint32_t i=0;i<tile;i++) offsets.SetValue(i,i*8);
+    if(phase==1) {
+      auto offsetIndices=offsets.ReinterpretCast<int32_t>();
+      CreateVecIndex(offsetIndices,int32_t(0),tile);
+      PipeBarrier<PIPE_V>();
+      Muls(offsetIndices,offsetIndices,int32_t(8),tile);
+      PipeBarrier<PIPE_ALL>();
+    }
     cache=residentBuf.Get<int32_t>();
     if(resident==1 && (phase==1 || phase==2)) {
       const auto source=phase==1?old:cand;
@@ -73,18 +80,13 @@ class KernelGraclus {
   __aicore__ inline void CopyOut(GlobalTensor<T> a,LocalTensor<T> b,uint32_t len) {
     DataCopyExtParams p{1,uint32_t(len*sizeof(T)),0,0,0}; DataCopyPad(a,b,p);
   }
-  __aicore__ inline uint32_t Priority(uint32_t u,uint32_t v) {
-    uint32_t lo=u<v?u:v, hi=u<v?v:u;
-    return (lo*0x9e3779b1U)^(hi*0x85ebca77U);
-  }
   __aicore__ inline bool TieBetter(uint32_t u,uint32_t v,int32_t chosen) {
     if(chosen<0) return true;
-    uint32_t a=Priority(u,v), b=Priority(u,uint32_t(chosen));
-    if(a!=b) return a>b;
-    uint32_t lo=u<v?u:v,hi=u<v?v:u;
-    uint32_t oldLo=u<uint32_t(chosen)?u:uint32_t(chosen);
-    uint32_t oldHi=u<uint32_t(chosen)?uint32_t(chosen):u;
-    return lo<oldLo || (lo==oldLo && hi<oldHi);
+    const uint32_t c=uint32_t(chosen);
+    const uint32_t hi1=u<v?v:u, lo1=u<v?u:v;
+    const uint32_t hi0=u<c?c:u, lo0=u<c?u:c;
+    if(hi1!=hi0) return hi1>hi0;
+    return lo1>lo0;
   }
   template<uint32_t Mode>
   __aicore__ inline int32_t Status(uint32_t v) {
@@ -105,37 +107,115 @@ class KernelGraclus {
     const uint32_t first=64*id/cores,last=64*(id+1)/cores,len=(last-first)*16;
     auto buf=outBuf.Get<int32_t>();
     PipeBarrier<PIPE_ALL>();
-    Duplicate(buf,int32_t(0),len);PipeBarrier<PIPE_ALL>();
-    buf.SetValue(0,remaining);buf.SetValue(1,changed);buf.SetValue(2,error);
-    buf.SetValue(3,complete);
-    SetFlag<HardEvent::S_MTE3>(0);WaitFlag<HardEvent::S_MTE3>(0);
-    // Contiguous cache-line-owned counters, one DMA per AIV; all slots defined.
+    const uint32_t cp=(len+63)/64*64;
+    auto fv=weightBuf.Get<float>();
+    auto vbuf=edges.Get<float>();
+    auto idxI=scoreBuf.Get<int32_t>();
+    auto idxF=reduceBuf.Get<float>();
+    auto mk=candidateBuf.Get<uint8_t>();
+    Duplicate(fv,float(0),cp);PipeBarrier<PIPE_V>();
+    CreateVecIndex(idxI,int32_t(0),cp);PipeBarrier<PIPE_V>();
+    Cast(idxF,idxI,RoundMode::CAST_NONE,cp);PipeBarrier<PIPE_V>();
+    Duplicate(vbuf,float(int32_t(remaining)),cp);PipeBarrier<PIPE_V>();
+    CompareScalar(mk,idxF,float(0),CMPMODE::EQ,cp);PipeBarrier<PIPE_V>();
+    AscendC::Select(fv,mk,vbuf,fv,SELMODE::VSEL_TENSOR_TENSOR_MODE,cp);PipeBarrier<PIPE_V>();
+    Duplicate(vbuf,float(int32_t(changed)),cp);PipeBarrier<PIPE_V>();
+    CompareScalar(mk,idxF,float(1),CMPMODE::EQ,cp);PipeBarrier<PIPE_V>();
+    AscendC::Select(fv,mk,vbuf,fv,SELMODE::VSEL_TENSOR_TENSOR_MODE,cp);PipeBarrier<PIPE_V>();
+    Duplicate(vbuf,float(int32_t(error)),cp);PipeBarrier<PIPE_V>();
+    CompareScalar(mk,idxF,float(2),CMPMODE::EQ,cp);PipeBarrier<PIPE_V>();
+    AscendC::Select(fv,mk,vbuf,fv,SELMODE::VSEL_TENSOR_TENSOR_MODE,cp);PipeBarrier<PIPE_V>();
+    Duplicate(vbuf,float(int32_t(complete)),cp);PipeBarrier<PIPE_V>();
+    CompareScalar(mk,idxF,float(3),CMPMODE::EQ,cp);PipeBarrier<PIPE_V>();
+    AscendC::Select(fv,mk,vbuf,fv,SELMODE::VSEL_TENSOR_TENSOR_MODE,cp);PipeBarrier<PIPE_V>();
+    Cast(buf,fv,RoundMode::CAST_RINT,len);PipeBarrier<PIPE_ALL>();
     CopyOut(count[first*16],buf,len);
-    SetFlag<HardEvent::MTE3_S>(0);WaitFlag<HardEvent::MTE3_S>(0);
     PipeBarrier<PIPE_ALL>();
   }
   __aicore__ inline void Prepare() {
     auto fill=outBuf.Get<int32_t>();
     Duplicate(fill,int32_t(-1),tile);PipeBarrier<PIPE_ALL>();
     uint32_t error=0;
+    {
     auto rows=rowBuf.Get<int64_t>();
+    auto lowCur=indexBuf.Get<int32_t>();
+    auto highCur=scoreBuf.Get<int32_t>();
+    auto lowNxt=reduceBuf.Get<int32_t>();
+    auto highNxt=nodeBuf.Get<int32_t>();
+    auto wf=weightBuf.Get<float>();
+    auto lcf=wf,hcf=wf[256],lnf=wf[512],hnf=wf[768];
+    auto diff=candidateBuf.Get<float>();
+    auto red=resultBuf.Get<float>();
+    auto tmpw=edges.Get<float>();
     for(uint32_t off=begin;off<end;off+=256) {
       uint32_t len=end-off<256?end-off:256;
+      const uint32_t padded=(len+63)/64*64;
       CopyIn(rows,rp[off],len+1);PipeBarrier<PIPE_ALL>();
-      for(uint32_t i=0;i<len;i++) {
-        int64_t a=rows.GetValue(i),b=rows.GetValue(i+1);
-        if(a<0 || b<a || b>e || (off+i==0 && a!=0) || (off+i+1==n && b!=e)) error=1;
-      }
+      Duplicate(lowCur,int32_t(0),padded);Duplicate(highCur,int32_t(0),padded);
+      Duplicate(lowNxt,int32_t(0),padded);Duplicate(highNxt,int32_t(0),padded);
+      auto off32=offsets.ReinterpretCast<int32_t>();
+      CreateVecIndex(off32,int32_t(0),padded);PipeBarrier<PIPE_V>();
+      Muls(off32,off32,int32_t(8),padded);PipeBarrier<PIPE_V>();
+      Gather(lowCur,rows.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_V>();
+      Adds(off32,off32,int32_t(4),padded);PipeBarrier<PIPE_V>();
+      Gather(highCur,rows.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_V>();
+      Adds(off32,off32,int32_t(4),padded);PipeBarrier<PIPE_V>();
+      Gather(lowNxt,rows.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_V>();
+      Adds(off32,off32,int32_t(4),padded);PipeBarrier<PIPE_V>();
+      Gather(highNxt,rows.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_V>();
+      Cast(lcf,lowCur,RoundMode::CAST_NONE,padded);
+      Cast(hcf,highCur,RoundMode::CAST_NONE,padded);
+      Cast(lnf,lowNxt,RoundMode::CAST_NONE,padded);
+      Cast(hnf,highNxt,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+      ReduceMin(red,lcf,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)<float(0)) error=1;
+      ReduceMax(red,lcf,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)>float(int32_t(e))) error=1;
+      ReduceMin(red,hcf,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)!=float(0)) error=1;
+      ReduceMax(red,hcf,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)!=float(0)) error=1;
+      Sub(diff,lnf,lcf,padded);PipeBarrier<PIPE_V>();
+      ReduceMin(red,diff,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)<float(0)) error=1;
+      ReduceMin(red,hnf,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)!=float(0)) error=1;
+      ReduceMax(red,hnf,tmpw,padded);PipeBarrier<PIPE_ALL>(); if(red.GetValue(0)!=float(0)) error=1;
       CopyOut(dst[off],fill,len);
     }
+    if(begin==0 || end==n) {
+      auto eb=candidateBuf.Get<int64_t>();
+      if(begin==0) { CopyIn(eb,rp[0],1); }
+      if(end==n)   { CopyIn(eb[8],rp[n],1); }
+      PipeBarrier<PIPE_ALL>();
+      if(begin==0 && eb.GetValue(0)!=0) error=1;
+      if(end==n   && eb.GetValue(8)!=e) error=1;
+      PipeBarrier<PIPE_ALL>();
+    }
+    }
     auto columns=edges.Get<int64_t>();
+    auto lowInt=indexBuf.Get<int32_t>();
+    auto highInt=scoreBuf.Get<int32_t>();
+    auto lowFl=reduceBuf.Get<float>();
+    auto highFl=nodeBuf.Get<float>();
+    auto red=resultBuf.Get<float>();
+    auto tmp=outBuf.Get<float>();
     const uint32_t first=uint64_t(e)*id/cores,last=uint64_t(e)*(id+1)/cores;
     for(uint32_t off=first;off<last;off+=tile) {
       uint32_t len=last-off<tile?last-off:tile;
+      const uint32_t padded=(len+63)/64*64;
       CopyIn(columns,ci[off],len);PipeBarrier<PIPE_ALL>();
-      for(uint32_t i=0;i<len;i++) {
-        int64_t v=columns.GetValue(i);if(v<0 || v>=n) error=1;
-      }
+      Duplicate(lowInt,int32_t(0),padded);Duplicate(highInt,int32_t(0),padded);
+      auto off32=offsets.ReinterpretCast<int32_t>();
+      CreateVecIndex(off32,int32_t(0),padded);PipeBarrier<PIPE_V>();
+      Muls(off32,off32,int32_t(8),padded);PipeBarrier<PIPE_V>();
+      Gather(lowInt,columns.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_V>();
+      Adds(off32,off32,int32_t(4),padded);PipeBarrier<PIPE_V>();
+      Gather(highInt,columns.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_V>();
+      Cast(lowFl,lowInt,RoundMode::CAST_NONE,padded);
+      Cast(highFl,highInt,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+      ReduceMin(red,lowFl,tmp,padded);PipeBarrier<PIPE_ALL>();
+      if(red.GetValue(0)<float(0)) error=1;
+      ReduceMax(red,lowFl,tmp,padded);PipeBarrier<PIPE_ALL>();
+      if(red.GetValue(0)>=float(int32_t(n))) error=1;
+      ReduceMin(red,highFl,tmp,padded);PipeBarrier<PIPE_ALL>();
+      if(red.GetValue(0)!=float(0)) error=1;
+      ReduceMax(red,highFl,tmp,padded);PipeBarrier<PIPE_ALL>();
+      if(red.GetValue(0)!=float(0)) error=1;
     }
     if(resident==2) {
       auto bits=scoreBuf.Get<int32_t>();
@@ -150,13 +230,22 @@ class KernelGraclus {
     if(e==0) {
       PipeBarrier<PIPE_ALL>();
       auto source=edges.Get<int32_t>(),expanded=outBuf.Get<int32_t>();
+      auto wordIndices=weightBuf.Get<int32_t>();
+      auto byteOffsets=offsets.ReinterpretCast<int32_t>();
       for(uint32_t off=begin;off<end;off+=tile) {
         const uint32_t len=end-off<tile?end-off:tile;
-        for(uint32_t j=0;j<len;j++) {
-          source.SetValue(j,int32_t(off+j));
-          offsets.SetValue(2*j,4*j);offsets.SetValue(2*j+1,4*len);
-        }
-        source.SetValue(len,0);PipeBarrier<PIPE_ALL>();
+        Duplicate(source,int32_t(0),len+1);PipeBarrier<PIPE_V>();
+        CreateVecIndex(source,int32_t(off),len);PipeBarrier<PIPE_V>();
+        CreateVecIndex(wordIndices,int32_t(0),len*2);PipeBarrier<PIPE_V>();
+        ShiftRight(byteOffsets,wordIndices,int32_t(1),len*2);PipeBarrier<PIPE_V>();
+        Muls(expanded,byteOffsets,int32_t(2),len*2);PipeBarrier<PIPE_V>();
+        Sub(wordIndices,wordIndices,expanded,len*2);PipeBarrier<PIPE_V>();
+        Muls(expanded,wordIndices,int32_t(-1),len*2);PipeBarrier<PIPE_V>();
+        Adds(expanded,expanded,int32_t(1),len*2);PipeBarrier<PIPE_V>();
+        Muls(byteOffsets,byteOffsets,int32_t(4),len*2);PipeBarrier<PIPE_V>();
+        Mul(byteOffsets,byteOffsets,expanded,len*2);PipeBarrier<PIPE_V>();
+        Muls(wordIndices,wordIndices,int32_t(4*len),len*2);PipeBarrier<PIPE_V>();
+        Add(byteOffsets,byteOffsets,wordIndices,len*2);PipeBarrier<PIPE_V>();
         Gather(expanded,source,offsets,0,len*2);PipeBarrier<PIPE_ALL>();
         CopyOut(output[uint64_t(off)*2],expanded,len*2);PipeBarrier<PIPE_ALL>();
       }
@@ -252,7 +341,12 @@ class KernelGraclus {
     }
     Count(0,0,0,1);
   }
-  template<bool Weighted,bool Wide,uint32_t Mode>
+  template<bool ShortVectors=false>
+  __aicore__ inline void FilterBarrier() {
+    if constexpr(ShortVectors) {PipeBarrier<PIPE_V>();}
+    else {PipeBarrier<PIPE_ALL>();}
+  }
+  template<bool Weighted,bool Wide,uint32_t Mode,bool ShortVectors=false>
   __aicore__ inline void Select() {
     auto columns=edges.Get<int64_t>();
     auto indices=indexBuf.Get<int32_t>();
@@ -263,22 +357,29 @@ class KernelGraclus {
     auto tmp=reduceBuf.Get<float>();
     auto selected=outBuf.Get<int32_t>();
     auto rows=rowBuf.Get<int64_t>();
-    constexpr uint32_t rowTile=Mode==2?64:256;
+    const uint32_t rowTile=Mode==2 || (Mode==1 && Weighted && !Wide &&
+      uint64_t(e)<=uint64_t(n)*8)?64:256;
     for(uint32_t block=begin;block<end;block+=rowTile) {
       uint32_t rowsCount=end-block<rowTile?end-block:rowTile;
       CopyIn(rows,rp[block],rowsCount+1);PipeBarrier<PIPE_ALL>();
       const uint32_t blockFirst=rows.GetValue(0),blockLast=rows.GetValue(rowsCount);
-      bool batch=Mode==2 && blockLast>blockFirst && blockLast-blockFirst<=tile;
+      bool batch=(Mode==2 || (Mode==1 && Weighted && !Wide)) &&
+        blockLast>blockFirst && blockLast-blockFirst<=tile;
       if(batch) {
         bool active=false;
         for(uint32_t r=0;r<rowsCount;r++) {
-          if(rows.GetValue(r+1)-rows.GetValue(r)>=128) batch=false;
+          if(rows.GetValue(r+1)-rows.GetValue(r)>=(Mode==1?64:128)) batch=false;
           if(Status<Mode>(block+r)<0) active=true;
         }
         batch=batch && active;
       }
       if(batch) {
         const uint32_t len=blockLast-blockFirst;
+        if constexpr(Mode==1 && Weighted && !Wide) {
+          const uint32_t padded=(len+63)/64*64;
+          Duplicate(indices,int32_t(0),padded);
+          Duplicate(floatWeight,float(-1),padded);PipeBarrier<PIPE_ALL>();
+        }
         CopyIn(columns,ci[blockFirst],len);
         if(Weighted) {
           if(Wide) CopyIn(wideWeight,wi[blockFirst],len);
@@ -286,20 +387,47 @@ class KernelGraclus {
         }
         PipeBarrier<PIPE_ALL>();
         Gather(indices,columns.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_ALL>();
+        if constexpr(Mode==1 && Weighted && !Wide) {
+          const uint32_t padded=(len+63)/64*64;
+          auto byteOffsets=candidateBuf.Get<int32_t>();
+          auto flags=reduceBuf.Get<int32_t>();
+          auto flagFloat=nodeBuf.Get<float>();
+          auto mask=edges.Get<uint8_t>();
+          // SIMD filter across the CSR block amortizes short-row DMA and
+          // status lookups. Per-row winner and tie selection remain exact.
+          Muls(byteOffsets,indices,int32_t(4),padded);PipeBarrier<PIPE_V>();
+          Gather(flags,cache,byteOffsets.ReinterpretCast<uint32_t>(),0,padded);
+          PipeBarrier<PIPE_V>();
+          Cast(flagFloat,flags,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+          CompareScalar(mask,flagFloat,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+          AscendC::Select(scores,mask,floatWeight,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+          PipeBarrier<PIPE_V>();
+          CompareScalar(mask,scores,float(0),CMPMODE::GE,padded);PipeBarrier<PIPE_V>();
+          AscendC::Select(scores,mask,scores,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+          Sync<HardEvent::V_S>();
+        }
       }
+      const uint32_t rpadded=(rowsCount+63)/64*64;
+      auto rowF=rowSelBuf.Get<float>();
+      auto laneIdxF=rowF,selOut=rowF[256],tmpRow=rowF[512];
+      auto rowI=rowSelBuf.Get<int32_t>()[768];
+      auto rmask=outBuf.Get<uint8_t>();
+      CreateVecIndex(rowI,int32_t(0),rpadded);PipeBarrier<PIPE_V>();
+      Cast(laneIdxF,rowI,RoundMode::CAST_NONE,rpadded);PipeBarrier<PIPE_V>();
+      Duplicate(selOut,float(-1),rpadded);PipeBarrier<PIPE_V>();
       for(uint32_t r=0;r<rowsCount;r++) {
         const uint32_t u=block+r;
         int32_t chosen=-1;
         float best=-1;
         uint64_t bestWide=0;
         bool haveWide=false;
-        if(Status<Mode>(u)>=0) {selected.SetValue(r,-1);continue;}
+        if(Status<Mode>(u)>=0) continue;
         const uint32_t first=rows.GetValue(r),last=rows.GetValue(r+1);
         for(uint32_t off=first;off<last;off+=tile) {
           uint32_t len=last-off<tile?last-off:tile;
           const uint32_t edgeBase=batch?off-blockFirst:0;
           const uint32_t padded=(len+63)/64*64;
-          const bool vectorFilter=Weighted && !Wide && Mode==1 && len>=128;
+          const bool vectorFilter=Weighted && !Wide && Mode==1 && len>=(ShortVectors?64:128);
           if(vectorFilter) {
             Duplicate(indices,int32_t(0),padded);
             Duplicate(floatWeight,float(-1),padded);
@@ -317,8 +445,8 @@ class KernelGraclus {
           if(Weighted && !Wide && len<64) {
             for(uint32_t j=0;j<len;j++) {
               const uint32_t v=indices.GetValue(edgeBase+j);
-              const float value=floatWeight.GetValue(edgeBase+j);
-              if(v==u || Status<Mode>(v)>=0 || !(value>=0)) continue;
+              const float value=(Mode==1 && batch)?scores.GetValue(edgeBase+j):floatWeight.GetValue(edgeBase+j);
+              if(v==u || !(value>=0) || (!(Mode==1 && batch) && Status<Mode>(v)>=0)) continue;
               if(value>best || (value==best && TieBetter(u,v,chosen))) {
                 best=value;chosen=v;
               }
@@ -331,20 +459,20 @@ class KernelGraclus {
               auto mask=edges.Get<uint8_t>();
               // Cache bounds are <2^24, so index-to-float is exact here.
               // CompareScalar on 910B requires complete 64-float repeats.
-              Muls(byteOffsets,indices,int32_t(4),padded);PipeBarrier<PIPE_ALL>();
+              Muls(byteOffsets,indices,int32_t(4),padded);FilterBarrier<ShortVectors>();
               Gather(flags,cache,byteOffsets.ReinterpretCast<uint32_t>(),0,padded);
-              PipeBarrier<PIPE_ALL>();
-              Cast(flagFloat,flags,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_ALL>();
-              CompareScalar(mask,flagFloat,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_ALL>();
+              FilterBarrier<ShortVectors>();
+              Cast(flagFloat,flags,RoundMode::CAST_NONE,padded);FilterBarrier<ShortVectors>();
+              CompareScalar(mask,flagFloat,float(0),CMPMODE::LT,padded);FilterBarrier<ShortVectors>();
               AscendC::Select(scores,mask,floatWeight,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
-              PipeBarrier<PIPE_ALL>();
-              Cast(flagFloat,indices,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_ALL>();
-              CompareScalar(mask,flagFloat,float(int32_t(u)),CMPMODE::NE,padded);PipeBarrier<PIPE_ALL>();
+              FilterBarrier<ShortVectors>();
+              Cast(flagFloat,indices,RoundMode::CAST_NONE,padded);FilterBarrier<ShortVectors>();
+              CompareScalar(mask,flagFloat,float(int32_t(u)),CMPMODE::NE,padded);FilterBarrier<ShortVectors>();
               AscendC::Select(scores,mask,scores,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
-              PipeBarrier<PIPE_ALL>();
-              CompareScalar(mask,scores,float(0),CMPMODE::GE,padded);PipeBarrier<PIPE_ALL>();
+              FilterBarrier<ShortVectors>();
+              CompareScalar(mask,scores,float(0),CMPMODE::GE,padded);FilterBarrier<ShortVectors>();
               AscendC::Select(scores,mask,scores,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
-              PipeBarrier<PIPE_ALL>();
+              FilterBarrier<ShortVectors>();
             } else {
               Duplicate(scores,float(-1),padded);PipeBarrier<PIPE_ALL>();
               for(uint32_t j=0;j<len;j++) {
@@ -392,12 +520,71 @@ class KernelGraclus {
             }
           }
         }
-        selected.SetValue(r,chosen);
+        Duplicate(tmpRow,float(chosen),rpadded);PipeBarrier<PIPE_V>();
+        CompareScalar(rmask,laneIdxF,float(int32_t(r)),CMPMODE::EQ,rpadded);PipeBarrier<PIPE_V>();
+        AscendC::Select(selOut,rmask,tmpRow,selOut,SELMODE::VSEL_TENSOR_TENSOR_MODE,rpadded);PipeBarrier<PIPE_V>();
       }
+      Cast(selected,selOut,RoundMode::CAST_RINT,rowsCount);PipeBarrier<PIPE_ALL>();
       PipeBarrier<PIPE_ALL>();CopyOut(prop[block],selected,rowsCount);PipeBarrier<PIPE_ALL>();
     }
   }
+  template<HardEvent Event>
+  __aicore__ inline void Sync() {SetFlag<Event>(0);WaitFlag<Event>(0);}
+
+  __aicore__ inline void CommitResident() {
+    // Resident candidate labels are <24576, so FP32 label operations are exact.
+    // Weight comparisons keep their original precision in Select.
+    auto state=nodeBuf.Get<int32_t>(),p=candidateBuf.Get<int32_t>();
+    auto stateFloat=weightBuf.Get<float>(),candidateFloat=edges.Get<float>();
+    auto ids=indexBuf.Get<float>(),labels=scoreBuf.Get<float>();
+    auto result=outBuf.Get<float>(),tmp=reduceBuf.Get<float>();
+    auto reduced=resultBuf.Get<float>();
+    auto mask=candidateBuf.Get<uint8_t>();
+    auto byteOffsets=offsets.ReinterpretCast<int32_t>();
+    uint32_t remaining=0,changed=0;
+    for(uint32_t off=begin;off<end;off+=tile) {
+      const uint32_t len=end-off<tile?end-off:tile,padded=(len+63)/64*64;
+      Duplicate(state,int32_t(0),padded);Duplicate(p,int32_t(-1),padded);
+      Sync<HardEvent::V_MTE2>();
+      CopyIn(state,old[off],len);CopyIn(p,cand[off],len);
+      Sync<HardEvent::MTE2_V>();
+      Cast(stateFloat,state,RoundMode::CAST_NONE,padded);
+      Cast(candidateFloat,p,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+      Maxs(labels,candidateFloat,float(0),padded);PipeBarrier<PIPE_V>();
+      Cast(byteOffsets,labels,RoundMode::CAST_RINT,padded);PipeBarrier<PIPE_V>();
+      Muls(byteOffsets,byteOffsets,int32_t(4),padded);PipeBarrier<PIPE_V>();
+      Gather(state,cache,offsets,0,padded);PipeBarrier<PIPE_V>();
+      Cast(result,state,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+      CreateVecIndex(ids,float(int32_t(off)),padded);PipeBarrier<PIPE_V>();
+      Min(labels,ids,candidateFloat,padded);PipeBarrier<PIPE_V>();
+      Compare(mask,result,ids,CMPMODE::EQ,padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(result,mask,labels,stateFloat,SELMODE::VSEL_TENSOR_TENSOR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      CompareScalar(mask,candidateFloat,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(result,mask,ids,result,SELMODE::VSEL_TENSOR_TENSOR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      CompareScalar(mask,stateFloat,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(result,mask,result,stateFloat,SELMODE::VSEL_TENSOR_TENSOR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      Duplicate(labels,float(1),padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(labels,mask,labels,float(0),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      ReduceSum(reduced,labels,tmp,len);Sync<HardEvent::V_S>();
+      const uint32_t active=uint32_t(int32_t(reduced.GetValue(0)));
+      CompareScalar(mask,result,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+      Duplicate(labels,float(1),padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(labels,mask,labels,float(0),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      ReduceSum(reduced,labels,tmp,len);Sync<HardEvent::V_S>();
+      const uint32_t pending=uint32_t(int32_t(reduced.GetValue(0)));
+      remaining+=pending;changed+=active-pending;
+      Cast(state,result,RoundMode::CAST_RINT,len);Sync<HardEvent::V_MTE3>();
+      CopyOut(dst[off],state,len);Sync<HardEvent::MTE3_V>();
+    }
+    Count(remaining,changed);
+  }
   __aicore__ inline void Commit() {
+    if(resident==1) {CommitResident();return;}
     auto state=nodeBuf.Get<int32_t>(),p=candidateBuf.Get<int32_t>(),result=outBuf.Get<int32_t>();
     uint32_t remaining=0,changed=0;
     for(uint32_t off=begin;off<end;off+=tile) {
@@ -432,14 +619,25 @@ class KernelGraclus {
   __aicore__ inline void Finalize() {
     auto src=nodeBuf.Get<int32_t>(),expanded=outBuf.Get<int32_t>();
     // Gather from [labels, zero] into interleaved low/high words (little endian).
-    auto zeros=scoreBuf.Get<int32_t>();
+    auto wordIndices=weightBuf.Get<int32_t>();
+    auto byteOffsets=offsets.ReinterpretCast<int32_t>();
     auto source=edges.Get<int32_t>();
+    // Reserved 32B-aligned zero slot beyond CopyIn padding reach.
+    Duplicate(source[tile+8],int32_t(0),8);PipeBarrier<PIPE_V>();
     for(uint32_t off=begin;off<end;off+=tile) {
       uint32_t len=end-off<tile?end-off:tile;
       CopyIn(source,old[off],len);PipeBarrier<PIPE_ALL>();
-      source.SetValue(len,0);
-      for(uint32_t j=0;j<len;j++) {offsets.SetValue(2*j,4*j);offsets.SetValue(2*j+1,4*len);}
-      PipeBarrier<PIPE_ALL>();
+      // Construct [0,4*Z,4,4*Z,...] with SIMD integer arithmetic (Z=zero slot).
+      CreateVecIndex(wordIndices,int32_t(0),len*2);PipeBarrier<PIPE_V>();
+      ShiftRight(byteOffsets,wordIndices,int32_t(1),len*2);PipeBarrier<PIPE_V>();
+      Muls(expanded,byteOffsets,int32_t(2),len*2);PipeBarrier<PIPE_V>();
+      Sub(wordIndices,wordIndices,expanded,len*2);PipeBarrier<PIPE_V>();
+      Muls(expanded,wordIndices,int32_t(-1),len*2);PipeBarrier<PIPE_V>();
+      Adds(expanded,expanded,int32_t(1),len*2);PipeBarrier<PIPE_V>();
+      Muls(byteOffsets,byteOffsets,int32_t(4),len*2);PipeBarrier<PIPE_V>();
+      Mul(byteOffsets,byteOffsets,expanded,len*2);PipeBarrier<PIPE_V>();
+      Muls(wordIndices,wordIndices,int32_t(4*(tile+8)),len*2);PipeBarrier<PIPE_V>();
+      Add(byteOffsets,byteOffsets,wordIndices,len*2);PipeBarrier<PIPE_V>();
       Gather(expanded,source,offsets,0,len*2);PipeBarrier<PIPE_ALL>();
       CopyOut(output[uint64_t(off)*2],expanded,len*2);PipeBarrier<PIPE_ALL>();
     }
@@ -481,7 +679,7 @@ class KernelGraclus {
   }
  private:
   TPipe pipe;
-  TBuf<QuePosition::VECCALC> edges,weightBuf,indexBuf,scoreBuf,reduceBuf,offsetBuf,outBuf,nodeBuf,candidateBuf,rowBuf,residentBuf,resultBuf;
+  TBuf<QuePosition::VECCALC> edges,weightBuf,indexBuf,scoreBuf,reduceBuf,offsetBuf,outBuf,nodeBuf,candidateBuf,rowBuf,residentBuf,resultBuf,rowSelBuf;
   GlobalTensor<int64_t> rp,ci,wi;
   GlobalTensor<float> wf;
   GlobalTensor<int32_t> old,cand,dst,prop,count,output;
@@ -506,6 +704,7 @@ extern "C" __global__ __aicore__ void graclus(GM_ADDR rowptr,GM_ADDR col,GM_ADDR
   else if(TILING_KEY_IS(21)) op.Select<true,false,2>();
   else if(TILING_KEY_IS(22)) op.Select<false,false,2>();
   else if(TILING_KEY_IS(23)) op.Select<true,true,2>();
+  else if(TILING_KEY_IS(31)) op.Select<true,false,1,true>();
   else if(TILING_KEY_IS(4)) op.Commit();
   else if(TILING_KEY_IS(5)) op.Finalize();
   else if(TILING_KEY_IS(6)) op.Finish();

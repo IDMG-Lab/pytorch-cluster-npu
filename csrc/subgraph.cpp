@@ -3,6 +3,7 @@
 #endif
 #include <torch/script.h>
 #include <vector>
+#include <climits>
 
 #ifdef WITH_NPU
 #include "npu/subgraph_npu.h"
@@ -13,13 +14,14 @@
 using SubgraphResult = std::tuple<torch::Tensor, torch::Tensor,
                                   torch::Tensor, torch::Tensor>;
 
-static SubgraphResult subgraph_cpu(torch::Tensor rowptr, torch::Tensor col,
+template <typename IndexT>
+static SubgraphResult subgraph_cpu_impl(torch::Tensor rowptr, torch::Tensor col,
                                    torch::Tensor nodes) {
   TORCH_CHECK(rowptr.device().is_cpu() && col.device().is_cpu() &&
                   nodes.device().is_cpu(), "subgraph: tensors must share a device");
-  TORCH_CHECK(rowptr.scalar_type() == at::kLong && col.scalar_type() == at::kLong &&
-                  nodes.scalar_type() == at::kLong,
-              "subgraph: rowptr, col and nodes must be int64");
+  TORCH_CHECK((rowptr.scalar_type() == at::kLong || rowptr.scalar_type() == at::kInt) &&
+                  col.scalar_type() == rowptr.scalar_type() && nodes.scalar_type() == rowptr.scalar_type(),
+              "subgraph: rowptr, col and nodes must have the same int32 or int64 dtype");
   TORCH_CHECK(rowptr.dim() == 1 && col.dim() == 1 && nodes.dim() == 1 &&
                   rowptr.numel() >= 1, "subgraph: expected one-dimensional CSR inputs");
   rowptr = rowptr.contiguous();
@@ -28,9 +30,12 @@ static SubgraphResult subgraph_cpu(torch::Tensor rowptr, torch::Tensor col,
   const auto n = rowptr.numel() - 1;
   const auto e = col.numel();
   const auto q = nodes.numel();
-  const auto* rp = rowptr.data_ptr<int64_t>();
-  const auto* ci = col.data_ptr<int64_t>();
-  const auto* nd = nodes.data_ptr<int64_t>();
+  TORCH_CHECK(rowptr.scalar_type() != at::kInt ||
+                  (n <= INT32_MAX && e <= INT32_MAX && q <= INT32_MAX),
+              "subgraph: shape exceeds int32 range");
+  const auto* rp = rowptr.data_ptr<IndexT>();
+  const auto* ci = col.data_ptr<IndexT>();
+  const auto* nd = nodes.data_ptr<IndexT>();
   TORCH_CHECK(rp[0] == 0 && rp[n] == e, "subgraph: invalid CSR offsets");
   std::vector<int64_t> mapping(n, -1);
   for (int64_t i = 0; i < n; ++i) {
@@ -50,9 +55,9 @@ static SubgraphResult subgraph_cpu(torch::Tensor rowptr, torch::Tensor col,
   auto out_col = at::empty({e}, col.options());
   auto out_eid = at::empty({e}, col.options());
   auto out_count = at::empty({1}, rowptr.options());
-  auto* out_rp = out_rowptr.data_ptr<int64_t>();
-  auto* out_ci = out_col.data_ptr<int64_t>();
-  auto* out_ei = out_eid.data_ptr<int64_t>();
+  auto* out_rp = out_rowptr.data_ptr<IndexT>();
+  auto* out_ci = out_col.data_ptr<IndexT>();
+  auto* out_ei = out_eid.data_ptr<IndexT>();
   int64_t count = 0;
   out_rp[0] = 0;
   for (int64_t i = 0; i < q; ++i) {
@@ -66,8 +71,15 @@ static SubgraphResult subgraph_cpu(torch::Tensor rowptr, torch::Tensor col,
     }
     out_rp[i + 1] = count;
   }
-  out_count.data_ptr<int64_t>()[0] = count;
+  out_count.data_ptr<IndexT>()[0] = count;
   return {out_rowptr, out_col, out_eid, out_count};
+}
+
+static SubgraphResult subgraph_cpu(torch::Tensor rowptr, torch::Tensor col,
+                                    torch::Tensor nodes) {
+  if (rowptr.scalar_type() == at::kInt)
+    return subgraph_cpu_impl<int32_t>(rowptr, col, nodes);
+  return subgraph_cpu_impl<int64_t>(rowptr, col, nodes);
 }
 
 static SubgraphResult subgraph(torch::Tensor rowptr, torch::Tensor col,

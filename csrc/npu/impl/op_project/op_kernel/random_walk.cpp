@@ -1,6 +1,7 @@
 #include "kernel_operator.h"
 using namespace AscendC;
 
+template <typename IndexT>
 class KernelRandomWalk {
 public:
   __aicore__ inline void Init(GM_ADDR rowptr, GM_ADDR col, GM_ADDR start,
@@ -25,18 +26,18 @@ public:
     this->localGraph = n <= 4096 && e <= 8192 && len >= 8;
     this->returnWeight = 1.0f / p;
     this->farWeight = 1.0f / q;
-    rp.SetGlobalBuffer((__gm__ int64_t*)rowptr, n + 1);
-    ci.SetGlobalBuffer((__gm__ int64_t*)col, e);
-    starts.SetGlobalBuffer((__gm__ int64_t*)start, s);
+    rp.SetGlobalBuffer((__gm__ IndexT*)rowptr, n + 1);
+    ci.SetGlobalBuffer((__gm__ IndexT*)col, e);
+    starts.SetGlobalBuffer((__gm__ IndexT*)start, s);
     rnd.SetGlobalBuffer((__gm__ float*)random, static_cast<uint64_t>(s) * len);
-    walkGm.SetGlobalBuffer((__gm__ int64_t*)walks,
+    walkGm.SetGlobalBuffer((__gm__ IndexT*)walks,
                            static_cast<uint64_t>(s) * nodesPitch);
-    edgeGm.SetGlobalBuffer((__gm__ int64_t*)edgeIds,
+    edgeGm.SetGlobalBuffer((__gm__ IndexT*)edgeIds,
                            static_cast<uint64_t>(s) * edgesPitch);
     graphFlags.SetGlobalBuffer((__gm__ int32_t*)flags, 640);
     if (localGraph) {
-      pipe.InitBuffer(rowBuffer, ((n + 4) / 4 * 4) * sizeof(int64_t));
-      pipe.InitBuffer(colBuffer, ((e + 3) / 4 * 4 + 4) * sizeof(int64_t));
+      pipe.InitBuffer(rowBuffer, ((n + 1 + 31 / sizeof(IndexT)) / (32 / sizeof(IndexT)) * (32 / sizeof(IndexT))) * sizeof(IndexT));
+      pipe.InitBuffer(colBuffer, ((e + 31 / sizeof(IndexT)) / (32 / sizeof(IndexT)) * (32 / sizeof(IndexT)) + 32 / sizeof(IndexT)) * sizeof(IndexT));
     }
   }
 
@@ -114,7 +115,7 @@ public:
         current = next;
       }
     }
-    DataCacheCleanAndInvalid<int64_t, CacheLine::ENTIRE_DATA_CACHE>(walkGm);
+    DataCacheCleanAndInvalid<IndexT, CacheLine::ENTIRE_DATA_CACHE>(walkGm);
   }
 
   template <bool Local>
@@ -145,13 +146,13 @@ public:
       }
     }
     if (localGraph) {
-      localRows = rowBuffer.Get<int64_t>();
-      localCols = colBuffer.Get<int64_t>();
-      DataCopyExtParams rowCopy{1, static_cast<uint32_t>((n + 1) * sizeof(int64_t)), 0, 0, 0};
-      DataCopyPad(localRows, rp, rowCopy, DataCopyPadExtParams<int64_t>{false, 0, 0, 0});
+      localRows = rowBuffer.Get<IndexT>();
+      localCols = colBuffer.Get<IndexT>();
+      DataCopyExtParams rowCopy{1, static_cast<uint32_t>((n + 1) * sizeof(IndexT)), 0, 0, 0};
+      DataCopyPad(localRows, rp, rowCopy, DataCopyPadExtParams<IndexT>{false, 0, 0, 0});
       if (e) {
-        DataCopyExtParams colCopy{1, static_cast<uint32_t>(e * sizeof(int64_t)), 0, 0, 0};
-        DataCopyPad(localCols, ci, colCopy, DataCopyPadExtParams<int64_t>{false, 0, 0, 0});
+        DataCopyExtParams colCopy{1, static_cast<uint32_t>(e * sizeof(IndexT)), 0, 0, 0};
+        DataCopyPad(localCols, ci, colCopy, DataCopyPadExtParams<IndexT>{false, 0, 0, 0});
       }
       PipeBarrier<PIPE_ALL>();
       DispatchWalks<true>();
@@ -163,8 +164,8 @@ public:
 private:
   TPipe pipe;
   TBuf<QuePosition::VECCALC> rowBuffer, colBuffer;
-  LocalTensor<int64_t> localRows, localCols;
-  GlobalTensor<int64_t> rp, ci, starts, walkGm, edgeGm;
+  LocalTensor<IndexT> localRows, localCols;
+  GlobalTensor<IndexT> rp, ci, starts, walkGm, edgeGm;
   GlobalTensor<float> rnd;
   GlobalTensor<int32_t> graphFlags;
   uint32_t n, e, s, len, nodesPitch, edgesPitch, first, last;
@@ -177,7 +178,7 @@ extern "C" __global__ __aicore__ void random_walk(
     GM_ADDR rowptr, GM_ADDR col, GM_ADDR start, GM_ADDR random,
     GM_ADDR walks, GM_ADDR edgeIds, GM_ADDR flags, GM_ADDR workspace, GM_ADDR tiling) {
   GET_TILING_DATA(data, tiling);
-  KernelRandomWalk op;
+  KernelRandomWalk<DTYPE_ROWPTR> op;
   op.Init(rowptr, col, start, random, walks, edgeIds, flags,
           data.numNodes, data.numEdges, data.numWalks, data.walkLength,
           data.nodesPitch, data.edgesPitch, data.walksPerCore,

@@ -18,7 +18,8 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   const uint32_t cores = std::max(1U, platform.GetCoreNumAiv());
   uint32_t blocks = 1;
   if (phase == 0 && data.get_numNodes() >= 65536) blocks = cores;
-  if (phase == 1) blocks = std::min(cores, std::max(1U, (data.get_subsetSize() + 7) / 8));
+  const uint32_t lineElements = context->GetInputDesc(0)->GetDataType() == ge::DT_INT32 ? 16 : 8;
+  if (phase == 1) blocks = std::min(cores, std::max(1U, (data.get_subsetSize() + lineElements - 1) / lineElements));
   if (phase == 3) blocks = cores;
   context->SetBlockDim(blocks);
   data.SaveToBuffer(context->GetRawTilingData()->GetData(),
@@ -29,6 +30,11 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
 }
 
 namespace ge {
+static ge::graphStatus InferDataType(gert::InferDataTypeContext* context) {
+  const auto dtype = context->GetInputDataType(0);
+  for (size_t i = 0; i < 4; ++i) context->SetOutputDataType(i, dtype);
+  return ge::GRAPH_SUCCESS;
+}
 static ge::graphStatus InferShape(gert::InferShapeContext* context) {
   const auto e = context->GetInputShape(1)->GetDim(0);
   const auto q = context->GetInputShape(2)->GetDim(0);
@@ -53,17 +59,18 @@ class ClusterSubgraph : public OpDef {
 public:
   explicit ClusterSubgraph(const char* name) : OpDef(name) {
     for (const char* input : {"rowptr", "col", "nodes"}) {
-      this->Input(input).ParamType(REQUIRED).DataType({ge::DT_INT64})
-          .Format({ge::FORMAT_ND});
+      this->Input(input).ParamType(REQUIRED).DataType({ge::DT_INT64, ge::DT_INT32})
+          .Format({ge::FORMAT_ND, ge::FORMAT_ND});
     }
-    this->Input("mapping").ParamType(REQUIRED).DataType({ge::DT_INT32})
-        .Format({ge::FORMAT_ND});
+    this->Input("mapping").ParamType(REQUIRED).DataType({ge::DT_INT32, ge::DT_INT32})
+        .Format({ge::FORMAT_ND, ge::FORMAT_ND});
     for (const char* output : {"out_rowptr", "out_col", "out_eid", "out_count"}) {
-      this->Output(output).ParamType(REQUIRED).DataType({ge::DT_INT64})
-          .Format({ge::FORMAT_ND});
+      this->Output(output).ParamType(REQUIRED).DataType({ge::DT_INT64, ge::DT_INT32})
+          .Format({ge::FORMAT_ND, ge::FORMAT_ND});
     }
     this->Attr("phase").Int();
     this->SetInferShape(ge::InferShape);
+    this->SetInferDataType(ge::InferDataType);
     this->AICore().SetTiling(optiling::TilingFunc);
     this->AICore().AddConfig("ascend910b");
   }

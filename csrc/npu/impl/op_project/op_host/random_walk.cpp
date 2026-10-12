@@ -29,8 +29,9 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   data.set_numEdges(e);
   data.set_numWalks(s);
   data.set_walkLength(len);
-  data.set_nodesPitch((len + 1 + 7) / 8 * 8);
-  data.set_edgesPitch((len + 7) / 8 * 8);
+  const uint32_t lineElements = context->GetInputDesc(0)->GetDataType() == ge::DT_INT32 ? 16 : 8;
+  data.set_nodesPitch((len + lineElements) / lineElements * lineElements);
+  data.set_edgesPitch((len + lineElements - 1) / lineElements * lineElements);
   data.set_walksPerCore(walksPerCore);
   data.set_phase(phase);
   data.set_checkBlocks(checkBlocks);
@@ -45,6 +46,12 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
 }
 
 namespace ge {
+static ge::graphStatus InferDataType(gert::InferDataTypeContext* context) {
+  const auto dtype = context->GetInputDataType(0);
+  for (size_t i = 0; i < 2; ++i) context->SetOutputDataType(i, dtype);
+  context->SetOutputDataType(2, ge::DT_INT32);
+  return ge::GRAPH_SUCCESS;
+}
 static ge::graphStatus InferShape(gert::InferShapeContext* context) {
   auto s = context->GetInputShape(2)->GetDim(0);
   auto len = *context->GetAttrs()->GetInt(0);
@@ -52,10 +59,11 @@ static ge::graphStatus InferShape(gert::InferShapeContext* context) {
   auto edges = context->GetOutputShape(1);
   nodes->SetDimNum(2);
   nodes->SetDim(0, s);
-  nodes->SetDim(1, (len + 1 + 7) / 8 * 8);
+  const auto lineElements = context->GetInputDesc(0)->GetDataType() == ge::DT_INT32 ? 16 : 8;
+  nodes->SetDim(1, (len + lineElements) / lineElements * lineElements);
   edges->SetDimNum(2);
   edges->SetDim(0, s);
-  edges->SetDim(1, (len + 7) / 8 * 8);
+  edges->SetDim(1, (len + lineElements - 1) / lineElements * lineElements);
   auto flags = context->GetOutputShape(2);
   flags->SetDimNum(1);
   flags->SetDim(0, 640);
@@ -68,20 +76,21 @@ class RandomWalk : public OpDef {
 public:
   explicit RandomWalk(const char* name) : OpDef(name) {
     for (const char* input : {"rowptr", "col", "start"})
-      this->Input(input).ParamType(REQUIRED).DataType({ge::DT_INT64})
-          .Format({ge::FORMAT_ND});
-    this->Input("random").ParamType(REQUIRED).DataType({ge::DT_FLOAT})
-        .Format({ge::FORMAT_ND});
+      this->Input(input).ParamType(REQUIRED).DataType({ge::DT_INT64, ge::DT_INT32})
+          .Format({ge::FORMAT_ND, ge::FORMAT_ND});
+    this->Input("random").ParamType(REQUIRED).DataType({ge::DT_FLOAT, ge::DT_FLOAT})
+        .Format({ge::FORMAT_ND, ge::FORMAT_ND});
     for (const char* output : {"walks", "e_ids"})
-      this->Output(output).ParamType(REQUIRED).DataType({ge::DT_INT64})
-          .Format({ge::FORMAT_ND});
-    this->Output("graph_flags").ParamType(REQUIRED).DataType({ge::DT_INT32})
-        .Format({ge::FORMAT_ND});
+      this->Output(output).ParamType(REQUIRED).DataType({ge::DT_INT64, ge::DT_INT32})
+          .Format({ge::FORMAT_ND, ge::FORMAT_ND});
+    this->Output("graph_flags").ParamType(REQUIRED).DataType({ge::DT_INT32, ge::DT_INT32})
+        .Format({ge::FORMAT_ND, ge::FORMAT_ND});
     this->Attr("walk_length").Int();
     this->Attr("p").Float();
     this->Attr("q").Float();
     this->Attr("phase").Int(1);
     this->SetInferShape(ge::InferShape);
+    this->SetInferDataType(ge::InferDataType);
     this->AICore().SetTiling(optiling::TilingFunc);
     this->AICore().AddConfig("ascend910b");
   }

@@ -16,9 +16,11 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   uint64_t ub = 0;
   platform.GetCoreMemSize(platform_ascendc::CoreMemType::UB, ub);
   const uint32_t available = std::min(64U, std::max(1U, platform.GetCoreNumAiv()));
-  // One output owner per 64-byte unit; min work is an engineering constant.
+  // Phase-specific grain: scalar row/commit work needs finer AIV partitioning
+  // than the DMA-only final label expansion. All thresholds are work counts.
   const uint64_t work = phase == 0 ? uint64_t(n) + e : uint64_t(n) + (phase == 1 ? e : 0);
-  uint32_t cores = std::min(available, std::max(1U, uint32_t((work + 2047) / 2048)));
+  const uint32_t grain = phase == 2 ? 256 : phase == 3 ? 1024 : 512;
+  uint32_t cores = std::min(available, std::max(1U, uint32_t((work + grain - 1) / grain)));
   cores = std::min(cores, std::max(1U, (n + 15) / 16));
   if (n*uint64_t(4)>96*1024 && ((uint64_t(n)+255)/256)*32<=128*1024)
     cores=std::min(cores,std::max(1U,(n+511)/512));
@@ -35,7 +37,11 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   const bool fused=phase==0 && kind==0 && e>0 && fusedBytes<=96*1024 && fusedBytes+68*1024<=ub;
   const uint32_t mode=fused?3:resident?1:bitmap?2:0;
   data.set_cores(fused?1:cores); data.set_tile(bitmap && !fused?512:1024); data.set_resident(mode);
-  const uint64_t key = phase == 0 ? (fused?7:0) : phase == 1 ? (!weighted ? 2 : kind == 0 ? 1 : 3)+mode*10
+  // One to two 64-lane vector repeats per average row: use a separate
+  // template, keeping sparse-row and wide-row code generation independent.
+  const bool mediumRows=phase==1 && weighted && kind==0 && resident &&
+    uint64_t(e)>=uint64_t(n)*64 && uint64_t(e)<uint64_t(n)*128;
+  const uint64_t key = phase == 0 ? (fused?7:0) : phase == 1 ? (mediumRows?31:(!weighted ? 2 : kind == 0 ? 1 : 3)+mode*10)
                                   : phase == 2 ? 4 : phase == 3 ? 5 : 6;
   context->SetTilingKey(key); context->SetBlockDim(fused?1:cores);
   data.SaveToBuffer(context->GetRawTilingData()->GetData(), context->GetRawTilingData()->GetCapacity());

@@ -16,8 +16,9 @@ def subgraph(
     to positions in ``nodes``. The optional edge IDs address the original
     ``col`` array. Duplicate edges retain their input order within each row.
     """
-    if rowptr.dtype != torch.long or col.dtype != torch.long or nodes.dtype != torch.long:
-        raise TypeError("rowptr, col and nodes must be int64")
+    if (rowptr.dtype not in (torch.int32, torch.int64)
+            or col.dtype != rowptr.dtype or nodes.dtype != rowptr.dtype):
+        raise TypeError("rowptr, col and nodes must have the same int32 or int64 dtype")
     if rowptr.device != col.device or rowptr.device != nodes.device:
         raise ValueError("rowptr, col and nodes must share a device")
     out_rowptr, out_col, out_eid, count = torch.ops.torch_cluster.subgraph(
