@@ -45,10 +45,11 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   data.set_q(*context->GetAttrs()->GetFloat(2));
   data.set_outputMode(outputMode);
   auto workspace = context->GetWorkspaceSizes(1);
-  const uint32_t shardCapacity = n / 4096 == 128 ? (walksPerCore <= 4096 ? 32 : 48) : 64;
+  const uint32_t shardParts = e / 32768;
+  const uint32_t shardCapacity = shardParts == 128 ? (walksPerCore <= 4096 ? 32 : 48) : 64;
   workspace[0] = outputMode && phase == 2 ?
       static_cast<uint64_t>(platform.GetLibApiWorkSpaceSize()) +
-      static_cast<uint64_t>(40) * (n / 4096) * shardCapacity * 12 : 0;
+      static_cast<uint64_t>(40) * shardParts * shardCapacity * 12 : 0;
   context->SetBlockDim(blocks);
   data.SaveToBuffer(context->GetRawTilingData()->GetData(),
                     context->GetRawTilingData()->GetCapacity());
@@ -84,7 +85,7 @@ static ge::graphStatus InferShape(gert::InferShapeContext* context) {
     flags->SetDim(0, s * len);
     return ge::GRAPH_SUCCESS;
   }
-  const auto parts = context->GetInputShape(0)->GetDim(0) / 4096;
+  const auto parts = context->GetInputShape(1)->GetDim(0) / 32768;
   const auto queueCapacity = (s + 15) / 16 * 16 + 640 * (parts + 1);
   flags->SetDim(0, mode ? 640 + (s + 15) / 16 * 16 + 80 * parts + 3 * queueCapacity : 640);
   return ge::GRAPH_SUCCESS;

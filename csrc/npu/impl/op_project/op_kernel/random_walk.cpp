@@ -48,6 +48,7 @@ public:
       // aliases a float32 [len,s] tensor. Separate queues overlap output DMA.
       pipe.InitBuffer(rngStateBuffer, 10 * kRngLanes * 4);
       pipe.InitBuffer(rngOutQueue, 2, 4 * kRngLanes * 4);
+      if (!outputMode) pipe.InitBuffer(rngIndexBuffer, 4 * kRngLanes * 4);
       return;
     }
     if (outputMode && phase != 0) {
@@ -163,24 +164,54 @@ public:
     const uint32_t round1Key0 = static_cast<uint32_t>(constantB) ^ (key0 + 0x9e3779b9U);
     const uint32_t round1Key1 = static_cast<uint32_t>(constantA >> 32) ^ (key1 + 0xbb67ae85U);
     auto state = rngStateBuffer.Get<int32_t>();
+    LocalTensor<uint32_t> packedIndices;
+    if (!outputMode) {
+      packedIndices = rngIndexBuffer.Get<uint32_t>();
+      // Philox produces four word planes. Convert their flat output order
+      // once, before the round scratch becomes live, for contiguous DMA.
+      auto row = state;
+      auto mask = state[4 * kRngLanes];
+      CreateVecIndex(packedIndices.ReinterpretCast<int32_t>(), int32_t(0), 4 * kRngLanes);
+      Duplicate(mask, int32_t(3), 4 * kRngLanes);
+      PipeBarrier<PIPE_V>();
+      ShiftRight(row.ReinterpretCast<uint32_t>(), packedIndices, 2U, 4 * kRngLanes);
+      And(packedIndices.ReinterpretCast<uint16_t>(), packedIndices.ReinterpretCast<uint16_t>(),
+          mask.ReinterpretCast<uint16_t>(), 8 * kRngLanes);
+      PipeBarrier<PIPE_V>();
+      Muls(row, row, int32_t(4), 4 * kRngLanes);
+      Muls(packedIndices.ReinterpretCast<int32_t>(), packedIndices.ReinterpretCast<int32_t>(),
+           int32_t(kRngLanes * 4), 4 * kRngLanes);
+      PipeBarrier<PIPE_V>();
+      Add(packedIndices.ReinterpretCast<int32_t>(), packedIndices.ReinterpretCast<int32_t>(),
+          row, 4 * kRngLanes);
+      PipeBarrier<PIPE_ALL>();
+    }
     auto maskLow = state[8 * kRngLanes];
     auto maskFloat = state[9 * kRngLanes];
     Duplicate(maskLow, 65535, kRngLanes);
     Duplicate(maskFloat, 0x7fffff, kRngLanes);
     GlobalTensor<float> output;
     output.SetGlobalBuffer((__gm__ float*)graphFlags.GetPhyAddr(), static_cast<uint64_t>(s) * len);
-    for (uint32_t walk = first; walk < last; walk += kRngLanes) {
-      const uint32_t count = last - walk < kRngLanes ? last - walk : kRngLanes;
+    const uint32_t groups = static_cast<uint64_t>(s) * len / 4;
+    // A flat counter group emits four adjacent values. Align ownership to
+    // cache lines so distinct cores never write the same DMA destination.
+    const uint32_t flatSpan = ((groups + GetBlockNum() - 1) / GetBlockNum() + 15) / 16 * 16;
+    const uint32_t begin = outputMode ? first : GetBlockIdx() * flatSpan;
+    const uint32_t end = outputMode ? last : (begin + flatSpan < groups ? begin + flatSpan : groups);
+    for (uint32_t walk = begin; walk < end; walk += kRngLanes) {
+      const uint32_t count = end - walk < kRngLanes ? end - walk : kRngLanes;
       const uint32_t calc = (count + 63) / 64 * 64;
-      for (uint32_t group = 0; group < len / 4; ++group) {
+      for (uint32_t group = 0; group < (outputMode ? len / 4 : 1); ++group) {
         auto out = rngOutQueue.AllocTensor<float>();
         auto initial = out.ReinterpretCast<int32_t>();
         CreateVecIndex(initial, static_cast<int32_t>(walk), calc);
         PipeBarrier<PIPE_V>();
-        Muls(initial, initial, static_cast<int32_t>(len / 4), calc);
-        PipeBarrier<PIPE_V>();
-        Adds(initial, initial, static_cast<int32_t>(group), calc);
-        PipeBarrier<PIPE_V>();
+        if (outputMode) {
+          Muls(initial, initial, static_cast<int32_t>(len / 4), calc);
+          PipeBarrier<PIPE_V>();
+          Adds(initial, initial, static_cast<int32_t>(group), calc);
+          PipeBarrier<PIPE_V>();
+        }
         auto tmp = state[4 * kRngLanes];
         auto key = state[5 * kRngLanes];
         RngMultiply(state[3 * kRngLanes], state[2 * kRngLanes], initial, 0xd2511f53U, calc);
@@ -216,12 +247,24 @@ public:
           Adds(values, values, 0x3f800000, calc); PipeBarrier<PIPE_V>();
           Adds(values.ReinterpretCast<float>(), values.ReinterpretCast<float>(), -1.0f, calc);
         }
-        rngOutQueue.EnQue(out);
-        auto ready = rngOutQueue.DeQue<float>();
-        DataCopyExtParams cp{4, count * 4, (kRngLanes - (count + 7) / 8 * 8) / 8,
-                             (s - count) * 4, 0};
-        DataCopyPad(output[static_cast<uint64_t>(group * 4) * s + walk], ready, cp);
-        rngOutQueue.FreeTensor(ready);
+        if (outputMode) {
+          rngOutQueue.EnQue(out);
+          auto ready = rngOutQueue.DeQue<float>();
+          DataCopyExtParams cp{4, count * 4, (kRngLanes - (count + 7) / 8 * 8) / 8,
+                               (s - count) * 4, 0};
+          DataCopyPad(output[static_cast<uint64_t>(group * 4) * s + walk], ready, cp);
+          rngOutQueue.FreeTensor(ready);
+        } else {
+          PipeBarrier<PIPE_V>();
+          auto packed = rngOutQueue.AllocTensor<float>();
+          Gather(packed, out, packedIndices, 0, count * 4);
+          rngOutQueue.EnQue(packed);
+          auto ready = rngOutQueue.DeQue<float>();
+          DataCopyExtParams cp{1, count * 16, 0, 0, 0};
+          DataCopyPad(output[static_cast<uint64_t>(walk) * 4], ready, cp);
+          rngOutQueue.FreeTensor(ready);
+          rngOutQueue.FreeTensor(out);
+        }
       }
     }
   }
@@ -692,7 +735,7 @@ public:
     if ASCEND_IS_AIV {
       constexpr uint32_t quota = 1024, shardEdges = 32768;
       const uint32_t core = GetBlockIdx(), producers = GetBlockNum();
-      const uint32_t parts = n / 4096, count = last - first;
+      const uint32_t parts = e / shardEdges, count = last - first;
       const uint32_t capacity = parts == 128 ? (walkSpan <= 4096 ? 32 : 48) : 64;
       const uint32_t padded = (count + 63) / 64 * 64;
       const uint32_t queuePitch = (walkSpan + parts * 16 + 15) / 16 * 16;
@@ -735,11 +778,11 @@ public:
         if (step == 0) {
           DataCopyPad(walkGm[first], nodes, stateCopy); PipeBarrier<PIPE_ALL>();
         }
-        Muls(temp.ReinterpretCast<float>(), temp.ReinterpretCast<float>(), float(8), count);
+        Muls(temp.ReinterpretCast<float>(), temp.ReinterpretCast<float>(), static_cast<float>(static_cast<int32_t>(regularDegree)), count);
         PipeBarrier<PIPE_V>();
         Cast(payload, temp.ReinterpretCast<float>(), RoundMode::CAST_FLOOR, count);
-        Muls(nodes, nodes, int32_t(8), count); PipeBarrier<PIPE_V>();
-        Mins(payload, payload, int32_t(7), count); PipeBarrier<PIPE_V>();
+        Muls(nodes, nodes, static_cast<int32_t>(regularDegree), count); PipeBarrier<PIPE_V>();
+        Mins(payload, payload, static_cast<int32_t>(regularDegree - 1), count); PipeBarrier<PIPE_V>();
         Add(nodes, nodes, payload, count); PipeBarrier<PIPE_ALL>();
         DataCopyPad(edgeGm[static_cast<uint64_t>(step) * edgesPitch + first], nodes, stateCopy);
         PipeBarrier<PIPE_ALL>();
@@ -1115,7 +1158,7 @@ public:
     }
     if (outputMode) {
       if constexpr (sizeof(IndexT) == 4) {
-        if (trustedGraph && regularDegree == 8 && walkSpan <= 8192) {
+        if (trustedGraph && (regularDegree == 4 || regularDegree == 8) && walkSpan <= 8192) {
           ProcessSharded();
           return;
         }
@@ -1165,6 +1208,7 @@ private:
   TPipe pipe;
   static constexpr uint32_t kRngLanes = 2048;
   TBuf<QuePosition::VECCALC> rngStateBuffer;
+  TBuf<QuePosition::VECCALC> rngIndexBuffer;
   TQue<QuePosition::VECOUT, 2> rngOutQueue;
   static constexpr uint32_t kWalkBatch = 8;
   static constexpr uint32_t kStepTile = 64;

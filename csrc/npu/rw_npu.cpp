@@ -63,9 +63,11 @@ random_walk_npu(torch::Tensor rowptr,
   const int64_t steps = count * walk_length;
   // This only chooses the internal layout. Device validation still proves
   // regularity and all index bounds before the cooperative sampler runs.
+  const bool shard_shape = (col.numel() == num_nodes * 8 && num_nodes <= 524288) ||
+      (col.numel() == num_nodes * 4 && num_nodes <= 1048576 && count >= 65536);
   const int64_t output_mode = start.scalar_type() == at::kInt &&
-      p == 1.0 && q == 1.0 && num_nodes >= 8192 && num_nodes <= 524288 &&
-      (num_nodes & (num_nodes - 1)) == 0 && col.numel() == num_nodes * 8 &&
+      p == 1.0 && q == 1.0 && num_nodes >= 8192 && shard_shape &&
+      (num_nodes & (num_nodes - 1)) == 0 && col.numel() % 32768 == 0 &&
       count >= 8192 && count <= 262144 && steps >= 32768 ? 1 : 0;
   const int64_t nodes_pitch = output_mode ? (count + 15) / 16 * 16 :
       ((walk_length + line_elements) / line_elements) * line_elements;
@@ -79,18 +81,21 @@ random_walk_npu(torch::Tensor rowptr,
   auto ci = col.contiguous();
   auto starts = start.contiguous();
   at::Tensor random;
-  // Exact CANN float32 Philox, computed directly in the step-major layout.
+  // Exact CANN float32 Philox, computed directly in the requested layout.
   // The bounded case has a 32-bit counter group index. Graph capture keeps
   // the framework's graph-safe RNG path and every other dtype/layout stays
   // on the original at::rand implementation.
-  const bool vector_rng = output_mode && walk_length % 4 == 0 &&
+  const bool flat_vector_rng = !output_mode && start.scalar_type() == at::kInt &&
+      p == 1.0 && q == 1.0 && count >= 8192 && steps >= 32768 && walk_length % 16 == 0;
+  const bool vector_rng = (output_mode || flat_vector_rng) && walk_length % 4 == 0 &&
       steps <= UINT32_MAX &&
       // The NPU input/device guard guarantees an initialized context. The
       // exported query avoids the inline helper's hidden IsContextInitialized
       // symbol in the installed torch_npu build.
       c10_npu::currentStreamCaptureStatusMayInitCtx() == c10_npu::CaptureStatus::None;
   if (vector_rng) {
-    random = at::empty({walk_length, count}, start.options().dtype(at::kFloat));
+    random = output_mode ? at::empty({walk_length, count}, start.options().dtype(at::kFloat)) :
+        at::empty({count, walk_length}, start.options().dtype(at::kFloat));
     auto seed_cpu = at::empty({4}, at::TensorOptions().dtype(at::kInt)
                                         .device(at::kCPU).pinned_memory(true));
     std::pair<uint64_t, uint64_t> state;
@@ -118,7 +123,7 @@ random_walk_npu(torch::Tensor rowptr,
     random = at::rand({count, walk_length}, start.options().dtype(at::kFloat));
     if (output_mode) random = random.transpose(0, 1).contiguous();
   }
-  const int64_t parts = num_nodes / 4096;
+  const int64_t parts = col.numel() / 32768;
   const int64_t queue_capacity = nodes_pitch + 640 * (parts + 1);
   const int64_t flag_count = output_mode ?
       640 + nodes_pitch + 80 * parts + 3 * queue_capacity : 640;
