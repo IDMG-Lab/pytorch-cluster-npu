@@ -14,6 +14,7 @@ BEGIN_TILING_DATA_DEF(RandomWalkTilingData)
   TILING_DATA_FIELD_DEF(uint32_t, checkBlocks);
   TILING_DATA_FIELD_DEF(float, p);
   TILING_DATA_FIELD_DEF(float, q);
+  TILING_DATA_FIELD_DEF(uint32_t, outputMode);
 END_TILING_DATA_DEF;
 REGISTER_TILING_DATA_CLASS(RandomWalk, RandomWalkTilingData)
 }

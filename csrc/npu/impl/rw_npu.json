@@ -108,6 +108,12 @@
         "param_type": "optional",
         "type": "int",
         "default_value": 1
+      },
+      {
+        "name": "output_mode",
+        "param_type": "optional",
+        "type": "int",
+        "default_value": 0
       }
     ]
   }

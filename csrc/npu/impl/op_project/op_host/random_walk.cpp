@@ -23,20 +23,32 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   uint32_t blocks = std::min(cores, std::max(1U, s));
   uint32_t walksPerCore = (s + blocks - 1) / blocks;
   const uint32_t phase = static_cast<uint32_t>(*context->GetAttrs()->GetInt(3));
+  const uint32_t outputMode = static_cast<uint32_t>(*context->GetAttrs()->GetInt(4));
   const uint32_t checkBlocks = std::min(40U, cores);
+  if (outputMode) {
+    blocks = std::min(40U, cores);
+    walksPerCore = ((s + blocks - 1) / blocks + 15) / 16 * 16;
+    blocks = (s + walksPerCore - 1) / walksPerCore;
+  }
   if (phase == 0) blocks = checkBlocks;
   data.set_numNodes(n);
   data.set_numEdges(e);
   data.set_numWalks(s);
   data.set_walkLength(len);
   const uint32_t lineElements = context->GetInputDesc(0)->GetDataType() == ge::DT_INT32 ? 16 : 8;
-  data.set_nodesPitch((len + lineElements) / lineElements * lineElements);
-  data.set_edgesPitch((len + lineElements - 1) / lineElements * lineElements);
+  data.set_nodesPitch(outputMode ? (s + 15) / 16 * 16 : (len + lineElements) / lineElements * lineElements);
+  data.set_edgesPitch(outputMode ? (s + 15) / 16 * 16 : (len + lineElements - 1) / lineElements * lineElements);
   data.set_walksPerCore(walksPerCore);
   data.set_phase(phase);
   data.set_checkBlocks(checkBlocks);
   data.set_p(*context->GetAttrs()->GetFloat(1));
   data.set_q(*context->GetAttrs()->GetFloat(2));
+  data.set_outputMode(outputMode);
+  auto workspace = context->GetWorkspaceSizes(1);
+  const uint32_t shardCapacity = n / 4096 == 128 ? (walksPerCore <= 4096 ? 32 : 48) : 64;
+  workspace[0] = outputMode && phase == 2 ?
+      static_cast<uint64_t>(platform.GetLibApiWorkSpaceSize()) +
+      static_cast<uint64_t>(40) * (n / 4096) * shardCapacity * 12 : 0;
   context->SetBlockDim(blocks);
   data.SaveToBuffer(context->GetRawTilingData()->GetData(),
                     context->GetRawTilingData()->GetCapacity());
@@ -60,13 +72,21 @@ static ge::graphStatus InferShape(gert::InferShapeContext* context) {
   nodes->SetDimNum(2);
   nodes->SetDim(0, s);
   const auto lineElements = context->GetInputDesc(0)->GetDataType() == ge::DT_INT32 ? 16 : 8;
-  nodes->SetDim(1, (len + lineElements) / lineElements * lineElements);
+  const auto mode = *context->GetAttrs()->GetInt(4);
+  nodes->SetDim(0, mode ? len + 1 : s);
+  nodes->SetDim(1, mode ? (s + 15) / 16 * 16 : (len + lineElements) / lineElements * lineElements);
   edges->SetDimNum(2);
-  edges->SetDim(0, s);
-  edges->SetDim(1, (len + lineElements - 1) / lineElements * lineElements);
+  edges->SetDim(0, mode ? len : s);
+  edges->SetDim(1, mode ? (s + 15) / 16 * 16 : (len + lineElements - 1) / lineElements * lineElements);
   auto flags = context->GetOutputShape(2);
   flags->SetDimNum(1);
-  flags->SetDim(0, 640);
+  if (*context->GetAttrs()->GetInt(3) == 4) {
+    flags->SetDim(0, s * len);
+    return ge::GRAPH_SUCCESS;
+  }
+  const auto parts = context->GetInputShape(0)->GetDim(0) / 4096;
+  const auto queueCapacity = (s + 15) / 16 * 16 + 640 * (parts + 1);
+  flags->SetDim(0, mode ? 640 + (s + 15) / 16 * 16 + 80 * parts + 3 * queueCapacity : 640);
   return ge::GRAPH_SUCCESS;
 }
 }
@@ -89,6 +109,7 @@ public:
     this->Attr("p").Float();
     this->Attr("q").Float();
     this->Attr("phase").Int(1);
+    this->Attr("output_mode").Int(0);
     this->SetInferShape(ge::InferShape);
     this->SetInferDataType(ge::InferDataType);
     this->AICore().SetTiling(optiling::TilingFunc);

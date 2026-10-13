@@ -26,6 +26,10 @@ namespace optiling
   TILING_DATA_FIELD_DEF(uint32_t, ptrXLen);
   TILING_DATA_FIELD_DEF(uint32_t, ptrYLen);
   TILING_DATA_FIELD_DEF(float, r);
+  TILING_DATA_FIELD_DEF(uint32_t, phase);
+  TILING_DATA_FIELD_DEF(uint32_t, gridCells);
+  TILING_DATA_FIELD_DEF(uint32_t, nativeCores);
+  TILING_DATA_FIELD_DEF(uint32_t, queryMode);
   END_TILING_DATA_DEF;
 
   REGISTER_TILING_DATA_CLASS(Radius, RadiusTilingData)

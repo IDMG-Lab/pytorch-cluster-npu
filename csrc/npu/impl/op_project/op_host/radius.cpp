@@ -15,6 +15,7 @@
 #include "register/op_def_registry.h"
 #include "tiling/platform/platform_ascendc.h"
 #include <cstdio>
+#include <algorithm>
 
 namespace optiling
 {
@@ -34,6 +35,9 @@ namespace optiling
     float r = *attrs->GetFloat(0);
     uint32_t max_num_neighbors = *attrs->GetInt(1);
     uint32_t ignore_same_index = *attrs->GetBool(2);
+    uint32_t phase = static_cast<uint32_t>(*attrs->GetInt(3));
+    uint32_t gridCells = static_cast<uint32_t>(*attrs->GetInt(4));
+    uint32_t queryMode = static_cast<uint32_t>(*attrs->GetInt(5));
     uint32_t ptrXLen = 0;
     uint32_t ptrYLen = 0;
     if (ptr_x_shape != nullptr)
@@ -47,7 +51,7 @@ namespace optiling
     // context->SetBlockDim(1);
     // 多核实现
     auto ascendcPlatform = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
-    uint32_t aivNum = ascendcPlatform.GetCoreNumAiv();
+    uint32_t aivNum = std::max(1U, std::min(40U, ascendcPlatform.GetCoreNumAiv()));
     uint32_t workItems = (ptrYLen > 1) ? (ptrYLen - 1) : ySize; // 无batch按y切，有batch按batch切
     uint32_t blockDim = (workItems == 0) ? 1 : ((workItems < aivNum) ? workItems : aivNum);
     // context->SetBlockDim(blockDim);
@@ -60,6 +64,11 @@ namespace optiling
     tiling.set_r(r);
     tiling.set_max_num_neighbors(max_num_neighbors);
     tiling.set_ignore_same_index(ignore_same_index);
+    tiling.set_phase(phase);
+    tiling.set_gridCells(gridCells);
+    tiling.set_nativeCores(aivNum);
+    tiling.set_queryMode(queryMode);
+    if (phase == 4 || phase == 8) context->SetBlockDim(1);
     tiling.SaveToBuffer(context->GetRawTilingData()->GetData(), context->GetRawTilingData()->GetCapacity());
     context->GetRawTilingData()->SetDataSize(tiling.GetDataSize());
 
@@ -75,8 +84,7 @@ namespace ge
   }
   static ge::graphStatus InferDataType(gert::InferDataTypeContext *context)
   {
-    const ge::DataType x1_dtype = context->GetInputDataType(0);
-    context->SetOutputDataType(0, x1_dtype);
+    context->SetOutputDataType(0, ge::DT_INT32);
     return GRAPH_SUCCESS;
   }
 }
@@ -151,6 +159,12 @@ namespace ops
           .DataType({ge::DT_INT32, ge::DT_INT32, ge::DT_INT32})
           .Format({ge::FORMAT_ND, ge::FORMAT_ND, ge::FORMAT_ND})
           .UnknownShapeFormat({ge::FORMAT_ND, ge::FORMAT_ND, ge::FORMAT_ND});
+      this->Input("compact_state").ParamType(REQUIRED)
+          .DataType({ge::DT_INT32, ge::DT_INT32, ge::DT_INT32})
+          .Format({ge::FORMAT_ND, ge::FORMAT_ND, ge::FORMAT_ND});
+      this->Input("packed").ParamType(REQUIRED)
+          .DataType({ge::DT_INT64, ge::DT_INT64, ge::DT_INT64})
+          .Format({ge::FORMAT_ND, ge::FORMAT_ND, ge::FORMAT_ND});
       this->Output("out")
           .ParamType(REQUIRED)
           .DataType({ge::DT_INT32, ge::DT_INT32, ge::DT_INT32})
@@ -159,6 +173,9 @@ namespace ops
       this->Attr("r").Float();
       this->Attr("max_num_neighbors").Int();
       this->Attr("ignore_same_index").Bool();
+      this->Attr("phase").Int(0);
+      this->Attr("grid_cells").Int(0);
+      this->Attr("query_mode").Int(0);
 
       this->SetInferShape(ge::InferShape).SetInferDataType(ge::InferDataType);
 
