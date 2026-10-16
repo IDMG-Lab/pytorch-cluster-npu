@@ -43,6 +43,7 @@ public:
                            static_cast<uint64_t>(outputMode ? len : s) * edgesPitch);
     graphFlags.SetGlobalBuffer((__gm__ int32_t*)flags, 640);
     if (phase == 4) {
+      if(outputMode==3) {pipe.InitBuffer(rngStateBuffer,32);return;}
       // Private exact Philox probe, independent from public sampling. Input
       // rowptr carries seed_lo/seed_hi/offset_lo/offset_hi. Output graph_flags
       // aliases a float32 [len,s] tensor. Separate queues overlap output DMA.
@@ -52,6 +53,12 @@ public:
       return;
     }
     if (outputMode && phase != 0) {
+      if(outputMode==3 && phase==2) {
+        pipe.InitBuffer(rngStateBuffer,10*kRngLanes*4);
+        pipe.InitBuffer(rngOutQueue,2,4*kRngLanes*4);
+        pipe.InitBuffer(shardBuffer,12*kRngLanes*4);
+        return;
+      }
       // All three cooperative phases reuse one arena. No old sampler UB is
       // live alongside the 128 KiB column shard.
       pipe.InitBuffer(shardBuffer, 163840);
@@ -154,6 +161,15 @@ public:
     const uint32_t key1 = static_cast<uint32_t>(rp.GetValue(1));
     const uint32_t offset0 = static_cast<uint32_t>(rp.GetValue(2));
     const uint32_t offset1 = static_cast<uint32_t>(rp.GetValue(3));
+    if(outputMode==3) {
+      auto metadata=rngStateBuffer.Get<uint32_t>();
+      metadata.SetValue(0,key0);metadata.SetValue(1,key1);
+      metadata.SetValue(2,offset0);metadata.SetValue(3,offset1);PipeBarrier<PIPE_ALL>();
+      GlobalTensor<uint32_t> output;
+      output.SetGlobalBuffer((__gm__ uint32_t*)graphFlags.GetPhyAddr(),4);
+      if(GetBlockIdx()==0) DataCopyPad(output,metadata,DataCopyExtParams{1,16,0,0,0});
+      return;
+    }
     // The first round's c2 is the uniform offset; its product is constant.
     // This makes c0 of round 1 constant too. Hoist both full products out of
     // the vector loop while preserving every Philox round and output bit.
@@ -313,7 +329,7 @@ public:
             if (degree == 1) {
               edge = begin;
             } else {
-              float u = rnd.GetValue(outputMode ? static_cast<uint64_t>(step) * s + walk : static_cast<uint64_t>(walk) * len + step);
+              float u = RandomAt(walk,step);
               if (u < 0.0f) u = 0.0f;
               if (u >= 1.0f) u = 0.99999994f;
               if (Uniform || previous < 0) {
@@ -731,6 +747,370 @@ public:
     }
   }
 
+  // A core owns independent walks. Time-major RNG/output permits wide SIMD
+  // and contiguous stores without global bucket sorting or cross-core queues.
+  // Every CSR offset and index has already been proved by phase 0.
+  // Exact two-step transition records: [w0 | (v_lo10<<20),
+  // w1 | (v_hi10<<20), w2, w3]. Validated node IDs fit twenty bits.
+  __aicore__ inline bool UsePairs() {
+    return outputMode && e==uint64_t(n)*4 && n<=1048576 && len>=64 &&
+        len%2==0 && uint64_t(s)*len>=uint64_t(n)*8;
+  }
+  __aicore__ inline GlobalTensor<int32_t> PairTable() {
+    const uint32_t parts=e/32768;
+    const uint64_t prefix=640+nodesPitch+80*parts+3*(uint64_t(nodesPitch)+640*(parts+1));
+    GlobalTensor<int32_t> table;
+    table.SetGlobalBuffer((__gm__ int32_t*)graphFlags.GetPhyAddr()+prefix,uint64_t(e)*4);
+    return table;
+  }
+  __aicore__ inline void BuildPairs() {
+    constexpr uint32_t B=1536;
+    auto arena=shardBuffer.Get<int32_t>();
+    auto firstNode=arena,addresses=arena[B],replies=arena[B*2];
+    auto output=arena[B*10],indices=arena[B*14],metaIndices=arena[B*18];
+    auto metadata=arena[B*3];
+    auto table=PairTable();
+    // Fixed padded-row gather indices; do not rebuild them for each tile.
+    CreateVecIndex(indices,int32_t(0),B*4);PipeBarrier<PIPE_V>();
+    ShiftRight(output,indices,int32_t(2),B*4);PipeBarrier<PIPE_V>();
+    Muls(output,output,int32_t(16),B*4);
+    Muls(indices,indices,int32_t(4),B*4);PipeBarrier<PIPE_V>();
+    Add(indices,indices,output,B*4);PipeBarrier<PIPE_V>();
+    // Expand [low-v bits, high-v bits, zero] into each four-word record.
+    CreateVecIndex(metaIndices,int32_t(0),B*4);PipeBarrier<PIPE_V>();
+    ShiftRight(output,metaIndices,int32_t(2),B*4);PipeBarrier<PIPE_V>();
+    Muls(output,output,int32_t(4),B*4);PipeBarrier<PIPE_V>();
+    Sub(metaIndices,metaIndices,output,B*4);PipeBarrier<PIPE_V>();
+    Mins(metaIndices,metaIndices,int32_t(2),B*4);PipeBarrier<PIPE_V>();
+    Muls(metaIndices,metaIndices,int32_t(B),B*4);
+    ShiftRight(output,output,int32_t(2),B*4);PipeBarrier<PIPE_V>();
+    Add(metaIndices,metaIndices,output,B*4);PipeBarrier<PIPE_V>();
+    Muls(metaIndices,metaIndices,int32_t(4),B*4);PipeBarrier<PIPE_V>();
+    const uint32_t span=((uint64_t(e)+GetBlockNum()-1)/GetBlockNum()+7)/8*8;
+    const uint32_t begin=GetBlockIdx()*span,end=begin+span<e?begin+span:e;
+    for(uint32_t base=begin;base<end;base+=B) {
+      const uint32_t count=end-base<B?end-base:B,words=count*4;
+      DataCopyPad(firstNode,ci[base],DataCopyExtParams{1,count*4,0,0,0},DataCopyPadExtParams<int32_t>{false,0,0,0});
+      PipeBarrier<PIPE_ALL>();
+      Maxs(firstNode,firstNode,int32_t(0),count);PipeBarrier<PIPE_V>();
+      Mins(firstNode,firstNode,int32_t(n-1),count);PipeBarrier<PIPE_V>();
+      Muls(addresses,firstNode,int32_t(4),count);PipeBarrier<PIPE_ALL>();
+      const __ubuf__ int32_t* __restrict__ selected=(__ubuf__ int32_t*)addresses.GetPhyAddr();
+      __ubuf__ int32_t* __restrict__ receive=(__ubuf__ int32_t*)replies.GetPhyAddr();
+      __gm__ int32_t* __restrict__ columns=(__gm__ int32_t*)ci.GetPhyAddr();
+      if ASCEND_IS_AIV {
+        uint32_t i=0;
+        for(;i+8<=count;i+=8) {
+          #pragma unroll
+          for(uint32_t k=0;k<8;k++)
+            copy_gm_to_ubuf_align_b32(receive+(i+k)*8,columns+selected[i+k],0,1,16,0,0,0,0);
+        }
+        for(;i<count;i++)
+          copy_gm_to_ubuf_align_b32(receive+i*8,columns+selected[i],0,1,16,0,0,0,0);
+      }
+      PipeBarrier<PIPE_ALL>();
+      Gather(output,replies,indices.ReinterpretCast<uint32_t>(),0,words);PipeBarrier<PIPE_V>();
+      ShiftRight(addresses,firstNode,int32_t(10),count);PipeBarrier<PIPE_V>();
+      Muls(addresses,addresses,int32_t(1024),count);PipeBarrier<PIPE_V>();
+      Sub(firstNode,firstNode,addresses,count);PipeBarrier<PIPE_V>();
+      Muls(firstNode,firstNode,int32_t(1<<20),count);
+      Muls(addresses,addresses,int32_t(1024),count);
+      Duplicate(replies,int32_t(0),B);PipeBarrier<PIPE_V>();
+      Gather(metadata,firstNode,metaIndices.ReinterpretCast<uint32_t>(),0,words);PipeBarrier<PIPE_V>();
+      Add(output,output,metadata,words);PipeBarrier<PIPE_ALL>();
+      DataCopyPad(table[uint64_t(base)*4],output,DataCopyExtParams{1,words*4,0,0,0});
+      PipeBarrier<PIPE_ALL>();
+    }
+  }
+
+  __aicore__ inline void CopyPairRange(uint32_t first,uint32_t last,
+      __ubuf__ int32_t* __restrict__ receive,const __ubuf__ int32_t* __restrict__ selected,
+      __gm__ int32_t* __restrict__ records) {
+    if ASCEND_IS_AIV {
+      uint32_t i=first;
+      for(;i+8<=last;i+=8) {
+        #pragma unroll
+        for(uint32_t k=0;k<8;k++)
+          copy_gm_to_ubuf(receive+(i+k)*8,records+selected[i+k],0,1,1,0,0);
+      }
+      for(;i<last;i++)copy_gm_to_ubuf(receive+i*8,records+selected[i],0,1,1,0,0);
+    }
+  }
+  template<bool Prefetch=false>
+  __aicore__ inline void FillPhiloxTile(LocalTensor<float> out,
+      uint32_t walk,uint32_t group,uint32_t count,
+      __ubuf__ int32_t* receive=nullptr,const __ubuf__ int32_t* selected=nullptr,
+      __gm__ int32_t* records=nullptr) {
+    const uint32_t calc=(count+63)/64*64;
+    const uint32_t key0=fusedSeed0,key1=fusedSeed1,offset0=fusedOffset0,offset1=fusedOffset1;
+    const uint64_t constantB=uint64_t(offset0)*0xcd9e8d57U;
+    const uint32_t nextC0=uint32_t(constantB>>32)^key0;
+    const uint64_t constantA=uint64_t(nextC0)*0xd2511f53U;
+    const uint32_t round0Key=offset1^key1;
+    const uint32_t round1Key0=uint32_t(constantB)^(key0+0x9e3779b9U);
+    const uint32_t round1Key1=uint32_t(constantA>>32)^(key1+0xbb67ae85U);
+    auto state=rngStateBuffer.Get<int32_t>();
+    auto maskFloat=state[9*kRngLanes];
+        auto initial = out.ReinterpretCast<int32_t>();
+        CreateVecIndex(initial, static_cast<int32_t>(walk), calc);
+        PipeBarrier<PIPE_V>();
+        if (outputMode) {
+          Muls(initial, initial, static_cast<int32_t>(len / 4), calc);
+          PipeBarrier<PIPE_V>();
+          Adds(initial, initial, static_cast<int32_t>(group), calc);
+          PipeBarrier<PIPE_V>();
+        }
+        auto tmp = state[4 * kRngLanes];
+        auto key = state[5 * kRngLanes];
+        RngMultiply(state[3 * kRngLanes], state[2 * kRngLanes], initial, 0xd2511f53U, calc);
+        Duplicate(key, static_cast<int32_t>(round0Key), calc); PipeBarrier<PIPE_V>();
+        RngXor(state[2 * kRngLanes], state[2 * kRngLanes], key, tmp, calc);
+        RngMultiply(initial[kRngLanes], initial, state[2 * kRngLanes], 0xcd9e8d57U, calc);
+        Duplicate(key, static_cast<int32_t>(round1Key0), calc); PipeBarrier<PIPE_V>();
+        RngXor(initial, initial, key, tmp, calc);
+        Duplicate(key, static_cast<int32_t>(round1Key1), calc); PipeBarrier<PIPE_V>();
+        RngXor(initial[2 * kRngLanes], state[3 * kRngLanes], key, tmp, calc);
+        Duplicate(initial[3 * kRngLanes], static_cast<int32_t>(constantA), calc);
+        PipeBarrier<PIPE_V>();
+        if constexpr(Prefetch) CopyPairRange(0,count*2/10,receive,selected,records);
+        uint32_t k0 = key0 + 2U * 0x9e3779b9U, k1 = key1 + 2U * 0xbb67ae85U;
+        for (uint32_t round = 2; round < 10; ++round) {
+          auto src = (round & 1) ? state : initial;
+          auto dst = (round & 1) ? initial : state;
+          RngMultiply(dst[3 * kRngLanes], dst[2 * kRngLanes], src, 0xd2511f53U, calc);
+          RngMultiply(dst[kRngLanes], dst, src[2 * kRngLanes], 0xcd9e8d57U, calc);
+          RngXor(dst, dst, src[kRngLanes], tmp, calc);
+          Duplicate(key, static_cast<int32_t>(k0), calc); PipeBarrier<PIPE_V>();
+          RngXor(dst, dst, key, tmp, calc);
+          RngXor(dst[2 * kRngLanes], dst[2 * kRngLanes], src[3 * kRngLanes], tmp, calc);
+          Duplicate(key, static_cast<int32_t>(k1), calc); PipeBarrier<PIPE_V>();
+          RngXor(dst[2 * kRngLanes], dst[2 * kRngLanes], key, tmp, calc);
+          if constexpr(Prefetch)
+            CopyPairRange(count*round/10,count*(round+1)/10,receive,selected,records);
+          k0 += 0x9e3779b9U;
+          k1 += 0xbb67ae85U;
+        }
+        for (uint32_t word = 0; word < 4; ++word) {
+          auto values = initial[word * kRngLanes];
+          And(values.ReinterpretCast<uint16_t>(), values.ReinterpretCast<uint16_t>(),
+              maskFloat.ReinterpretCast<uint16_t>(), calc * 2);
+          PipeBarrier<PIPE_V>();
+          Adds(values, values, 0x3f800000, calc); PipeBarrier<PIPE_V>();
+          Adds(values.ReinterpretCast<float>(), values.ReinterpretCast<float>(), -1.0f, calc);
+        }
+  }
+  __aicore__ inline float RandomAt(uint32_t walk,uint32_t step) {
+    if(outputMode!=3)
+      return rnd.GetValue(outputMode?uint64_t(step)*s+walk:uint64_t(walk)*len+step);
+    // Invalid / irregular CSR falls back safely without a full RNG tensor.
+    // Recompute the exact framework word, preserving every Philox output bit.
+    uint32_t c0=uint64_t(walk)*(len/4)+step/4,c1=0,c2=fusedOffset0,c3=fusedOffset1;
+    uint32_t k0=fusedSeed0,k1=fusedSeed1;
+    for(uint32_t round=0;round<10;round++) {
+      const uint64_t a=uint64_t(c0)*0xd2511f53U,b=uint64_t(c2)*0xcd9e8d57U;
+      c0=uint32_t(b>>32)^c1^k0;c1=uint32_t(b);
+      c2=uint32_t(a>>32)^c3^k1;c3=uint32_t(a);
+      k0+=0x9e3779b9U;k1+=0xbb67ae85U;
+    }
+    const uint32_t word=(step&3)==0?c0:(step&3)==1?c1:(step&3)==2?c2:c3;
+    return float(int32_t(word&0x7fffffU))*(1.0f/8388608.0f);
+  }
+
+  __aicore__ inline void ProcessPairsFused() {
+    constexpr uint32_t B=kRngLanes;
+    auto arena=shardBuffer.Get<int32_t>();
+    auto nodes=arena,edges=arena[B*2],replies=arena[B*4];
+    auto draws=arena[B].ReinterpretCast<float>();
+    auto indices=arena[B*3].ReinterpretCast<uint32_t>();
+    auto table=PairTable();
+    auto rngState=rngStateBuffer.Get<int32_t>();
+    Duplicate(rngState[8*kRngLanes],int32_t(65535),kRngLanes);
+    Duplicate(rngState[9*kRngLanes],int32_t(0x7fffff),kRngLanes);PipeBarrier<PIPE_V>();
+    auto currentDraws=rngOutQueue.AllocTensor<float>();
+    auto followingDraws=rngOutQueue.AllocTensor<float>();
+    for(uint32_t base=first;base<last;base+=B) {
+      const uint32_t count=last-base<B?last-base:B;
+      DataCopyExtParams copy{1,count*4,0,0,0};
+      DataCopyPad(nodes,starts[base],copy,DataCopyPadExtParams<int32_t>{false,0,0,0});
+      PipeBarrier<PIPE_ALL>();DataCopyPad(walkGm[base],nodes,copy);PipeBarrier<PIPE_ALL>();
+      FillPhiloxTile(currentDraws,base,0,count);PipeBarrier<PIPE_ALL>();
+      for(uint32_t step=0;step<len;step+=2) {
+        Adds(draws,currentDraws[(step&3)*kRngLanes],float(0),count);PipeBarrier<PIPE_V>();
+        Muls(draws,draws,float(4),count);PipeBarrier<PIPE_V>();
+        Cast(edges,draws,RoundMode::CAST_FLOOR,count);PipeBarrier<PIPE_V>();
+        Mins(edges,edges,int32_t(3),count);
+        Muls(nodes,nodes,int32_t(4),count);PipeBarrier<PIPE_V>();
+        Add(edges,edges,nodes,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(edgeGm[uint64_t(step)*edgesPitch+base],edges,copy);PipeBarrier<PIPE_ALL>();
+        ShiftRight(nodes,edges,int32_t(1),count);PipeBarrier<PIPE_V>();
+        Muls(nodes,nodes,int32_t(2),count);PipeBarrier<PIPE_V>();
+        Sub(indices.ReinterpretCast<int32_t>(),edges,nodes,count);PipeBarrier<PIPE_V>();
+        Muls(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),int32_t(16),count);
+        Muls(nodes,nodes,int32_t(4),count);
+        CreateVecIndex(draws.ReinterpretCast<int32_t>(),int32_t(0),count);PipeBarrier<PIPE_V>();
+        Muls(draws.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),int32_t(32),count);PipeBarrier<PIPE_V>();
+        Add(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),count);
+        PipeBarrier<PIPE_ALL>();
+        const __ubuf__ int32_t* __restrict__ selected=(__ubuf__ int32_t*)nodes.GetPhyAddr();
+        __ubuf__ int32_t* __restrict__ receive=(__ubuf__ int32_t*)replies.GetPhyAddr();
+        __gm__ int32_t* __restrict__ records=(__gm__ int32_t*)table.GetPhyAddr();
+        if((step&3)==0 && step+4<len)
+          FillPhiloxTile<true>(followingDraws,base,step/4+1,count,receive,selected,records);
+        else
+          CopyPairRange(0,count,receive,selected,records);
+        Adds(draws,currentDraws[((step+1)&3)*kRngLanes],float(0),count);
+        PipeBarrier<PIPE_ALL>();
+        Gather(nodes,replies,indices,0,count);
+        Gather(edges,replies,indices,4,count);PipeBarrier<PIPE_V>();
+        ShiftRight(nodes,nodes,int32_t(20),count);
+        ShiftRight(edges,edges,int32_t(20),count);PipeBarrier<PIPE_V>();
+        Muls(edges,edges,int32_t(1024),count);PipeBarrier<PIPE_V>();
+        Add(nodes,nodes,edges,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(walkGm[uint64_t(step+1)*nodesPitch+base],nodes,copy);PipeBarrier<PIPE_ALL>();
+        Muls(draws,draws,float(4),count);PipeBarrier<PIPE_V>();
+        Cast(edges,draws,RoundMode::CAST_FLOOR,count);PipeBarrier<PIPE_V>();
+        Mins(edges,edges,int32_t(3),count);PipeBarrier<PIPE_V>();
+        Muls(draws.ReinterpretCast<int32_t>(),edges,int32_t(4),count);
+        Muls(nodes,nodes,int32_t(4),count);PipeBarrier<PIPE_V>();
+        Add(edges,edges,nodes,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(edgeGm[uint64_t(step+1)*edgesPitch+base],edges,copy);PipeBarrier<PIPE_ALL>();
+        Add(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),count);PipeBarrier<PIPE_V>();
+        Gather(nodes,replies,indices,0,count);PipeBarrier<PIPE_V>();
+        ShiftLeft(nodes.ReinterpretCast<uint32_t>(),nodes.ReinterpretCast<uint32_t>(),uint32_t(12),count);PipeBarrier<PIPE_V>();
+        ShiftRight(nodes.ReinterpretCast<uint32_t>(),nodes.ReinterpretCast<uint32_t>(),uint32_t(12),count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(walkGm[uint64_t(step+2)*nodesPitch+base],nodes,copy);PipeBarrier<PIPE_ALL>();
+        if((step&3)==2) {auto swap=currentDraws;currentDraws=followingDraws;followingDraws=swap;}
+      }
+    }
+    rngOutQueue.FreeTensor(currentDraws);rngOutQueue.FreeTensor(followingDraws);
+  }
+
+  __aicore__ inline void ProcessPairs() {
+    constexpr uint32_t B=3328;
+    auto arena=shardBuffer.Get<int32_t>();
+    auto nodes=arena,edges=arena[B*2],replies=arena[B*4];
+    auto draws=arena[B].ReinterpretCast<float>();
+    auto indices=arena[B*3].ReinterpretCast<uint32_t>();
+    auto table=PairTable();
+    for(uint32_t base=first;base<last;base+=B) {
+      const uint32_t count=last-base<B?last-base:B;
+      DataCopyExtParams copy{1,count*4,0,0,0};
+      DataCopyPad(nodes,starts[base],copy,DataCopyPadExtParams<int32_t>{false,0,0,0});
+      PipeBarrier<PIPE_ALL>();DataCopyPad(walkGm[base],nodes,copy);PipeBarrier<PIPE_ALL>();
+      for(uint32_t step=0;step<len;step+=2) {
+        DataCopyPad(draws,rnd[uint64_t(step)*s+base],copy,DataCopyPadExtParams<float>{false,0,0,0});
+        PipeBarrier<PIPE_ALL>();
+        Muls(draws,draws,float(4),count);PipeBarrier<PIPE_V>();
+        Cast(edges,draws,RoundMode::CAST_FLOOR,count);PipeBarrier<PIPE_V>();
+        Mins(edges,edges,int32_t(3),count);
+        Muls(nodes,nodes,int32_t(4),count);PipeBarrier<PIPE_V>();
+        Add(edges,edges,nodes,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(edgeGm[uint64_t(step)*edgesPitch+base],edges,copy);PipeBarrier<PIPE_ALL>();
+        ShiftRight(nodes,edges,int32_t(1),count);PipeBarrier<PIPE_V>();
+        Muls(nodes,nodes,int32_t(2),count);PipeBarrier<PIPE_V>();
+        Sub(indices.ReinterpretCast<int32_t>(),edges,nodes,count);PipeBarrier<PIPE_V>();
+        Muls(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),int32_t(16),count);
+        Muls(nodes,nodes,int32_t(4),count);
+        CreateVecIndex(draws.ReinterpretCast<int32_t>(),int32_t(0),count);PipeBarrier<PIPE_V>();
+        Muls(draws.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),int32_t(32),count);PipeBarrier<PIPE_V>();
+        Add(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),count);
+        PipeBarrier<PIPE_ALL>();
+        const __ubuf__ int32_t* __restrict__ selected=(__ubuf__ int32_t*)nodes.GetPhyAddr();
+        __ubuf__ int32_t* __restrict__ receive=(__ubuf__ int32_t*)replies.GetPhyAddr();
+        __gm__ int32_t* __restrict__ records=(__gm__ int32_t*)table.GetPhyAddr();
+        if ASCEND_IS_AIV {
+          uint32_t i=0;
+          for(;i+8<=count;i+=8) {
+            #pragma unroll
+            for(uint32_t k=0;k<8;k++)copy_gm_to_ubuf(receive+(i+k)*8,records+selected[i+k],0,1,1,0,0);
+          }
+          for(;i<count;i++)copy_gm_to_ubuf(receive+i*8,records+selected[i],0,1,1,0,0);
+        }
+        DataCopyPad(draws,rnd[uint64_t(step+1)*s+base],copy,DataCopyPadExtParams<float>{false,0,0,0});
+        PipeBarrier<PIPE_ALL>();
+        Gather(nodes,replies,indices,0,count);
+        Gather(edges,replies,indices,4,count);PipeBarrier<PIPE_V>();
+        ShiftRight(nodes,nodes,int32_t(20),count);
+        ShiftRight(edges,edges,int32_t(20),count);PipeBarrier<PIPE_V>();
+        Muls(edges,edges,int32_t(1024),count);PipeBarrier<PIPE_V>();
+        Add(nodes,nodes,edges,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(walkGm[uint64_t(step+1)*nodesPitch+base],nodes,copy);PipeBarrier<PIPE_ALL>();
+        Muls(draws,draws,float(4),count);PipeBarrier<PIPE_V>();
+        Cast(edges,draws,RoundMode::CAST_FLOOR,count);PipeBarrier<PIPE_V>();
+        Mins(edges,edges,int32_t(3),count);PipeBarrier<PIPE_V>();
+        Muls(draws.ReinterpretCast<int32_t>(),edges,int32_t(4),count);
+        Muls(nodes,nodes,int32_t(4),count);PipeBarrier<PIPE_V>();
+        Add(edges,edges,nodes,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(edgeGm[uint64_t(step+1)*edgesPitch+base],edges,copy);PipeBarrier<PIPE_ALL>();
+        Add(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),count);PipeBarrier<PIPE_V>();
+        Gather(nodes,replies,indices,0,count);PipeBarrier<PIPE_V>();
+        ShiftLeft(nodes.ReinterpretCast<uint32_t>(),nodes.ReinterpretCast<uint32_t>(),uint32_t(12),count);PipeBarrier<PIPE_V>();
+        ShiftRight(nodes.ReinterpretCast<uint32_t>(),nodes.ReinterpretCast<uint32_t>(),uint32_t(12),count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(walkGm[uint64_t(step+2)*nodesPitch+base],nodes,copy);PipeBarrier<PIPE_ALL>();
+      }
+    }
+  }
+
+  __aicore__ inline void ProcessUniformColumns() {
+    constexpr uint32_t B=3328;
+    auto arena=shardBuffer.Get<int32_t>();
+    auto nodes=arena;
+    auto draws=arena[B].ReinterpretCast<float>();
+    auto edges=arena[B*2];
+    auto indices=arena[B*3].ReinterpretCast<uint32_t>();
+    auto replies=arena[B*4];
+    CreateVecIndex(indices.ReinterpretCast<int32_t>(),int32_t(0),B);
+    PipeBarrier<PIPE_V>();
+    Muls(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),int32_t(32),B);
+    PipeBarrier<PIPE_ALL>();
+    for(uint32_t base=first;base<last;base+=B) {
+      const uint32_t count=last-base<B?last-base:B;
+      DataCopyExtParams copy{1,count*4,0,0,0};
+      DataCopyPad(nodes,starts[base],copy,DataCopyPadExtParams<int32_t>{false,0,0,0});
+      PipeBarrier<PIPE_ALL>();
+      DataCopyPad(walkGm[base],nodes,copy);
+      PipeBarrier<PIPE_ALL>();
+      for(uint32_t step=0;step<len;++step) {
+        DataCopyPad(draws,rnd[uint64_t(step)*s+base],copy,DataCopyPadExtParams<float>{false,0,0,0});
+        PipeBarrier<PIPE_ALL>();
+        Muls(draws,draws,float(int32_t(regularDegree)),count);PipeBarrier<PIPE_V>();
+        Cast(edges,draws,RoundMode::CAST_FLOOR,count);PipeBarrier<PIPE_V>();
+        Mins(edges,edges,int32_t(regularDegree-1),count);PipeBarrier<PIPE_V>();
+        Muls(nodes,nodes,int32_t(regularDegree),count);PipeBarrier<PIPE_V>();
+        Add(edges,edges,nodes,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(edgeGm[uint64_t(step)*edgesPitch+base],edges,copy);
+        PipeBarrier<PIPE_ALL>();
+        // Fetch aligned 32-byte lines. The non-padding DMA instruction has
+        // substantially less per-request overhead than a padded 4-byte copy.
+        ShiftRight(nodes,edges,int32_t(3),count);PipeBarrier<PIPE_V>();
+        Muls(nodes,nodes,int32_t(8),count);PipeBarrier<PIPE_V>();
+        Sub(indices.ReinterpretCast<int32_t>(),edges,nodes,count);PipeBarrier<PIPE_V>();
+        Muls(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),int32_t(4),count);
+        CreateVecIndex(draws.ReinterpretCast<int32_t>(),int32_t(0),count);PipeBarrier<PIPE_V>();
+        Muls(draws.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),int32_t(32),count);PipeBarrier<PIPE_V>();
+        Add(indices.ReinterpretCast<int32_t>(),indices.ReinterpretCast<int32_t>(),draws.ReinterpretCast<int32_t>(),count);
+        PipeBarrier<PIPE_ALL>();
+        const __ubuf__ int32_t* __restrict__ selected=(__ubuf__ int32_t*)nodes.GetPhyAddr();
+        __ubuf__ int32_t* __restrict__ destination=(__ubuf__ int32_t*)replies.GetPhyAddr();
+        __gm__ IndexT* __restrict__ columns=(__gm__ IndexT*)ci.GetPhyAddr();
+        if ASCEND_IS_AIV {
+          uint32_t i=0;
+          for(;i+8<=count;i+=8) {
+            #pragma unroll
+            for(uint32_t k=0;k<8;++k)
+              copy_gm_to_ubuf(destination+(i+k)*8,columns+selected[i+k],0,1,1,0,0);
+          }
+          for(;i<count;++i)
+            copy_gm_to_ubuf(destination+i*8,columns+selected[i],0,1,1,0,0);
+        }
+        PipeBarrier<PIPE_ALL>();
+        Gather(nodes,replies,indices,0,count);PipeBarrier<PIPE_ALL>();
+        DataCopyPad(walkGm[uint64_t(step+1)*nodesPitch+base],nodes,copy);
+        PipeBarrier<PIPE_ALL>();
+      }
+    }
+  }
+
   __aicore__ inline void ProcessSharded() {
     if ASCEND_IS_AIV {
       constexpr uint32_t quota = 1024, shardEdges = 32768;
@@ -1079,6 +1459,10 @@ public:
   }
 
   __aicore__ inline void Process() {
+    if (phase == 5) {
+      if constexpr (sizeof(IndexT)==4) { if(UsePairs()) BuildPairs(); }
+      return;
+    }
     if (phase == 4) {
       if constexpr (sizeof(IndexT) == 4) ProcessRandom();
       return;
@@ -1156,10 +1540,17 @@ public:
       if (degreeOne) regularDegree = n ? e / n : 0;
       degreeOne = regularDegree == 1;
     }
+    if(outputMode==3) {
+      GlobalTensor<uint32_t> seed;
+      seed.SetGlobalBuffer((__gm__ uint32_t*)rnd.GetPhyAddr(),4);
+      fusedSeed0=seed.GetValue(0);fusedSeed1=seed.GetValue(1);
+      fusedOffset0=seed.GetValue(2);fusedOffset1=seed.GetValue(3);
+    }
     if (outputMode) {
       if constexpr (sizeof(IndexT) == 4) {
         if (trustedGraph && (regularDegree == 4 || regularDegree == 8) && walkSpan <= 8192) {
-          ProcessSharded();
+          if (UsePairs()) {if(outputMode==3) ProcessPairsFused();else ProcessPairs();}
+          else ProcessUniformColumns();
           return;
         }
       }
@@ -1206,7 +1597,7 @@ private:
   }
 
   TPipe pipe;
-  static constexpr uint32_t kRngLanes = 2048;
+  static constexpr uint32_t kRngLanes = 1536;
   TBuf<QuePosition::VECCALC> rngStateBuffer;
   TBuf<QuePosition::VECCALC> rngIndexBuffer;
   TQue<QuePosition::VECOUT, 2> rngOutQueue;
@@ -1234,6 +1625,7 @@ private:
   float returnWeight, farWeight;
   uint32_t phase, checkBlocks, regularDegree;
   uint32_t outputMode, walkSpan;
+  uint32_t fusedSeed0,fusedSeed1,fusedOffset0,fusedOffset1;
   GM_ADDR shardWorkspace;
   bool uniform, localGraph, degreeOne, trustedGraph;
 };

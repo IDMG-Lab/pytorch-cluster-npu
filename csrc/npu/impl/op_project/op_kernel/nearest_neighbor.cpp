@@ -62,6 +62,89 @@ constexpr uint32_t GENERAL_VEC_FLOATS =
         ? GENERAL_PIPE_Y_TILE_POINTS
         : GATHER_DST_FLOATS;
 
+// Fused AoS float32 3-D nearest neighbour. One y tile is reused by sixteen
+// x rows; batch boundaries remain on device and labels are global y indices.
+class KernelNearest3 {
+public:
+  __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, GM_ADDR px, GM_ADDR py,
+      GM_ADDR out, const NearestNeighborTilingData* data) {
+    n=data->numPoints; batches=data->batchSize;
+    begin=GetBlockIdx()*data->blockPoints;
+    end=begin+data->blockPoints<n?begin+data->blockPoints:n;
+    gx.SetGlobalBuffer((__gm__ float*)x);gy.SetGlobalBuffer((__gm__ float*)y);
+    bx.SetGlobalBuffer((__gm__ int64_t*)px);by.SetGlobalBuffer((__gm__ int64_t*)py);
+    go.SetGlobalBuffer((__gm__ int64_t*)out);
+    pipe.InitBuffer(xBuf,16*3*4);
+    pipe.InitBuffer(yBuf,T*3*4);
+    pipe.InitBuffer(planes,T*3*4);
+    pipe.InitBuffer(distBuf,T*4);pipe.InitBuffer(tmpBuf,T*4);
+    pipe.InitBuffer(workBuf,T*4);pipe.InitBuffer(offsetBuf,T*4);
+    pipe.InitBuffer(reduceBuf,64);pipe.InitBuffer(outBuf,16*8);
+    auto offsets=offsetBuf.Get<int32_t>();
+    CreateVecIndex(offsets,int32_t(0),T);PipeBarrier<PIPE_V>();
+    Muls(offsets,offsets,int32_t(12),T);PipeBarrier<PIPE_ALL>();
+  }
+  __aicore__ inline void Process() {
+    if(begin>=end)return;
+    auto xv=xBuf.Get<float>(),ya=yBuf.Get<float>(),ys=planes.Get<float>();
+    auto dist=distBuf.Get<float>(),tmp=tmpBuf.Get<float>(),work=workBuf.Get<float>();
+    auto reduced=reduceBuf.Get<float>();auto output=outBuf.Get<int64_t>();
+    auto offsets=offsetBuf.Get<uint32_t>();
+    for(uint32_t batch=0;batch<batches;++batch) {
+      const int64_t xs=bx.GetValue(batch),xe=bx.GetValue(batch+1);
+      const int64_t yfirst=by.GetValue(batch),ylast=by.GetValue(batch+1);
+      const uint32_t first=xs>begin?xs:begin,last=xe<end?xe:end;
+      if(first>=last)continue;
+      for(uint32_t base=first;base<last;base+=16) {
+        const uint32_t nx=last-base<16?last-base:16;
+        DataCopyPad(xv,gx[uint64_t(base)*3],DataCopyExtParams{1,nx*12,0,0,0},DataCopyPadExtParams<float>{false,0,0,0});
+        PipeBarrier<PIPE_ALL>();
+        float best[16];int64_t chosen[16];
+        for(uint32_t i=0;i<nx;++i){best[i]=3.402823466e38F;chosen[i]=-1;}
+        for(int64_t start=yfirst;start<ylast;start+=T) {
+          const uint32_t count=ylast-start<T?ylast-start:T;
+          const uint32_t padded=(count+63)/64*64;
+          DataCopyPad(ya,gy[uint64_t(start)*3],DataCopyExtParams{1,count*12,0,0,0},DataCopyPadExtParams<float>{false,0,0,0});
+          PipeBarrier<PIPE_ALL>();
+          Gather(ys,ya,offsets,0,padded);
+          Gather(ys[T],ya,offsets,4,padded);
+          Gather(ys[T*2],ya,offsets,8,padded);
+          PipeBarrier<PIPE_ALL>();
+          for(uint32_t i=0;i<nx;++i) {
+            Adds(dist,ys,-xv.GetValue(i*3),padded);PipeBarrier<PIPE_V>();
+            Mul(dist,dist,dist,padded);PipeBarrier<PIPE_V>();
+            Adds(tmp,ys[T],-xv.GetValue(i*3+1),padded);PipeBarrier<PIPE_V>();
+            Mul(tmp,tmp,tmp,padded);PipeBarrier<PIPE_V>();
+            Add(dist,dist,tmp,padded);PipeBarrier<PIPE_V>();
+            Adds(tmp,ys[T*2],-xv.GetValue(i*3+2),padded);PipeBarrier<PIPE_V>();
+            Mul(tmp,tmp,tmp,padded);PipeBarrier<PIPE_V>();
+            Add(dist,dist,tmp,padded);PipeBarrier<PIPE_ALL>();
+            for(uint32_t k=count;k<padded;++k)dist.SetValue(k,3.402823466e38F);
+            PipeBarrier<PIPE_ALL>();
+            ReduceMin(reduced,dist,work,int32_t(padded),true);PipeBarrier<PIPE_ALL>();
+            const float value=reduced.GetValue(0);
+            const uint32_t index=reduced.ReinterpretCast<uint32_t>().GetValue(1);
+            const int64_t label=start+index;
+            if(index<count && (value<best[i] || (value==best[i] && (chosen[i]<0 || label<chosen[i])))) {
+              best[i]=value;chosen[i]=label;
+            }
+          }
+        }
+        for(uint32_t i=0;i<nx;++i)output.SetValue(i,chosen[i]);
+        PipeBarrier<PIPE_ALL>();
+        DataCopyPad(go[base],output,DataCopyExtParams{1,nx*8,0,0,0});
+        PipeBarrier<PIPE_ALL>();
+      }
+    }
+  }
+private:
+  static constexpr uint32_t T=2048;
+  TPipe pipe;
+  TBuf<QuePosition::VECCALC> xBuf,yBuf,planes,distBuf,tmpBuf,workBuf,offsetBuf,reduceBuf,outBuf;
+  GlobalTensor<float> gx,gy;GlobalTensor<int64_t> bx,by,go;
+  uint32_t n,batches,begin,end;
+};
+
 class KernelNearestNeighbor {
 public:
     __aicore__ inline KernelNearestNeighbor() {}
@@ -973,6 +1056,17 @@ extern "C" __global__ __aicore__ void nearest_neighbor(
 {
     GET_TILING_DATA(tiling_data, tiling);
 
+#ifndef DTYPE_X
+#define DTYPE_X float
+#endif
+    if constexpr (sizeof(DTYPE_X) == sizeof(float)) {
+        if (tiling_data.dim == 3) {
+            KernelNearest3 fused;
+            fused.Init(x, y, ptr_x, ptr_y, cluster, &tiling_data);
+            fused.Process();
+            return;
+        }
+    }
     KernelNearestNeighbor op;
     op.Init(x, y, ptr_x, ptr_y, cluster, &tiling_data);
     op.Process();

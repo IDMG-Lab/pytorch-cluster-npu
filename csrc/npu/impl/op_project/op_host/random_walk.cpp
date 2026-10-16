@@ -26,7 +26,7 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
   const uint32_t outputMode = static_cast<uint32_t>(*context->GetAttrs()->GetInt(4));
   const uint32_t checkBlocks = std::min(40U, cores);
   if (outputMode) {
-    blocks = std::min(40U, cores);
+    blocks = cores;
     walksPerCore = ((s + blocks - 1) / blocks + 15) / 16 * 16;
     blocks = (s + walksPerCore - 1) / walksPerCore;
   }
@@ -87,7 +87,11 @@ static ge::graphStatus InferShape(gert::InferShapeContext* context) {
   }
   const auto parts = context->GetInputShape(1)->GetDim(0) / 32768;
   const auto queueCapacity = (s + 15) / 16 * 16 + 640 * (parts + 1);
-  flags->SetDim(0, mode ? 640 + (s + 15) / 16 * 16 + 80 * parts + 3 * queueCapacity : 640);
+  const auto n = context->GetInputShape(0)->GetDim(0)-1;
+  const auto e = context->GetInputShape(1)->GetDim(0);
+  const bool paired = mode && e==n*4 && n<=1048576 && len>=64 && len%2==0 && s*len>=n*8;
+  flags->SetDim(0, (mode ? 640 + (s + 15) / 16 * 16 + 80 * parts + 3 * queueCapacity : 640)
+                   + (paired ? e*4 : 0));
   return ge::GRAPH_SUCCESS;
 }
 }

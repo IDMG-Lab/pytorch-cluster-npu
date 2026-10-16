@@ -101,6 +101,10 @@ torch::Tensor nearest_npu(torch::Tensor x,
   const bool fast = xc.scalar_type() == at::kFloat &&
                     yc.scalar_type() == at::kFloat &&
                     n_x > 0 && yc.size(0) > 0;
+  if (fast && xc.size(1) == 3 && yc.size(1) == 3) {
+    EXEC_NPU_CMD(aclnnNearestNeighbor, xc, yc, ptr_x, ptr_y, out);
+    return out;
+  }
   if (fast) {
     auto pxc = ptr_x.contiguous();
     auto pyc = ptr_y.contiguous();

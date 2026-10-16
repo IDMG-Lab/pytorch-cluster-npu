@@ -18,31 +18,13 @@ static ge::graphStatus TilingFunc(gert::TilingContext* context) {
     auto ascendcPlatform =
         platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
 
-    uint32_t coreNum = ascendcPlatform.GetCoreNum();
-
-    // 2. 确定核数 (BlockDim)
-    // 分级自适应: 点数越大使用的核数越多, 每核至少处理 ~4096 点以摊销启动开销
-    // 910B 最多 32 核
-    uint32_t blockNum;
-    if (numPoints < 4096) {
-        blockNum = 1;
-    } else if (numPoints < 16384) {
-        blockNum = 4;
-    } else if (numPoints < 65536) {
-        blockNum = 8;
-    } else if (numPoints < 262144) {
-        blockNum = 16;
-    } else {
-        blockNum = 32;
-    }
-
-    blockNum = std::min(blockNum, coreNum);
-
+    uint32_t coreNum = std::max(1U,ascendcPlatform.GetCoreNumAiv());
+    uint32_t blockNum = std::min(coreNum,std::max(1U,(numPoints+4095)/4096));
+    // Keep inter-core output boundaries at complete int64 cache lines.
+    uint32_t pointsPerCore = blockNum == 1 ? numPoints : (numPoints/blockNum/8)*8;
+    if(pointsPerCore==0) {blockNum=1;pointsPerCore=numPoints;}
+    uint32_t tailPoints = numPoints-pointsPerCore*blockNum;
     context->SetBlockDim(blockNum);
-
-    // 3. 计算切分 (按点切分，不打散单个点的 D 维坐标)
-    uint32_t pointsPerCore = numPoints / blockNum;
-    uint32_t tailPoints = numPoints % blockNum;
 
     // 4. 设置 Tiling 数据
     tiling.set_numPoints(numPoints);

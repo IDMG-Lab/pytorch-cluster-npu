@@ -144,5 +144,41 @@ torch::Tensor knn_npu(torch::Tensor x, torch::Tensor y,
       static_cast<double>(x.size(0)) * y.size(0) * x.size(1) >= 1048576) {
     return knn_tiled_npu(x, y, k);
   }
+  // Segment the existing exact-checked Cube path instead of sending batched
+  // float32 queries through the scalar all-pairs kernel. Empty/short or
+  // malformed batches retain the native implementation and its contracts.
+  if (ptr_x.has_value() && ptr_y.has_value() && !cosine &&
+      x.scalar_type() == at::kFloat && y.scalar_type() == at::kFloat &&
+      x.size(0) <= 16777216 && y.size(0) > 0 &&
+      ptr_x->device() == x.device() && ptr_y->device() == x.device() &&
+      ptr_x->scalar_type() == at::kLong && ptr_y->scalar_type() == at::kLong &&
+      ptr_x->dim() == 1 && ptr_y->dim() == 1 &&
+      ptr_x->numel() == ptr_y->numel() && ptr_x->numel() >= 2) {
+    auto px = ptr_x->cpu().contiguous();
+    auto py = ptr_y->cpu().contiguous();
+    const auto* ax = px.data_ptr<int64_t>();
+    const auto* ay = py.data_ptr<int64_t>();
+    const int64_t batches = px.numel() - 1;
+    bool eligible = ax[0] == 0 && ay[0] == 0 &&
+        ax[batches] == x.size(0) && ay[batches] == y.size(0);
+    for (int64_t b = 0; b < batches && eligible; ++b) {
+      eligible = ax[b] >= 0 && ax[b+1] >= ax[b] && ax[b+1] <= x.size(0) &&
+          ay[b] >= 0 && ay[b+1] >= ay[b] && ay[b+1] <= y.size(0) &&
+          ax[b+1] - ax[b] >= k;
+    }
+    if (eligible) {
+      std::vector<torch::Tensor> chunks;
+      for (int64_t b = 0; b < batches; ++b) {
+        if (ay[b+1] == ay[b]) continue;
+        auto result = knn_tiled_npu(x.slice(0, ax[b], ax[b+1]),
+                                    y.slice(0, ay[b], ay[b+1]), k);
+        result.select(0, 0).add_(ay[b]);
+        result.select(0, 1).add_(ax[b]);
+        chunks.push_back(result);
+      }
+      if (chunks.empty()) return at::empty({2, 0}, y.options().dtype(at::kLong));
+      return chunks.size() == 1 ? chunks[0] : at::cat(chunks, 1);
+    }
+  }
   return knn_native_npu(x, y, ptr_x, ptr_y, k, cosine, num_workers);
 }

@@ -1,270 +1,120 @@
 #include "kernel_operator.h"
 using namespace AscendC;
-
 #ifndef DTYPE_POS
 #define DTYPE_POS float
 #endif
 
-// BUFFER_POINTS = 4096
-// UB 占用: 4096 × 36B ≈ 144KB (56% of 256KB on 910B)
-// 相比 64 点 (0.9% UB), 循环次数减少 64x, 显著降低循环开销
-constexpr uint32_t BUFFER_POINTS = 4096;
-constexpr uint32_t BUFFER_NUM = 2;
-
+// Eight exact byte accumulators implement modulo-2^64 grid labels on AIV.
+// No int64 vector multiply is required; the final low/high words are gathered
+// directly into int64 output storage. Unusually large coordinates use the
+// general scalar definition rather than silently losing integer precision.
 class KernelVoxelGrid {
 public:
-    __aicore__ inline KernelVoxelGrid() {}
-
-    __aicore__ inline void Init(
-        GM_ADDR pos,
-        GM_ADDR size,
-        GM_ADDR start,
-        GM_ADDR end,
-        GM_ADDR cluster,
-        const VoxelGridTilingData* tilingData) {
-        dim = tilingData->dim;
-        workPoints = tilingData->numPoints;
-
-        if (workPoints == 0) {
-            coreOffset = 0;
-            corePoints = 0;
-            return;
+  __aicore__ inline void Init(GM_ADDR pos,GM_ADDR size,GM_ADDR start,GM_ADDR end,
+      GM_ADDR out,const VoxelGridTilingData* d) {
+    dim=d->dim;n=d->numPoints;
+    first=GetBlockIdx()*d->blockPoints;
+    count=d->blockPoints+(GetBlockIdx()==GetBlockNum()-1?d->tailPoints:0);
+    pg.SetGlobalBuffer((__gm__ DTYPE_POS*)pos);sg.SetGlobalBuffer((__gm__ DTYPE_POS*)size);
+    bg.SetGlobalBuffer((__gm__ DTYPE_POS*)start);eg.SetGlobalBuffer((__gm__ DTYPE_POS*)end);
+    og.SetGlobalBuffer((__gm__ int64_t*)out);
+    pipe.InitBuffer(inBuf,T*sizeof(DTYPE_POS));pipe.InitBuffer(posBuf,T*4);
+    pipe.InitBuffer(coordBuf,T*4);pipe.InitBuffer(cfBuf,T*4);pipe.InitBuffer(tmpBuf,T*4);
+    pipe.InitBuffer(carryBuf,T*4);pipe.InitBuffer(absBuf,T*4);pipe.InitBuffer(limbBuf,T*8*4);
+    pipe.InitBuffer(packedBuf,T*2*4);pipe.InitBuffer(outBuf,T*2*4);pipe.InitBuffer(indexBuf,T*2*4);
+    pipe.InitBuffer(workBuf,T*4);pipe.InitBuffer(resultBuf,32);
+    auto indices=indexBuf.Get<int32_t>(),tmp=outBuf.Get<int32_t>(),scratch=packedBuf.Get<int32_t>();
+    CreateVecIndex(indices,int32_t(0),T*2);PipeBarrier<PIPE_V>();
+    ShiftRight(tmp,indices,int32_t(1),T*2);PipeBarrier<PIPE_V>();
+    Muls(scratch,tmp,int32_t(2),T*2);PipeBarrier<PIPE_V>();
+    Sub(indices,indices,scratch,T*2);PipeBarrier<PIPE_V>();
+    Muls(indices,indices,int32_t(T*4),T*2);PipeBarrier<PIPE_V>();
+    Muls(tmp,tmp,int32_t(4),T*2);PipeBarrier<PIPE_V>();
+    Add(indices,indices,tmp,T*2);PipeBarrier<PIPE_ALL>();
+  }
+  __aicore__ inline void Process() {
+    auto input=inBuf.Get<DTYPE_POS>();auto pos=posBuf.Get<float>();
+    auto coord=coordBuf.Get<int32_t>();auto cf=cfBuf.Get<float>(),tmp=tmpBuf.Get<float>();
+    auto carry=carryBuf.Get<float>(),magnitude=absBuf.Get<float>(),limbs=limbBuf.Get<float>();
+    auto packed=packedBuf.Get<int32_t>(),words=outBuf.Get<int32_t>();
+    auto offsets=indexBuf.Get<uint32_t>();
+    for(uint32_t off=0;off<count;off+=T) {
+      const uint32_t len=count-off<T?count-off:T;
+      for(uint32_t b=0;b<8;++b)Duplicate(limbs[b*T],float(0),len);
+      Duplicate(magnitude,float(0),len);PipeBarrier<PIPE_ALL>();
+      uint64_t stride=1;
+      for(uint32_t axis=0;axis<dim;++axis) {
+        const float size=static_cast<float>(sg.GetValue(axis));
+        const float start=static_cast<float>(bg.GetValue(axis));
+        const float end=static_cast<float>(eg.GetValue(axis));
+        DataCopyPad(input,pg[uint64_t(axis)*n+first+off],DataCopyExtParams{1,uint32_t(len*sizeof(DTYPE_POS)),0,0,0},DataCopyPadExtParams<DTYPE_POS>{false,0,0,0});
+        PipeBarrier<PIPE_ALL>();
+        if constexpr(sizeof(DTYPE_POS)==sizeof(float)) {
+          Adds(pos,input.ReinterpretCast<float>(),-start,len);
+        } else {
+          Cast(pos,input,RoundMode::CAST_NONE,len);PipeBarrier<PIPE_V>();
+          Adds(pos,pos,-start,len);
         }
-
-        uint32_t blockIdx = GetBlockIdx();
-        uint32_t blockNum = GetBlockNum();
-
-        uint32_t pointsPerCore = tilingData->blockPoints;
-        uint32_t tailPoints = tilingData->tailPoints;
-
-        coreOffset = blockIdx * pointsPerCore;
-        corePoints = pointsPerCore;
-
-        if (blockIdx == blockNum - 1) {
-            corePoints += tailPoints;
+        PipeBarrier<PIPE_V>();Muls(pos,pos,1.0f/size,len);PipeBarrier<PIPE_V>();
+        Cast(coord,pos,RoundMode::CAST_TRUNC,len);PipeBarrier<PIPE_V>();
+        Cast(cf,coord,RoundMode::CAST_NONE,len);PipeBarrier<PIPE_V>();
+        Abs(tmp,cf,len);PipeBarrier<PIPE_V>();Add(magnitude,magnitude,tmp,len);PipeBarrier<PIPE_V>();
+        for(uint32_t b=0;b<8;++b) {
+          const uint32_t byte=(stride>>(b*8))&255;
+          if(byte) {
+            Muls(tmp,cf,float(int32_t(byte)),len);PipeBarrier<PIPE_V>();
+            Add(limbs[b*T],limbs[b*T],tmp,len);PipeBarrier<PIPE_V>();
+          }
         }
-
-        // SoA: pos shape = [D, N]
-        posGm.SetGlobalBuffer((__gm__ DTYPE_POS*)pos);
-        sizeGm.SetGlobalBuffer((__gm__ DTYPE_POS*)size);
-        startGm.SetGlobalBuffer((__gm__ DTYPE_POS*)start);
-        endGm.SetGlobalBuffer((__gm__ DTYPE_POS*)end);
-        clusterGm.SetGlobalBuffer((__gm__ int64_t*)cluster);
-
-        usePrecomputed = tilingData->usePrecomputed != 0;
-        if (usePrecomputed) {
-            int32_t stride = 1;
-            for (uint32_t d = 0; d < dim; ++d) {
-                float s = static_cast<float>(sizeGm.GetValue(d));
-                float st = static_cast<float>(startGm.GetValue(d));
-                float e = static_cast<float>(endGm.GetValue(d));
-
-                startVals[d] = st;
-                invSizeVals[d] = 1.0f / s;
-                strideVals[d] = stride;
-
-                int32_t gridSize =
-                    static_cast<int32_t>((e - st) / s) + 1;
-                stride *= gridSize;
-            }
+        stride*=uint64_t(int64_t((end-start)/size)+1);
+      }
+      PipeBarrier<PIPE_ALL>();
+      auto reduced=resultBuf.Get<float>();
+      ReduceMax(reduced,magnitude,workBuf.Get<float>(),int32_t(len),false);PipeBarrier<PIPE_ALL>();
+      if(!(reduced.GetValue(0)<=32768.0f)) {
+        auto output=outBuf.Get<int64_t>();
+        for(uint32_t i=0;i<len;++i) {
+          uint64_t label=0,k=1;
+          for(uint32_t axis=0;axis<dim;++axis) {
+            const float s=static_cast<float>(sg.GetValue(axis)),a=static_cast<float>(bg.GetValue(axis));
+            const float e=static_cast<float>(eg.GetValue(axis));
+            const int64_t c=int64_t((static_cast<float>(pg.GetValue(uint64_t(axis)*n+first+off+i))-a)/s);
+            label+=uint64_t(c)*k;k*=uint64_t(int64_t((e-a)/s)+1);
+          }
+          output.SetValue(i,int64_t(label));
         }
-
-        pipe.InitBuffer(inQue, BUFFER_NUM, BUFFER_POINTS * sizeof(DTYPE_POS));
-        pipe.InitBuffer(outQue, BUFFER_NUM, BUFFER_POINTS * sizeof(int32_t));
-
-        pipe.InitBuffer(tmpBuf, BUFFER_POINTS * sizeof(float));
-        pipe.InitBuffer(posFloatBuf, BUFFER_POINTS * sizeof(float));
-        pipe.InitBuffer(gridI32Buf, BUFFER_POINTS * sizeof(int32_t));
-        pipe.InitBuffer(strideBuf, BUFFER_POINTS * sizeof(int32_t));
-        pipe.InitBuffer(castBuf, BUFFER_POINTS * sizeof(int64_t));
+      } else {
+        Duplicate(carry,float(0),len);PipeBarrier<PIPE_V>();
+        for(uint32_t b=0;b<8;++b) {
+          Add(tmp,limbs[b*T],carry,len);PipeBarrier<PIPE_V>();
+          Muls(carry,tmp,1.0f/256.0f,len);PipeBarrier<PIPE_V>();
+          Cast(coord,carry,RoundMode::CAST_FLOOR,len);PipeBarrier<PIPE_V>();
+          Cast(carry,coord,RoundMode::CAST_NONE,len);PipeBarrier<PIPE_V>();
+          Muls(cf,carry,256.0f,len);PipeBarrier<PIPE_V>();
+          Sub(limbs[b*T],tmp,cf,len);PipeBarrier<PIPE_V>();
+        }
+        Duplicate(packed,int32_t(0),len);Duplicate(packed[T],int32_t(0),len);PipeBarrier<PIPE_V>();
+        for(uint32_t b=0;b<8;++b) {
+          Cast(coord,limbs[b*T],RoundMode::CAST_TRUNC,len);PipeBarrier<PIPE_V>();
+          Muls(coord,coord,int32_t(uint32_t(1)<<((b%4)*8)),len);PipeBarrier<PIPE_V>();
+          Add(packed[(b/4)*T],packed[(b/4)*T],coord,len);PipeBarrier<PIPE_V>();
+        }
+        PipeBarrier<PIPE_ALL>();Gather(words,packed,offsets,0,len*2);PipeBarrier<PIPE_ALL>();
+      }
+      PipeBarrier<PIPE_ALL>();
+      DataCopyPad(og[first+off],outBuf.Get<int64_t>(),DataCopyExtParams{1,len*8,0,0,0});
+      PipeBarrier<PIPE_ALL>();
     }
-
-    __aicore__ inline void Process() {
-        if (corePoints == 0) {
-            return;
-        }
-
-        uint32_t loop = (corePoints + BUFFER_POINTS - 1) / BUFFER_POINTS;
-
-        for (uint32_t t = 0; t < loop; ++t) {
-            uint32_t pointOffset = coreOffset + t * BUFFER_POINTS;
-            uint32_t count = GetCount(pointOffset);
-
-            LocalTensor<int32_t> clusterLocal = outQue.AllocTensor<int32_t>();
-
-            Duplicate<int32_t>(clusterLocal, 0, count);
-
-            if (usePrecomputed && dim == 3) {
-                ProcessDim(pointOffset, count, 0, clusterLocal);
-                ProcessDim(pointOffset, count, 1, clusterLocal);
-                ProcessDim(pointOffset, count, 2, clusterLocal);
-            } else if (usePrecomputed) {
-                for (uint32_t d = 0; d < dim; ++d) {
-                    ProcessDim(pointOffset, count, d, clusterLocal);
-                }
-            } else {
-                int32_t stride = 1;
-
-                for (uint32_t d = 0; d < dim; ++d) {
-                    float s = static_cast<float>(sizeGm.GetValue(d));
-                    float st = static_cast<float>(startGm.GetValue(d));
-                    float e = static_cast<float>(endGm.GetValue(d));
-
-                    CopyIn(pointOffset, count, d);
-                    Compute(count, stride, st, 1.0f / s, clusterLocal);
-
-                    int32_t gridSize =
-                        static_cast<int32_t>((e - st) / s) + 1;
-
-                    stride *= gridSize;
-                }
-            }
-
-            outQue.EnQue(clusterLocal);
-            CopyOut(pointOffset, count);
-        }
-    }
-
+  }
 private:
-    __aicore__ inline uint32_t GetCount(uint32_t offset) {
-        uint32_t localOffset = offset - coreOffset;
-        uint32_t remain = corePoints - localOffset;
-        return remain > BUFFER_POINTS ? BUFFER_POINTS : remain;
-    }
-
-    __aicore__ inline void ProcessDim(
-        uint32_t pointOffset,
-        uint32_t count,
-        uint32_t d,
-        LocalTensor<int32_t>& clusterLocal) {
-        CopyIn(pointOffset, count, d);
-        Compute(
-            count,
-            strideVals[d],
-            startVals[d],
-            invSizeVals[d],
-            clusterLocal);
-    }
-
-    __aicore__ inline void CopyIn(
-        uint32_t offset,
-        uint32_t count,
-        uint32_t d) {
-        LocalTensor<DTYPE_POS> posLocal = inQue.AllocTensor<DTYPE_POS>();
-
-        // SoA contiguous read:
-        // pos[d, offset : offset + count]
-        uint32_t gmOffset = d * workPoints + offset;
-
-        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(DTYPE_POS)), 0, 0, 0};
-
-        DataCopyPadExtParams<DTYPE_POS> padParams{true, 0, 0, 0};
-
-        DataCopyPad(posLocal, posGm[gmOffset], copyParams, padParams);
-
-        inQue.EnQue(posLocal);
-    }
-
-    __aicore__ inline LocalTensor<float> ToFloatTensor(
-        LocalTensor<float>& posLocal,
-        uint32_t count) {
-        (void)count;
-        return posLocal;
-    }
-
-    __aicore__ inline LocalTensor<float> ToFloatTensor(
-        LocalTensor<half>& posLocal,
-        uint32_t count) {
-        LocalTensor<float> posFloatLocal = posFloatBuf.Get<float>();
-        Cast(posFloatLocal, posLocal, RoundMode::CAST_NONE, count);
-        return posFloatLocal;
-    }
-
-    __aicore__ inline void Compute(
-        uint32_t count,
-        int32_t stride,
-        float startVal,
-        float invSizeVal,
-        LocalTensor<int32_t>& clusterLocal) {
-        LocalTensor<DTYPE_POS> posLocal = inQue.DeQue<DTYPE_POS>();
-
-        LocalTensor<float> tmpLocal = tmpBuf.Get<float>();
-
-        LocalTensor<float> posFloatLocal = ToFloatTensor(posLocal, count);
-
-        LocalTensor<int32_t> gridLocal = gridI32Buf.Get<int32_t>();
-
-        LocalTensor<int32_t> strideLocal = strideBuf.Get<int32_t>();
-
-        Adds(tmpLocal, posFloatLocal, -startVal, count);
-        Muls(tmpLocal, tmpLocal, invSizeVal, count);
-
-        Cast(gridLocal, tmpLocal, RoundMode::CAST_FLOOR, count);
-
-        Duplicate<int32_t>(strideLocal, stride, count);
-
-        Mul(gridLocal, gridLocal, strideLocal, count);
-
-        Add(clusterLocal, clusterLocal, gridLocal, count);
-
-        inQue.FreeTensor(posLocal);
-    }
-
-    __aicore__ inline void CopyOut(
-        uint32_t offset,
-        uint32_t count) {
-        LocalTensor<int32_t> outLocal32 = outQue.DeQue<int32_t>();
-
-        LocalTensor<int64_t> outLocal64 = castBuf.Get<int64_t>();
-
-        Cast(outLocal64, outLocal32, RoundMode::CAST_NONE, count);
-
-        DataCopyExtParams copyParams{1, static_cast<uint32_t>(count * sizeof(int64_t)), 0, 0, 0};
-
-        DataCopyPad(clusterGm[offset], outLocal64, copyParams);
-
-        outQue.FreeTensor(outLocal32);
-    }
-
-private:
-    TPipe pipe;
-
-    TQue<QuePosition::VECIN, BUFFER_NUM> inQue;
-    TQue<QuePosition::VECOUT, BUFFER_NUM> outQue;
-
-    TBuf<QuePosition::VECCALC> tmpBuf;
-    TBuf<QuePosition::VECCALC> posFloatBuf;
-    TBuf<QuePosition::VECCALC> gridI32Buf;
-    TBuf<QuePosition::VECCALC> strideBuf;
-    TBuf<QuePosition::VECCALC> castBuf;
-
-    GlobalTensor<DTYPE_POS> posGm;
-    GlobalTensor<DTYPE_POS> sizeGm;
-    GlobalTensor<DTYPE_POS> startGm;
-    GlobalTensor<DTYPE_POS> endGm;
-    GlobalTensor<int64_t> clusterGm;
-
-    uint32_t workPoints = 0;
-    uint32_t coreOffset = 0;
-    uint32_t corePoints = 0;
-    uint32_t dim = 0;
-    bool usePrecomputed = false;
-    float startVals[16] = {};
-    float invSizeVals[16] = {};
-    int32_t strideVals[16] = {};
+  static constexpr uint32_t T=2048;
+  TPipe pipe;
+  TBuf<QuePosition::VECCALC> inBuf,posBuf,coordBuf,cfBuf,tmpBuf,carryBuf,absBuf,limbBuf,packedBuf,outBuf,indexBuf,workBuf,resultBuf;
+  GlobalTensor<DTYPE_POS> pg,sg,bg,eg;GlobalTensor<int64_t> og;
+  uint32_t dim,n,first,count;
 };
-
-extern "C" __global__ __aicore__ void voxel_grid(
-    GM_ADDR pos,
-    GM_ADDR size,
-    GM_ADDR start,
-    GM_ADDR end,
-    GM_ADDR cluster,
-    GM_ADDR workspace,
-    GM_ADDR tiling) {
-    GET_TILING_DATA(tiling_data, tiling);
-
-    KernelVoxelGrid op;
-    op.Init(pos, size, start, end, cluster, &tiling_data);
-    op.Process();
+extern "C" __global__ __aicore__ void voxel_grid(GM_ADDR pos,GM_ADDR size,GM_ADDR start,
+    GM_ADDR end,GM_ADDR out,GM_ADDR workspace,GM_ADDR tiling) {
+  GET_TILING_DATA(data,tiling);
+  KernelVoxelGrid op;op.Init(pos,size,start,end,out,&data);op.Process();
 }

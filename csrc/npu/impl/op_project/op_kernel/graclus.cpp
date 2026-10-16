@@ -43,7 +43,7 @@ class KernelGraclus {
         Align32(uint64_t(e)*4)+2*Align32(uint64_t(n)*4):32;
     pipe.InitBuffer(residentBuf,residentBytes);
     pipe.InitBuffer(resultBuf,32);
-    pipe.InitBuffer(rowSelBuf,8192);
+    pipe.InitBuffer(rowSelBuf,32768);
     offsets=offsetBuf.Get<uint32_t>();
     if(phase==1) {
       auto offsetIndices=offsets.ReinterpretCast<int32_t>();
@@ -341,6 +341,76 @@ class KernelGraclus {
     }
     Count(0,0,0,1);
   }
+  __aicore__ inline void SelectSparse16(uint32_t block,uint32_t rowsCount,
+      uint32_t blockFirst,uint32_t edgeCount,uint64_t matchedBits) {
+    // A bounded 64x16 ragged CSR tile becomes two SIMD row reductions.
+    // Only float32-weight bitmap mode enters here; larger rows retain Select.
+    constexpr uint32_t cells=1024;
+    const uint32_t count=((rowsCount+3)/4)*64;
+    auto arena=rowSelBuf.Get<int32_t>();
+    auto values=arena.ReinterpretCast<float>();
+    auto vertices=arena[cells].ReinterpretCast<float>();
+    auto positions=arena[cells*2];
+    auto limits=arena[cells*3];
+    auto scratch=arena[cells*4];
+    auto mask=arena[cells*5].ReinterpretCast<uint8_t>();
+    auto maxima=candidateBuf.Get<float>();
+    auto rows=rowBuf.Get<int64_t>();
+    auto originalIndices=indexBuf.Get<int32_t>();
+    auto originalScores=scoreBuf.Get<float>();
+    // positions = (rowptr[row]-blockFirst)+slot, limits = rowptr[row+1]-blockFirst.
+    CreateVecIndex(positions,int32_t(0),count);PipeBarrier<PIPE_V>();
+    ShiftRight(scratch,positions,int32_t(4),count);PipeBarrier<PIPE_V>();
+    Muls(scratch,scratch,int32_t(8),count);PipeBarrier<PIPE_V>();
+    Gather(limits,rows.ReinterpretCast<int32_t>(),scratch.ReinterpretCast<uint32_t>(),8,count);
+    Gather(values.ReinterpretCast<int32_t>(),rows.ReinterpretCast<int32_t>(),scratch.ReinterpretCast<uint32_t>(),0,count);
+    PipeBarrier<PIPE_V>();
+    Muls(scratch,scratch,int32_t(2),count);PipeBarrier<PIPE_V>();
+    Sub(positions,positions,scratch,count);
+    Adds(values.ReinterpretCast<int32_t>(),values.ReinterpretCast<int32_t>(),-int32_t(blockFirst),count);
+    Adds(limits,limits,-int32_t(blockFirst),count);PipeBarrier<PIPE_V>();
+    Add(positions,positions,values.ReinterpretCast<int32_t>(),count);PipeBarrier<PIPE_V>();
+    Cast(values,positions,RoundMode::CAST_NONE,count);
+    Cast(limits.ReinterpretCast<float>(),limits,RoundMode::CAST_NONE,count);PipeBarrier<PIPE_V>();
+    Compare(mask,values,limits.ReinterpretCast<float>(),CMPMODE::LT,count);PipeBarrier<PIPE_V>();
+    Maxs(positions,positions,int32_t(0),count);PipeBarrier<PIPE_V>();
+    Mins(positions,positions,int32_t(edgeCount-1),count);PipeBarrier<PIPE_V>();
+    Muls(positions,positions,int32_t(4),count);PipeBarrier<PIPE_V>();
+    Gather(values,originalScores,positions.ReinterpretCast<uint32_t>(),0,count);
+    Gather(vertices.ReinterpretCast<int32_t>(),originalIndices,positions.ReinterpretCast<uint32_t>(),0,count);
+    PipeBarrier<PIPE_V>();
+    AscendC::Select(values,mask,values,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,count);
+    PipeBarrier<PIPE_V>();
+    Cast(vertices,vertices.ReinterpretCast<int32_t>(),RoundMode::CAST_NONE,count);
+    CreateVecIndex(scratch,int32_t(0),count);PipeBarrier<PIPE_V>();
+    ShiftRight(scratch,scratch,int32_t(4),count);PipeBarrier<PIPE_V>();
+    Adds(scratch,scratch,int32_t(block),count);PipeBarrier<PIPE_V>();
+    Cast(limits.ReinterpretCast<float>(),scratch,RoundMode::CAST_NONE,count);PipeBarrier<PIPE_V>();
+    Compare(mask,vertices,limits.ReinterpretCast<float>(),CMPMODE::NE,count);PipeBarrier<PIPE_V>();
+    AscendC::Select(values,mask,values,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,count);
+    PipeBarrier<PIPE_V>();
+    WholeReduceMax(maxima,values,16,rowsCount,1,1,2,ReduceOrder::ORDER_ONLY_VALUE);
+    PipeBarrier<PIPE_V>();
+    CreateVecIndex(positions,int32_t(0),count);PipeBarrier<PIPE_V>();
+    ShiftRight(positions,positions,int32_t(4),count);PipeBarrier<PIPE_V>();
+    Muls(positions,positions,int32_t(4),count);PipeBarrier<PIPE_V>();
+    Gather(limits.ReinterpretCast<float>(),maxima,positions.ReinterpretCast<uint32_t>(),0,count);
+    PipeBarrier<PIPE_V>();
+    Compare(mask,values,limits.ReinterpretCast<float>(),CMPMODE::EQ,count);PipeBarrier<PIPE_V>();
+    AscendC::Select(vertices,mask,vertices,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,count);
+    PipeBarrier<PIPE_V>();
+    CompareScalar(mask,values,float(0),CMPMODE::GE,count);PipeBarrier<PIPE_V>();
+    AscendC::Select(vertices,mask,vertices,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,count);
+    PipeBarrier<PIPE_V>();
+    // For fixed u, the existing (max(u,v),min(u,v)) tie order is exactly v order.
+    WholeReduceMax(maxima,vertices,16,rowsCount,1,1,2,ReduceOrder::ORDER_ONLY_VALUE);
+    Sync<HardEvent::V_S>();
+    auto selected=outBuf.Get<int32_t>();
+    for(uint32_t r=0;r<rowsCount;r++)
+      selected.SetValue(r,((matchedBits>>r)&1)?-1:int32_t(maxima.GetValue(r)));
+    PipeBarrier<PIPE_ALL>();CopyOut(prop[block],selected,rowsCount);PipeBarrier<PIPE_ALL>();
+  }
+
   template<bool ShortVectors=false>
   __aicore__ inline void FilterBarrier() {
     if constexpr(ShortVectors) {PipeBarrier<PIPE_V>();}
@@ -361,21 +431,47 @@ class KernelGraclus {
       uint64_t(e)<=uint64_t(n)*8)?64:256;
     for(uint32_t block=begin;block<end;block+=rowTile) {
       uint32_t rowsCount=end-block<rowTile?end-block:rowTile;
+      uint64_t matchedBits=0;
+      if constexpr(Mode==2) {
+        matchedBits=uint32_t(cache.GetValue(block>>5));
+        if(rowsCount>32)matchedBits|=uint64_t(uint32_t(cache.GetValue((block>>5)+1)))<<32;
+        const uint64_t validBits=rowsCount==64?~uint64_t(0):(uint64_t(1)<<rowsCount)-1;
+        if((matchedBits&validBits)==validBits) {
+          Duplicate(selected,int32_t(-1),rowsCount);PipeBarrier<PIPE_ALL>();
+          CopyOut(prop[block],selected,rowsCount);PipeBarrier<PIPE_ALL>();
+          continue;
+        }
+      }
       CopyIn(rows,rp[block],rowsCount+1);PipeBarrier<PIPE_ALL>();
       const uint32_t blockFirst=rows.GetValue(0),blockLast=rows.GetValue(rowsCount);
+      bool sparse16=false;
       bool batch=(Mode==2 || (Mode==1 && Weighted && !Wide)) &&
         blockLast>blockFirst && blockLast-blockFirst<=tile;
       if(batch) {
-        bool active=false;
-        for(uint32_t r=0;r<rowsCount;r++) {
-          if(rows.GetValue(r+1)-rows.GetValue(r)>=(Mode==1?64:128)) batch=false;
-          if(Status<Mode>(block+r)<0) active=true;
+        if constexpr(Mode==2) {
+          // Two bitmap words describe the whole 64-row block. Avoid
+          // repeated scalar UB status loads, including fully matched blocks.
+          auto firstRow=indexBuf.Get<int32_t>(),lastRow=scoreBuf.Get<int32_t>();
+          auto lengths=nodeBuf.Get<int32_t>();
+          Gather(firstRow,rows.ReinterpretCast<int32_t>(),offsets,0,rowsCount);PipeBarrier<PIPE_V>();
+          Gather(lastRow,rows.ReinterpretCast<int32_t>(),offsets,8,rowsCount);PipeBarrier<PIPE_V>();
+          Sub(lengths,lastRow,firstRow,rowsCount);PipeBarrier<PIPE_V>();
+          Cast(floatWeight,lengths,RoundMode::CAST_NONE,rowsCount);PipeBarrier<PIPE_V>();
+          ReduceMax(reduced,floatWeight,tmp,rowsCount,false);PipeBarrier<PIPE_ALL>();
+          batch=reduced.GetValue(0)<float(64);
+          sparse16=reduced.GetValue(0)<=float(16);
+        } else {
+          bool active=false;
+          for(uint32_t r=0;r<rowsCount;r++) {
+            if(rows.GetValue(r+1)-rows.GetValue(r)>=64) batch=false;
+            if(Status<Mode>(block+r)<0) active=true;
+          }
+          batch=batch && active;
         }
-        batch=batch && active;
       }
       if(batch) {
         const uint32_t len=blockLast-blockFirst;
-        if constexpr(Mode==1 && Weighted && !Wide) {
+        if constexpr((Mode==1 || Mode==2) && Weighted && !Wide) {
           const uint32_t padded=(len+63)/64*64;
           Duplicate(indices,int32_t(0),padded);
           Duplicate(floatWeight,float(-1),padded);PipeBarrier<PIPE_ALL>();
@@ -387,6 +483,34 @@ class KernelGraclus {
         }
         PipeBarrier<PIPE_ALL>();
         Gather(indices,columns.ReinterpretCast<int32_t>(),offsets,0,len);PipeBarrier<PIPE_ALL>();
+        if constexpr(Mode==2 && Weighted && !Wide) {
+          const uint32_t padded=(len+63)/64*64;
+          auto byteOffsets=candidateBuf.Get<int32_t>();
+          auto flags=reduceBuf.Get<int32_t>();
+          auto flagFloat=nodeBuf.Get<float>();
+          auto bitmask=rowSelBuf.Get<int32_t>();
+          auto table=bitmask[512];
+          auto mask=edges.Get<uint8_t>();
+          for(uint32_t b=0;b<32;b++)table.SetValue(b,int32_t(1U<<b));
+          PipeBarrier<PIPE_ALL>();
+          ShiftRight(byteOffsets,indices,int32_t(5),padded);PipeBarrier<PIPE_V>();
+          Muls(byteOffsets,byteOffsets,int32_t(4),padded);PipeBarrier<PIPE_V>();
+          Gather(flags,cache,byteOffsets.ReinterpretCast<uint32_t>(),0,padded);PipeBarrier<PIPE_V>();
+          ShiftRight(byteOffsets,indices,int32_t(5),padded);PipeBarrier<PIPE_V>();
+          Muls(byteOffsets,byteOffsets,int32_t(32),padded);PipeBarrier<PIPE_V>();
+          Sub(byteOffsets,indices,byteOffsets,padded);PipeBarrier<PIPE_V>();
+          Muls(byteOffsets,byteOffsets,int32_t(4),padded);PipeBarrier<PIPE_V>();
+          Gather(bitmask,table,byteOffsets.ReinterpretCast<uint32_t>(),0,padded);PipeBarrier<PIPE_V>();
+          And(flags.ReinterpretCast<uint16_t>(),flags.ReinterpretCast<uint16_t>(),
+              bitmask.ReinterpretCast<uint16_t>(),padded*2);PipeBarrier<PIPE_V>();
+          Cast(flagFloat,flags,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+          CompareScalar(mask,flagFloat,float(0),CMPMODE::EQ,padded);PipeBarrier<PIPE_V>();
+          AscendC::Select(scores,mask,floatWeight,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+          PipeBarrier<PIPE_V>();
+          CompareScalar(mask,scores,float(0),CMPMODE::GE,padded);PipeBarrier<PIPE_V>();
+          AscendC::Select(scores,mask,scores,float(-1),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+          Sync<HardEvent::V_S>();
+        }
         if constexpr(Mode==1 && Weighted && !Wide) {
           const uint32_t padded=(len+63)/64*64;
           auto byteOffsets=candidateBuf.Get<int32_t>();
@@ -407,21 +531,27 @@ class KernelGraclus {
           Sync<HardEvent::V_S>();
         }
       }
-      const uint32_t rpadded=(rowsCount+63)/64*64;
-      auto rowF=rowSelBuf.Get<float>();
-      auto laneIdxF=rowF,selOut=rowF[256],tmpRow=rowF[512];
-      auto rowI=rowSelBuf.Get<int32_t>()[768];
-      auto rmask=outBuf.Get<uint8_t>();
-      CreateVecIndex(rowI,int32_t(0),rpadded);PipeBarrier<PIPE_V>();
-      Cast(laneIdxF,rowI,RoundMode::CAST_NONE,rpadded);PipeBarrier<PIPE_V>();
-      Duplicate(selOut,float(-1),rpadded);PipeBarrier<PIPE_V>();
+      if constexpr(Mode==2 && Weighted && !Wide) {
+        if(batch && sparse16 && matchedBits==0) {
+          SelectSparse16(block,rowsCount,blockFirst,blockLast-blockFirst,matchedBits);
+          continue;
+        }
+      }
+      // Each row owns one int32 candidate. Scalar UB stores avoid three
+      // full-vector masked updates (and barriers) for every short CSR row.
+      Duplicate(selected,int32_t(-1),rowsCount);
+      PipeBarrier<PIPE_ALL>();
       for(uint32_t r=0;r<rowsCount;r++) {
         const uint32_t u=block+r;
         int32_t chosen=-1;
         float best=-1;
         uint64_t bestWide=0;
         bool haveWide=false;
-        if(Status<Mode>(u)>=0) continue;
+        if constexpr(Mode==2) {
+          if((matchedBits>>r)&1)continue;
+        } else {
+          if(Status<Mode>(u)>=0) continue;
+        }
         const uint32_t first=rows.GetValue(r),last=rows.GetValue(r+1);
         for(uint32_t off=first;off<last;off+=tile) {
           uint32_t len=last-off<tile?last-off:tile;
@@ -445,8 +575,8 @@ class KernelGraclus {
           if(Weighted && !Wide && len<64) {
             for(uint32_t j=0;j<len;j++) {
               const uint32_t v=indices.GetValue(edgeBase+j);
-              const float value=(Mode==1 && batch)?scores.GetValue(edgeBase+j):floatWeight.GetValue(edgeBase+j);
-              if(v==u || !(value>=0) || (!(Mode==1 && batch) && Status<Mode>(v)>=0)) continue;
+              const float value=((Mode==1 || Mode==2) && batch)?scores.GetValue(edgeBase+j):floatWeight.GetValue(edgeBase+j);
+              if(v==u || !(value>=0) || (!((Mode==1 || Mode==2) && batch) && Status<Mode>(v)>=0)) continue;
               if(value>best || (value==best && TieBetter(u,v,chosen))) {
                 best=value;chosen=v;
               }
@@ -520,11 +650,8 @@ class KernelGraclus {
             }
           }
         }
-        Duplicate(tmpRow,float(chosen),rpadded);PipeBarrier<PIPE_V>();
-        CompareScalar(rmask,laneIdxF,float(int32_t(r)),CMPMODE::EQ,rpadded);PipeBarrier<PIPE_V>();
-        AscendC::Select(selOut,rmask,tmpRow,selOut,SELMODE::VSEL_TENSOR_TENSOR_MODE,rpadded);PipeBarrier<PIPE_V>();
+        selected.SetValue(r,chosen);
       }
-      Cast(selected,selOut,RoundMode::CAST_RINT,rowsCount);PipeBarrier<PIPE_ALL>();
       PipeBarrier<PIPE_ALL>();CopyOut(prop[block],selected,rowsCount);PipeBarrier<PIPE_ALL>();
     }
   }
@@ -583,8 +710,79 @@ class KernelGraclus {
     }
     Count(remaining,changed);
   }
+  __aicore__ inline void CommitBitmap() {
+    // Bitmap mode bounds labels to 2^20, so FP32 labels remain exact.
+    // Weight comparisons keep their original precision in Select.
+    auto state=nodeBuf.Get<int32_t>(),p=candidateBuf.Get<int32_t>();
+    auto stateFloat=weightBuf.Get<float>(),candidateFloat=edges.Get<float>();
+    auto ids=indexBuf.Get<float>(),labels=scoreBuf.Get<float>();
+    auto result=outBuf.Get<float>(),tmp=reduceBuf.Get<float>();
+    auto reduced=resultBuf.Get<float>();
+    auto mask=candidateBuf.Get<uint8_t>();
+    auto byteOffsets=offsets.ReinterpretCast<int32_t>();
+    uint32_t remaining=0,changed=0;
+    for(uint32_t off=begin;off<end;off+=tile) {
+      const uint32_t len=end-off<tile?end-off:tile,padded=(len+63)/64*64;
+      Duplicate(state,int32_t(0),padded);Duplicate(p,int32_t(-1),padded);
+      Sync<HardEvent::V_MTE2>();
+      CopyIn(state,old[off],len);CopyIn(p,cand[off],len);
+      PipeBarrier<PIPE_ALL>();
+      auto replies=rowSelBuf.Get<int32_t>();
+      Duplicate(replies,int32_t(-2),padded*8);PipeBarrier<PIPE_ALL>();
+      const __ubuf__ int32_t* selected=(__ubuf__ int32_t*)p.GetPhyAddr();
+      const __ubuf__ int32_t* previous=(__ubuf__ int32_t*)state.GetPhyAddr();
+      __ubuf__ int32_t* receive=(__ubuf__ int32_t*)replies.GetPhyAddr();
+      __gm__ int32_t* source=(__gm__ int32_t*)cand.GetPhyAddr();
+      if ASCEND_IS_AIV {
+        for(uint32_t j=0;j<len;j++) {
+          if(previous[j]<0 && selected[j]>=0)
+            copy_gm_to_ubuf_align_b32(receive+j*8,source+selected[j],0,1,4,0,0,0,0);
+        }
+      }
+      PipeBarrier<PIPE_ALL>();
+      Cast(stateFloat,state,RoundMode::CAST_NONE,padded);
+      Cast(candidateFloat,p,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+      CreateVecIndex(byteOffsets,int32_t(0),padded);PipeBarrier<PIPE_V>();
+      Muls(byteOffsets,byteOffsets,int32_t(32),padded);PipeBarrier<PIPE_V>();
+      Gather(state,replies,offsets,0,padded);PipeBarrier<PIPE_V>();
+      Cast(result,state,RoundMode::CAST_NONE,padded);PipeBarrier<PIPE_V>();
+      CreateVecIndex(ids,float(int32_t(off)),padded);PipeBarrier<PIPE_V>();
+      Min(labels,ids,candidateFloat,padded);PipeBarrier<PIPE_V>();
+      Compare(mask,result,ids,CMPMODE::EQ,padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(result,mask,labels,stateFloat,SELMODE::VSEL_TENSOR_TENSOR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      CompareScalar(mask,candidateFloat,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(result,mask,ids,result,SELMODE::VSEL_TENSOR_TENSOR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      CompareScalar(mask,stateFloat,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(result,mask,result,stateFloat,SELMODE::VSEL_TENSOR_TENSOR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      Duplicate(labels,float(1),padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(labels,mask,labels,float(0),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      ReduceSum(reduced,labels,tmp,len);Sync<HardEvent::V_S>();
+      const uint32_t active=uint32_t(int32_t(reduced.GetValue(0)));
+      CompareScalar(mask,result,float(0),CMPMODE::LT,padded);PipeBarrier<PIPE_V>();
+      Duplicate(labels,float(1),padded);PipeBarrier<PIPE_V>();
+      AscendC::Select(labels,mask,labels,float(0),SELMODE::VSEL_TENSOR_SCALAR_MODE,padded);
+      PipeBarrier<PIPE_V>();
+      ReduceSum(reduced,labels,tmp,len);Sync<HardEvent::V_S>();
+      const uint32_t pending=uint32_t(int32_t(reduced.GetValue(0)));
+      remaining+=pending;changed+=active-pending;
+      Cast(state,result,RoundMode::CAST_RINT,len);Sync<HardEvent::V_MTE3>();
+      CopyOut(dst[off],state,len);Sync<HardEvent::MTE3_V>();
+      Duplicate(labels,float(-1),padded);PipeBarrier<PIPE_V>();
+      // Labels and node indices are exactly representable in bitmap mode.
+      Adds(labels,result,float(0),len);PipeBarrier<PIPE_V>();
+      CompareScalar(mask,labels,float(0),CMPMODE::GE,padded);PipeBarrier<PIPE_ALL>();
+      CopyOut(prop[off/32],mask.ReinterpretCast<int32_t>(),(len+31)/32);
+      PipeBarrier<PIPE_ALL>();
+    }
+    Count(remaining,changed);
+  }
   __aicore__ inline void Commit() {
     if(resident==1) {CommitResident();return;}
+    if(resident==2) {CommitBitmap();return;}
     auto state=nodeBuf.Get<int32_t>(),p=candidateBuf.Get<int32_t>(),result=outBuf.Get<int32_t>();
     uint32_t remaining=0,changed=0;
     for(uint32_t off=begin;off<end;off+=tile) {

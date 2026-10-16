@@ -65,7 +65,7 @@ random_walk_npu(torch::Tensor rowptr,
   // regularity and all index bounds before the cooperative sampler runs.
   const bool shard_shape = (col.numel() == num_nodes * 8 && num_nodes <= 524288) ||
       (col.numel() == num_nodes * 4 && num_nodes <= 1048576 && count >= 65536);
-  const int64_t output_mode = start.scalar_type() == at::kInt &&
+  int64_t output_mode = start.scalar_type() == at::kInt &&
       p == 1.0 && q == 1.0 && num_nodes >= 8192 && shard_shape &&
       (num_nodes & (num_nodes - 1)) == 0 && col.numel() % 32768 == 0 &&
       count >= 8192 && count <= 262144 && steps >= 32768 ? 1 : 0;
@@ -94,7 +94,10 @@ random_walk_npu(torch::Tensor rowptr,
       // symbol in the installed torch_npu build.
       c10_npu::currentStreamCaptureStatusMayInitCtx() == c10_npu::CaptureStatus::None;
   if (vector_rng) {
-    random = output_mode ? at::empty({walk_length, count}, start.options().dtype(at::kFloat)) :
+    const bool fused_rng=output_mode && col.numel()==num_nodes*4 &&
+        num_nodes<=1048576 && walk_length>=64 && steps>=num_nodes*8;
+    if(fused_rng) output_mode=3;
+    random = fused_rng ? at::empty({4},start.options().dtype(at::kFloat)) : output_mode ? at::empty({walk_length, count}, start.options().dtype(at::kFloat)) :
         at::empty({count, walk_length}, start.options().dtype(at::kFloat));
     auto seed_cpu = at::empty({4}, at::TensorOptions().dtype(at::kInt)
                                         .device(at::kCPU).pinned_memory(true));
@@ -114,7 +117,7 @@ random_walk_npu(torch::Tensor rowptr,
     words[2] = static_cast<int32_t>(state.second);
     words[3] = static_cast<int32_t>(state.second >> 32);
     auto seed_device = seed_cpu.to(start.device(), at::kInt, true, false);
-    auto random_words = random.view(at::kInt).reshape({steps});
+    auto random_words = random.view(at::kInt).reshape({fused_rng ? 4 : steps});
     const int64_t rng_phase = 4;
     EXEC_NPU_CMD(aclnnRandomWalk, seed_device, ci, starts, random,
                  walk_length, p, q, rng_phase, output_mode,
@@ -127,7 +130,17 @@ random_walk_npu(torch::Tensor rowptr,
   const int64_t queue_capacity = nodes_pitch + 640 * (parts + 1);
   const int64_t flag_count = output_mode ?
       640 + nodes_pitch + 80 * parts + 3 * queue_capacity : 640;
-  auto flags = at::empty({flag_count}, start.options().dtype(at::kInt));
+  const bool paired_walk = output_mode && ci.numel()==num_nodes*4 &&
+      num_nodes<=1048576 && walk_length>=64 && walk_length%2==0 && steps>=num_nodes*8;
+  auto flags = at::empty({flag_count + (paired_walk ? ci.numel()*4 : 0)},
+                        start.options().dtype(at::kInt));
+  if (paired_walk) {
+    // Rebuild the exact compressed transition table on EVERY invocation.
+    // Its construction is part of the public operator's measured time.
+    int64_t table_phase = 5;
+    EXEC_NPU_CMD(aclnnRandomWalk, rp, ci, starts, random,
+                 walk_length, p, q, table_phase, output_mode, walks, e_ids, flags);
+  }
   // Amortize the complete CSR check across enough transition work. A shape
   // alone never enables the specialization: every row pointer is checked.
   const bool check_regular = num_nodes > 0 && ci.numel() > 0 &&
