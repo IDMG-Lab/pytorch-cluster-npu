@@ -16,13 +16,28 @@ def subgraph(
     to positions in ``nodes``. The optional edge IDs address the original
     ``col`` array. Duplicate edges retain their input order within each row.
     """
+    return _subgraph(torch.ops.torch_cluster.subgraph, rowptr, col, nodes, return_edge_id)
+
+
+def subgraph_950(rowptr: torch.Tensor, col: torch.Tensor, nodes: torch.Tensor,
+                 return_edge_id: bool = True):
+    """Ascend 950 SIMT operator; never falls back to the 910B implementation."""
+    return _subgraph(torch.ops.torch_cluster.subgraph_950, rowptr, col, nodes, return_edge_id)
+
+
+def subgraph_910b(rowptr: torch.Tensor, col: torch.Tensor, nodes: torch.Tensor,
+                  return_edge_id: bool = True):
+    """Original aclnnClusterSubgraph operator for Ascend 910B."""
+    return _subgraph(torch.ops.torch_cluster.subgraph_910b, rowptr, col, nodes, return_edge_id)
+
+
+def _subgraph(op, rowptr, col, nodes, return_edge_id):
     if (rowptr.dtype not in (torch.int32, torch.int64)
             or col.dtype != rowptr.dtype or nodes.dtype != rowptr.dtype):
         raise TypeError("rowptr, col and nodes must have the same int32 or int64 dtype")
     if rowptr.device != col.device or rowptr.device != nodes.device:
         raise ValueError("rowptr, col and nodes must share a device")
-    out_rowptr, out_col, out_eid, count = torch.ops.torch_cluster.subgraph(
-        rowptr, col, nodes)
+    out_rowptr, out_col, out_eid, count = op(rowptr, col, nodes)
     edge_count = int(count.item())
     out_col = out_col.narrow(0, 0, edge_count)
     if return_edge_id:

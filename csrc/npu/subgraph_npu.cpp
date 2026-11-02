@@ -4,10 +4,13 @@
 #include <climits>
 
 std::tuple<torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor>
-subgraph_npu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor nodes) {
+subgraph_910b_npu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor nodes) {
   TORCH_CHECK(rowptr.device().type() == c10::DeviceType::PrivateUse1 &&
                   col.device() == rowptr.device() && nodes.device() == rowptr.device(),
               "subgraph: tensors must share an NPU device");
+  const char* soc = aclrtGetSocName();
+  TORCH_CHECK(soc && std::string(soc).find("Ascend910B") == 0,
+              "subgraph_910b requires an Ascend910B device");
   TORCH_CHECK((rowptr.scalar_type() == at::kLong || rowptr.scalar_type() == at::kInt) &&
                   col.scalar_type() == rowptr.scalar_type() &&
                   nodes.scalar_type() == rowptr.scalar_type(),
@@ -53,4 +56,12 @@ subgraph_npu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor nodes) {
                  out_rowptr, out_col, out_eid, out_count);
   }
   return {out_rowptr, out_col, out_eid, out_count};
+}
+
+std::tuple<torch::Tensor, torch::Tensor, torch::Tensor, torch::Tensor>
+subgraph_npu(torch::Tensor rowptr, torch::Tensor col, torch::Tensor nodes) {
+  const char* soc = aclrtGetSocName();
+  if (soc && std::string(soc).find("Ascend950") == 0)
+    return subgraph_950_npu(rowptr, col, nodes);
+  return subgraph_910b_npu(rowptr, col, nodes);
 }

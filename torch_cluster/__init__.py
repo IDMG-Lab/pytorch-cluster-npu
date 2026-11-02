@@ -45,7 +45,7 @@ from .knn import knn, knn_graph  # noqa
 from .nearest import nearest  # noqa
 from .radius import radius, radius_graph  # noqa
 from .rw import random_walk  # noqa
-from .subgraph import subgraph  # noqa
+from .subgraph import subgraph, subgraph_950, subgraph_910b  # noqa
 from .sampler import neighbor_sampler  # noqa
 
 __all__ = [
@@ -60,5 +60,7 @@ __all__ = [
     'random_walk',
     'neighbor_sampler',
     'subgraph',
+    'subgraph_950',
+    'subgraph_910b',
     '__version__',
 ]

@@ -127,6 +127,31 @@ msopgen gen -i csrc/npu/impl/radius_npu.json \
 
 ## 编译安装
 
+### Ascend 950 SIMT subgraph 与 910B 共存
+
+`torch_cluster.subgraph_950` 和 `torch_cluster.subgraph_910b` 是两个独立注册算子。
+950 使用 `dav-3510` 编译的 SIMT 内核库 `libsubgraph950.so`；910B 继续使用
+原 `aclnnClusterSubgraph` 算子包。原 `subgraph` 接口按设备自动选择。
+两个显式入口均拒绝不对应的设备，不互相回退。
+
+加载当前机器的 CANN 环境后，在 950 上执行 `pip install -e . --no-build-isolation`
+会自动构建 950 内核。仅重建 subgraph 可使用：
+
+```bash
+TORCH_CLUSTER_ONLY_OP=subgraph python setup.py build_ext --inplace
+```
+
+```python
+from torch_cluster import subgraph_950, subgraph_910b
+
+# 950：输入为同一 NPU 上、相同 int32/int64 dtype 的一维 CSR 张量。
+out_rowptr, out_col, edge_id = subgraph_950(rowptr, col, nodes)
+# 910B 机器使用 subgraph_910b(rowptr, col, nodes)。
+```
+
+`return_edge_id=False` 保留现有接口的二元组返回行为。测试与进度见
+`test/acceptance/subgraph950.py` 和 `csrc/npu/950/README.md`。
+
 ### 前提条件
 
 - Python >= 3.8

@@ -2,6 +2,8 @@ import glob
 import os
 import os.path as osp
 import platform
+import shutil
+import subprocess
 import sys
 from itertools import product
 
@@ -140,6 +142,8 @@ def get_extensions():
         path = osp.join(extensions_dir, 'npu', f'{name}_npu.cpp')
         if suffix == 'npu' and osp.exists(path):
             sources += [path]
+            if name == 'subgraph':
+                sources += [osp.join(extensions_dir, 'npu', 'subgraph_950_npu.cpp')]
             
         if suffix == 'npu':
             # 如果安装了 torch_npu，使用其提供的 NpuExtension 以便自动处理依赖
@@ -178,7 +182,19 @@ class IsolatedBuildExtension(BuildExtension):
     def build_extensions(self):
         # build_extension temporarily changes build_temp for each extension.
         self.parallel = 1
+        build_950 = os.getenv('TORCH_CLUSTER_BUILD_950') == '1'
+        if WITH_NPU and '950' in torch_npu.npu.get_device_name():
+            build_950 = True
+        build_950 = build_950 and any(
+            ext.name == 'torch_cluster._subgraph_npu' for ext in self.extensions)
+        if build_950:
+            root = osp.dirname(osp.abspath(__file__))
+            subprocess.check_call(['bash', osp.join(root, 'csrc/npu/950/build.sh')])
         super().build_extensions()
+        if build_950:
+            target = osp.join(self.build_lib, 'torch_cluster')
+            os.makedirs(target, exist_ok=True)
+            shutil.copy2(osp.join(root, 'torch_cluster/libsubgraph950.so'), target)
 
     def build_extension(self, ext):
         original = self.build_temp
