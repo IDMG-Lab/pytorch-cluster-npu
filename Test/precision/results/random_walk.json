@@ -1,0 +1,3251 @@
+{
+  "device": "Ascend910B1",
+  "parameters": {
+    "source": "/home/ma-user/work/precision-compare-910b1-20261103/pyg-lib/benchmark/ops/geometry.py",
+    "sha256": "52489648b9e204fe643b5bb14af3df71afde33996919c86bc505317a7532b858",
+    "fps_ratios": [
+      0.125,
+      0.25,
+      0.5
+    ],
+    "grid_sizes": [
+      0.125,
+      0.25,
+      0.5
+    ],
+    "knn_k": [
+      2,
+      8,
+      64
+    ],
+    "radius_attributes": [
+      [
+        1.0,
+        32,
+        false
+      ],
+      [
+        1.0,
+        32,
+        true
+      ],
+      [
+        1.0,
+        100,
+        false
+      ],
+      [
+        2.0,
+        32,
+        false
+      ],
+      [
+        3.0,
+        32,
+        false
+      ]
+    ],
+    "random_walk_p": 1.0,
+    "random_walk_q": 1.0,
+    "fps_random_start": false,
+    "cases": {
+      "fps": [
+        [
+          1024,
+          32,
+          1,
+          0.5
+        ],
+        [
+          1024,
+          32,
+          1,
+          0.125
+        ],
+        [
+          1024,
+          32,
+          1,
+          0.25
+        ],
+        [
+          1024,
+          32,
+          2,
+          0.5
+        ],
+        [
+          4096,
+          32,
+          1,
+          0.5
+        ],
+        [
+          4096,
+          32,
+          1,
+          0.25
+        ],
+        [
+          4096,
+          32,
+          2,
+          0.5
+        ],
+        [
+          4096,
+          64,
+          1,
+          0.5
+        ],
+        [
+          8192,
+          16,
+          1,
+          0.5
+        ],
+        [
+          8192,
+          32,
+          1,
+          0.5
+        ],
+        [
+          8192,
+          64,
+          1,
+          0.5
+        ]
+      ],
+      "grid_cluster": [
+        [
+          1048576,
+          64,
+          0.5
+        ],
+        [
+          1048576,
+          64,
+          0.125
+        ],
+        [
+          4194304,
+          32,
+          0.5
+        ],
+        [
+          4194304,
+          32,
+          0.125
+        ],
+        [
+          4194304,
+          32,
+          0.25
+        ],
+        [
+          4194304,
+          64,
+          0.5
+        ],
+        [
+          8388608,
+          32,
+          0.5
+        ],
+        [
+          8388608,
+          32,
+          0.125
+        ],
+        [
+          8388608,
+          32,
+          0.25
+        ],
+        [
+          8388608,
+          64,
+          0.5
+        ],
+        [
+          33554432,
+          32,
+          0.5
+        ],
+        [
+          33554432,
+          32,
+          0.125
+        ],
+        [
+          33554432,
+          64,
+          0.5
+        ]
+      ],
+      "knn": [
+        [
+          4096,
+          128,
+          2,
+          0,
+          0
+        ],
+        [
+          4096,
+          128,
+          8,
+          0,
+          0
+        ],
+        [
+          4096,
+          128,
+          64,
+          0,
+          0
+        ],
+        [
+          8192,
+          256,
+          8,
+          0,
+          0
+        ],
+        [
+          20000,
+          128,
+          8,
+          0,
+          0
+        ],
+        [
+          32000,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          4096,
+          32,
+          64,
+          0,
+          0
+        ],
+        [
+          8192,
+          32,
+          64,
+          0,
+          0
+        ],
+        [
+          16384,
+          32,
+          8,
+          0,
+          0
+        ],
+        [
+          16384,
+          32,
+          8,
+          1,
+          0
+        ]
+      ],
+      "nearest": [
+        [
+          20000,
+          10000,
+          128,
+          0
+        ],
+        [
+          8192,
+          8192,
+          3,
+          0
+        ],
+        [
+          8192,
+          4096,
+          3,
+          0
+        ],
+        [
+          8192,
+          4096,
+          3,
+          1
+        ],
+        [
+          32768,
+          32768,
+          16,
+          0
+        ],
+        [
+          32768,
+          32768,
+          32,
+          0
+        ],
+        [
+          32768,
+          32768,
+          64,
+          0
+        ],
+        [
+          4096,
+          1024,
+          3,
+          0
+        ],
+        [
+          4096,
+          2048,
+          3,
+          1
+        ],
+        [
+          16384,
+          8192,
+          3,
+          0
+        ],
+        [
+          32768,
+          16384,
+          3,
+          0
+        ]
+      ],
+      "graclus_cluster": [
+        [
+          10000,
+          50000,
+          true
+        ],
+        [
+          10000,
+          100000,
+          true
+        ],
+        [
+          5000,
+          10000,
+          true
+        ],
+        [
+          128,
+          16256,
+          true
+        ],
+        [
+          256,
+          65280,
+          true
+        ],
+        [
+          512,
+          261120,
+          true
+        ],
+        [
+          1024,
+          1046528,
+          true
+        ],
+        [
+          2048,
+          4192256,
+          true
+        ],
+        [
+          4096,
+          16773120,
+          true
+        ],
+        [
+          500000,
+          2000000,
+          true
+        ],
+        [
+          1000000,
+          4000000,
+          true
+        ]
+      ],
+      "radius": [
+        [
+          32768,
+          3,
+          1.0,
+          32,
+          false
+        ],
+        [
+          32768,
+          3,
+          2.0,
+          32,
+          false
+        ],
+        [
+          65536,
+          3,
+          1.0,
+          32,
+          false
+        ],
+        [
+          65536,
+          3,
+          3.0,
+          32,
+          false
+        ],
+        [
+          65536,
+          3,
+          1.0,
+          100,
+          false
+        ],
+        [
+          65536,
+          3,
+          1.0,
+          32,
+          true
+        ],
+        [
+          262144,
+          3,
+          1.0,
+          32,
+          false
+        ],
+        [
+          262144,
+          3,
+          2.0,
+          32,
+          false
+        ],
+        [
+          262144,
+          3,
+          1.0,
+          32,
+          true
+        ]
+      ],
+      "random_walk": [
+        [
+          524288,
+          524288,
+          32768,
+          64
+        ],
+        [
+          524288,
+          524288,
+          32768,
+          128
+        ],
+        [
+          524288,
+          524288,
+          32768,
+          256
+        ],
+        [
+          1048576,
+          1048576,
+          65536,
+          128
+        ],
+        [
+          1048576,
+          1048576,
+          65536,
+          256
+        ],
+        [
+          1048576,
+          1048576,
+          65536,
+          512
+        ],
+        [
+          2097152,
+          2097152,
+          131072,
+          128
+        ],
+        [
+          2097152,
+          2097152,
+          131072,
+          256
+        ],
+        [
+          4194304,
+          4194304,
+          131072,
+          128
+        ],
+        [
+          4194304,
+          4194304,
+          131072,
+          256
+        ],
+        [
+          4194304,
+          4194304,
+          262144,
+          512
+        ]
+      ]
+    }
+  },
+  "results": [
+    {
+      "operator": "random_walk",
+      "case": 1,
+      "document_row": [
+        "[1024]",
+        "[1024]",
+        "[8]",
+        "[8,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 256,
+      "seed": 20261103,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 32,
+        "uniformity_assessed": false
+      },
+      "seconds": 2.1843054620549083
+    },
+    {
+      "operator": "random_walk",
+      "case": 1,
+      "document_row": [
+        "[1024]",
+        "[1024]",
+        "[8]",
+        "[8,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 256,
+      "seed": 20261103,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 32,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.10009447298943996
+    },
+    {
+      "operator": "random_walk",
+      "case": 2,
+      "document_row": [
+        "[4096]",
+        "[4096]",
+        "[16]",
+        "[16,9]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 8,
+      "num_nodes": 1024,
+      "seed": 20261104,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 128,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0028609149158000946
+    },
+    {
+      "operator": "random_walk",
+      "case": 2,
+      "document_row": [
+        "[4096]",
+        "[4096]",
+        "[16]",
+        "[16,9]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 8,
+      "num_nodes": 1024,
+      "seed": 20261104,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 128,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0025681350380182266
+    },
+    {
+      "operator": "random_walk",
+      "case": 3,
+      "document_row": [
+        "[8192]",
+        "[8192]",
+        "[32]",
+        "[32,11]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 10,
+      "num_nodes": 2048,
+      "seed": 20261105,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 320,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0027454551309347153
+    },
+    {
+      "operator": "random_walk",
+      "case": 3,
+      "document_row": [
+        "[8192]",
+        "[8192]",
+        "[32]",
+        "[32,11]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 10,
+      "num_nodes": 2048,
+      "seed": 20261105,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 320,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0028252950869500637
+    },
+    {
+      "operator": "random_walk",
+      "case": 4,
+      "document_row": [
+        "[16384]",
+        "[16384]",
+        "[64]",
+        "[64,7]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 6,
+      "num_nodes": 4096,
+      "seed": 20261106,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 384,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0028525451198220253
+    },
+    {
+      "operator": "random_walk",
+      "case": 4,
+      "document_row": [
+        "[16384]",
+        "[16384]",
+        "[64]",
+        "[64,7]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 6,
+      "num_nodes": 4096,
+      "seed": 20261106,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 384,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0031874459236860275
+    },
+    {
+      "operator": "random_walk",
+      "case": 5,
+      "document_row": [
+        "[32768]",
+        "[32768]",
+        "[128]",
+        "[128,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 8192,
+      "seed": 20261107,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 512,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0033004856668412685
+    },
+    {
+      "operator": "random_walk",
+      "case": 5,
+      "document_row": [
+        "[32768]",
+        "[32768]",
+        "[128]",
+        "[128,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 8192,
+      "seed": 20261107,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 512,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.004163858015090227
+    },
+    {
+      "operator": "random_walk",
+      "case": 6,
+      "document_row": [
+        "[4096]",
+        "[4096]",
+        "[8]",
+        "[8,21]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 20,
+      "num_nodes": 1024,
+      "seed": 20261108,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 160,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0024916850961744785
+    },
+    {
+      "operator": "random_walk",
+      "case": 6,
+      "document_row": [
+        "[4096]",
+        "[4096]",
+        "[8]",
+        "[8,21]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 20,
+      "num_nodes": 1024,
+      "seed": 20261108,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 160,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.002611794974654913
+    },
+    {
+      "operator": "random_walk",
+      "case": 7,
+      "document_row": [
+        "[8192]",
+        "[8192]",
+        "[256]",
+        "[256,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 2048,
+      "seed": 20261109,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1024,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2236328125,
+          0.26171875,
+          0.2587890625,
+          0.255859375
+        ],
+        "expected": 0.25,
+        "tolerance": 0.08128988160479113
+      },
+      "seconds": 0.0027069151401519775
+    },
+    {
+      "operator": "random_walk",
+      "case": 7,
+      "document_row": [
+        "[8192]",
+        "[8192]",
+        "[256]",
+        "[256,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 2048,
+      "seed": 20261109,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1024,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2236328125,
+          0.26171875,
+          0.2587890625,
+          0.255859375
+        ],
+        "expected": 0.25,
+        "tolerance": 0.08128988160479113
+      },
+      "seconds": 0.0028455457650125027
+    },
+    {
+      "operator": "random_walk",
+      "case": 8,
+      "document_row": [
+        "[2048]",
+        "[2048]",
+        "[4]",
+        "[4,33]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 32,
+      "num_nodes": 512,
+      "seed": 20261110,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 128,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.002584654837846756
+    },
+    {
+      "operator": "random_walk",
+      "case": 8,
+      "document_row": [
+        "[2048]",
+        "[2048]",
+        "[4]",
+        "[4,33]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 32,
+      "num_nodes": 512,
+      "seed": 20261110,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 128,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0025301938876509666
+    },
+    {
+      "operator": "random_walk",
+      "case": 9,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[1]",
+        "[1,2]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 1,
+      "num_nodes": 1,
+      "seed": 20261111,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0022925641387701035
+    },
+    {
+      "operator": "random_walk",
+      "case": 9,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[1]",
+        "[1,2]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 1,
+      "num_nodes": 1,
+      "seed": 20261111,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0022597438655793667
+    },
+    {
+      "operator": "random_walk",
+      "case": 10,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[2]",
+        "[2,1]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 0,
+      "num_nodes": 2,
+      "seed": 20261112,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 0,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0019843727350234985
+    },
+    {
+      "operator": "random_walk",
+      "case": 10,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[2]",
+        "[2,1]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 0,
+      "num_nodes": 2,
+      "seed": 20261112,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 0,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0019357139244675636
+    },
+    {
+      "operator": "random_walk",
+      "case": 11,
+      "document_row": [
+        "[16]",
+        "[16]",
+        "[4]",
+        "[4,3]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 2,
+      "num_nodes": 4,
+      "seed": 20261113,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 8,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0026764050126075745
+    },
+    {
+      "operator": "random_walk",
+      "case": 11,
+      "document_row": [
+        "[16]",
+        "[16]",
+        "[4]",
+        "[4,3]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 2,
+      "num_nodes": 4,
+      "seed": 20261113,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 8,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.002633744850754738
+    },
+    {
+      "operator": "random_walk",
+      "case": 12,
+      "document_row": [
+        "[0]",
+        "[0]",
+        "[1]",
+        "[1,2]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 1,
+      "num_nodes": 1,
+      "seed": 20261114,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 0,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0019319942221045494
+    },
+    {
+      "operator": "random_walk",
+      "case": 12,
+      "document_row": [
+        "[0]",
+        "[0]",
+        "[1]",
+        "[1,2]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 1,
+      "num_nodes": 1,
+      "seed": 20261114,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 0,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0014487630687654018
+    },
+    {
+      "operator": "random_walk",
+      "case": 13,
+      "document_row": [
+        "[65536]",
+        "[65536]",
+        "[256]",
+        "[256,9]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 8,
+      "num_nodes": 16384,
+      "seed": 20261115,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2048,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2412109375,
+          0.23486328125,
+          0.283203125,
+          0.24072265625
+        ],
+        "expected": 0.25,
+        "tolerance": 0.057509915846480734
+      },
+      "seconds": 0.004736818838864565
+    },
+    {
+      "operator": "random_walk",
+      "case": 13,
+      "document_row": [
+        "[65536]",
+        "[65536]",
+        "[256]",
+        "[256,9]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 8,
+      "num_nodes": 16384,
+      "seed": 20261115,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2048,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2412109375,
+          0.23486328125,
+          0.283203125,
+          0.24072265625
+        ],
+        "expected": 0.25,
+        "tolerance": 0.057509915846480734
+      },
+      "seconds": 0.006291812285780907
+    },
+    {
+      "operator": "random_walk",
+      "case": 14,
+      "document_row": [
+        "[16384]",
+        "[16384]",
+        "[1024]",
+        "[1024,3]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 2,
+      "num_nodes": 4096,
+      "seed": 20261116,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2048,
+        "uniformity_assessed": true,
+        "observed": [
+          0.25830078125,
+          0.24072265625,
+          0.25,
+          0.2509765625
+        ],
+        "expected": 0.25,
+        "tolerance": 0.057509915846480734
+      },
+      "seconds": 0.0027347849681973457
+    },
+    {
+      "operator": "random_walk",
+      "case": 14,
+      "document_row": [
+        "[16384]",
+        "[16384]",
+        "[1024]",
+        "[1024,3]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 2,
+      "num_nodes": 4096,
+      "seed": 20261116,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2048,
+        "uniformity_assessed": true,
+        "observed": [
+          0.25830078125,
+          0.24072265625,
+          0.25,
+          0.2509765625
+        ],
+        "expected": 0.25,
+        "tolerance": 0.057509915846480734
+      },
+      "seconds": 0.003193806391209364
+    },
+    {
+      "operator": "random_walk",
+      "case": 15,
+      "document_row": [
+        "[8192]",
+        "[8192]",
+        "[16]",
+        "[16,65]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 64,
+      "num_nodes": 2048,
+      "seed": 20261117,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1024,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2353515625,
+          0.255859375,
+          0.2607421875,
+          0.248046875
+        ],
+        "expected": 0.25,
+        "tolerance": 0.08128988160479113
+      },
+      "seconds": 0.002442053984850645
+    },
+    {
+      "operator": "random_walk",
+      "case": 15,
+      "document_row": [
+        "[8192]",
+        "[8192]",
+        "[16]",
+        "[16,65]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 64,
+      "num_nodes": 2048,
+      "seed": 20261117,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1024,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2353515625,
+          0.255859375,
+          0.2607421875,
+          0.248046875
+        ],
+        "expected": 0.25,
+        "tolerance": 0.08128988160479113
+      },
+      "seconds": 0.002646154724061489
+    },
+    {
+      "operator": "random_walk",
+      "case": 16,
+      "document_row": [
+        "[20]",
+        "[20]",
+        "[2]",
+        "[2,1]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 0,
+      "num_nodes": 5,
+      "seed": 20261118,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 0,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0020103841088712215
+    },
+    {
+      "operator": "random_walk",
+      "case": 16,
+      "document_row": [
+        "[20]",
+        "[20]",
+        "[2]",
+        "[2,1]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 0,
+      "num_nodes": 5,
+      "seed": 20261118,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 0,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0019731041975319386
+    },
+    {
+      "operator": "random_walk",
+      "case": 17,
+      "document_row": [
+        "[20]",
+        "[20]",
+        "[1]",
+        "[1,2]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 1,
+      "num_nodes": 5,
+      "seed": 20261119,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0020222337916493416
+    },
+    {
+      "operator": "random_walk",
+      "case": 17,
+      "document_row": [
+        "[20]",
+        "[20]",
+        "[1]",
+        "[1,2]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 1,
+      "num_nodes": 5,
+      "seed": 20261119,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.00204841373488307
+    },
+    {
+      "operator": "random_walk",
+      "case": 18,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[1]",
+        "[1,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 1,
+      "seed": 20261120,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0020306939259171486
+    },
+    {
+      "operator": "random_walk",
+      "case": 18,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[1]",
+        "[1,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 1,
+      "seed": 20261120,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.00201868312433362
+    },
+    {
+      "operator": "random_walk",
+      "case": 19,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[1]",
+        "[1,5]",
+        "[1,4]"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 1,
+      "seed": 20261121,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.001984722912311554
+    },
+    {
+      "operator": "random_walk",
+      "case": 19,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[1]",
+        "[1,5]",
+        "[1,4]"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 1,
+      "seed": 20261121,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.00197406392544508
+    },
+    {
+      "operator": "random_walk",
+      "case": 20,
+      "document_row": [
+        "[100]",
+        "[100]",
+        "[1]",
+        "[1,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 25,
+      "seed": 20261122,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0022751246578991413
+    },
+    {
+      "operator": "random_walk",
+      "case": 20,
+      "document_row": [
+        "[100]",
+        "[100]",
+        "[1]",
+        "[1,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 25,
+      "seed": 20261122,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.002253224141895771
+    },
+    {
+      "operator": "random_walk",
+      "case": 21,
+      "document_row": [
+        "[200]",
+        "[200]",
+        "[3]",
+        "[3,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 50,
+      "seed": 20261123,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 12,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0026844050735235214
+    },
+    {
+      "operator": "random_walk",
+      "case": 21,
+      "document_row": [
+        "[200]",
+        "[200]",
+        "[3]",
+        "[3,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 50,
+      "seed": 20261123,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 12,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0026816348545253277
+    },
+    {
+      "operator": "random_walk",
+      "case": 22,
+      "document_row": [
+        "[2]",
+        "[2]",
+        "[1]",
+        "[1,5]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 1,
+      "seed": 20261124,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0022156238555908203
+    },
+    {
+      "operator": "random_walk",
+      "case": 22,
+      "document_row": [
+        "[2]",
+        "[2]",
+        "[1]",
+        "[1,5]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 4,
+      "num_nodes": 1,
+      "seed": 20261124,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.002222664188593626
+    },
+    {
+      "operator": "random_walk",
+      "case": 23,
+      "document_row": [
+        "[4096]",
+        "[4096]",
+        "[4]",
+        "[4,9]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 8,
+      "num_nodes": 1024,
+      "seed": 20261125,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 32,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.0024510039947927
+    },
+    {
+      "operator": "random_walk",
+      "case": 23,
+      "document_row": [
+        "[4096]",
+        "[4096]",
+        "[4]",
+        "[4,9]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 8,
+      "num_nodes": 1024,
+      "seed": 20261125,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 32,
+        "uniformity_assessed": false
+      },
+      "seconds": 0.002461295109242201
+    },
+    {
+      "operator": "random_walk",
+      "case": 24,
+      "document_row": [
+        "[64K]",
+        "[64K]",
+        "[8K]",
+        "[8K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 16384,
+      "seed": 20261126,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1048576,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2505073547363281,
+          0.2488260269165039,
+          0.24986648559570312,
+          0.25080013275146484
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0026371838001497225
+      },
+      "seconds": 0.11341236671432853
+    },
+    {
+      "operator": "random_walk",
+      "case": 24,
+      "document_row": [
+        "[64K]",
+        "[64K]",
+        "[8K]",
+        "[8K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 16384,
+      "seed": 20261126,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1048576,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2505073547363281,
+          0.2488260269165039,
+          0.24986648559570312,
+          0.25080013275146484
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0026371838001497225
+      },
+      "seconds": 0.10832668794319034
+    },
+    {
+      "operator": "random_walk",
+      "case": 25,
+      "document_row": [
+        "[64K]",
+        "[64K]",
+        "[8K]",
+        "[8K,257]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 16384,
+      "seed": 20261127,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2498607635498047,
+          0.2502307891845703,
+          0.2504153251647949,
+          0.24949312210083008
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.22220149589702487
+    },
+    {
+      "operator": "random_walk",
+      "case": 25,
+      "document_row": [
+        "[64K]",
+        "[64K]",
+        "[8K]",
+        "[8K,257]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 16384,
+      "seed": 20261127,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2498607635498047,
+          0.2502307891845703,
+          0.2504153251647949,
+          0.24949312210083008
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.2265408239327371
+    },
+    {
+      "operator": "random_walk",
+      "case": 26,
+      "document_row": [
+        "[64K]",
+        "[64K]",
+        "[8K]",
+        "[8K,513]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 16384,
+      "seed": 20261128,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4194304,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2503218650817871,
+          0.24959588050842285,
+          0.2498152256011963,
+          0.25026702880859375
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0013685919000748614
+      },
+      "seconds": 0.46000850992277265
+    },
+    {
+      "operator": "random_walk",
+      "case": 26,
+      "document_row": [
+        "[64K]",
+        "[64K]",
+        "[8K]",
+        "[8K,513]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 16384,
+      "seed": 20261128,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4194304,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2503218650817871,
+          0.24959588050842285,
+          0.2498152256011963,
+          0.25026702880859375
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0013685919000748614
+      },
+      "seconds": 0.47990385675802827
+    },
+    {
+      "operator": "random_walk",
+      "case": 27,
+      "document_row": [
+        "[128K]",
+        "[128K]",
+        "[16K]",
+        "[16K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 32768,
+      "seed": 20261129,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24983453750610352,
+          0.250516414642334,
+          0.2500176429748535,
+          0.24963140487670898
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.21052155504003167
+    },
+    {
+      "operator": "random_walk",
+      "case": 27,
+      "document_row": [
+        "[128K]",
+        "[128K]",
+        "[16K]",
+        "[16K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 32768,
+      "seed": 20261129,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24983453750610352,
+          0.250516414642334,
+          0.2500176429748535,
+          0.24963140487670898
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.21493061166256666
+    },
+    {
+      "operator": "random_walk",
+      "case": 28,
+      "document_row": [
+        "[256K]",
+        "[256K]",
+        "[16K]",
+        "[16K,65]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 64,
+      "num_nodes": 65536,
+      "seed": 20261130,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1048576,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2501068115234375,
+          0.25030517578125,
+          0.24955463409423828,
+          0.2500333786010742
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0026371838001497225
+      },
+      "seconds": 0.1113183437846601
+    },
+    {
+      "operator": "random_walk",
+      "case": 28,
+      "document_row": [
+        "[256K]",
+        "[256K]",
+        "[16K]",
+        "[16K,65]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 64,
+      "num_nodes": 65536,
+      "seed": 20261130,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 1048576,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2501068115234375,
+          0.25030517578125,
+          0.24955463409423828,
+          0.2500333786010742
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0026371838001497225
+      },
+      "seconds": 0.10831395769491792
+    },
+    {
+      "operator": "random_walk",
+      "case": 29,
+      "document_row": [
+        "[256K]",
+        "[256K]",
+        "[16K]",
+        "[16K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 65536,
+      "seed": 20261131,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24999427795410156,
+          0.2498936653137207,
+          0.2505474090576172,
+          0.24956464767456055
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.21741142682731152
+    },
+    {
+      "operator": "random_walk",
+      "case": 29,
+      "document_row": [
+        "[256K]",
+        "[256K]",
+        "[16K]",
+        "[16K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 65536,
+      "seed": 20261131,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24999427795410156,
+          0.2498936653137207,
+          0.2505474090576172,
+          0.24956464767456055
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.21276933886110783
+    },
+    {
+      "operator": "random_walk",
+      "case": 30,
+      "document_row": [
+        "[256K]",
+        "[256K]",
+        "[32K]",
+        "[32K,513]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 65536,
+      "seed": 20261132,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2501128315925598,
+          0.2500683665275574,
+          0.24970465898513794,
+          0.2501141428947449
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 1.9403217160142958
+    },
+    {
+      "operator": "random_walk",
+      "case": 30,
+      "document_row": [
+        "[256K]",
+        "[256K]",
+        "[32K]",
+        "[32K,513]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 65536,
+      "seed": 20261132,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2501128315925598,
+          0.2500683665275574,
+          0.24970465898513794,
+          0.2501141428947449
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 1.9556319727562368
+    },
+    {
+      "operator": "random_walk",
+      "case": 31,
+      "document_row": [
+        "[512K]",
+        "[512K]",
+        "[32K]",
+        "[32K,65]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 64,
+      "num_nodes": 131072,
+      "seed": 20261133,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2495441436767578,
+          0.2501239776611328,
+          0.2501096725463867,
+          0.25022220611572266
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.22297511668875813
+    },
+    {
+      "operator": "random_walk",
+      "case": 31,
+      "document_row": [
+        "[512K]",
+        "[512K]",
+        "[32K]",
+        "[32K,65]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 64,
+      "num_nodes": 131072,
+      "seed": 20261133,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 2097152,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2495441436767578,
+          0.2501239776611328,
+          0.2501096725463867,
+          0.25022220611572266
+        ],
+        "expected": 0.25,
+        "tolerance": 0.001894059870202523
+      },
+      "seconds": 0.2350003789179027
+    },
+    {
+      "operator": "random_walk",
+      "case": 32,
+      "document_row": [
+        "[512K]",
+        "[512K]",
+        "[32K]",
+        "[32K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 131072,
+      "seed": 20261134,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4194304,
+        "uniformity_assessed": true,
+        "observed": [
+          0.250227689743042,
+          0.24971723556518555,
+          0.2499222755432129,
+          0.25013279914855957
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0013685919000748614
+      },
+      "seconds": 0.45159378508105874
+    },
+    {
+      "operator": "random_walk",
+      "case": 32,
+      "document_row": [
+        "[512K]",
+        "[512K]",
+        "[32K]",
+        "[32K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 131072,
+      "seed": 20261134,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 4194304,
+        "uniformity_assessed": true,
+        "observed": [
+          0.250227689743042,
+          0.24971723556518555,
+          0.2499222755432129,
+          0.25013279914855957
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0013685919000748614
+      },
+      "seconds": 0.47341820504516363
+    },
+    {
+      "operator": "random_walk",
+      "case": 33,
+      "document_row": [
+        "[512K]",
+        "[512K]",
+        "[32K]",
+        "[32K,257]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 131072,
+      "seed": 20261135,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 8388608,
+        "uniformity_assessed": true,
+        "observed": [
+          0.25015556812286377,
+          0.24983453750610352,
+          0.24964165687561035,
+          0.25036823749542236
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0009970299351012614
+      },
+      "seconds": 0.962114708032459
+    },
+    {
+      "operator": "random_walk",
+      "case": 33,
+      "document_row": [
+        "[512K]",
+        "[512K]",
+        "[32K]",
+        "[32K,257]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 131072,
+      "seed": 20261135,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 8388608,
+        "uniformity_assessed": true,
+        "observed": [
+          0.25015556812286377,
+          0.24983453750610352,
+          0.24964165687561035,
+          0.25036823749542236
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0009970299351012614
+      },
+      "seconds": 0.9525830410420895
+    },
+    {
+      "operator": "random_walk",
+      "case": 34,
+      "document_row": [
+        "[1M]",
+        "[1M]",
+        "[64K]",
+        "[64K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 262144,
+      "seed": 20261136,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 8388608,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24983811378479004,
+          0.24990391731262207,
+          0.25006163120269775,
+          0.25019633769989014
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0009970299351012614
+      },
+      "seconds": 0.9195863110944629
+    },
+    {
+      "operator": "random_walk",
+      "case": 34,
+      "document_row": [
+        "[1M]",
+        "[1M]",
+        "[64K]",
+        "[64K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 262144,
+      "seed": 20261136,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 8388608,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24983811378479004,
+          0.24990391731262207,
+          0.25006163120269775,
+          0.25019633769989014
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0009970299351012614
+      },
+      "seconds": 0.9544133441522717
+    },
+    {
+      "operator": "random_walk",
+      "case": 35,
+      "document_row": [
+        "[1M]",
+        "[1M]",
+        "[64K]",
+        "[64K,257]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 262144,
+      "seed": 20261137,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24998688697814941,
+          0.2500297427177429,
+          0.2500857710838318,
+          0.24989759922027588
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 1.9267968111671507
+    },
+    {
+      "operator": "random_walk",
+      "case": 35,
+      "document_row": [
+        "[1M]",
+        "[1M]",
+        "[64K]",
+        "[64K,257]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 262144,
+      "seed": 20261137,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24998688697814941,
+          0.2500297427177429,
+          0.2500857710838318,
+          0.24989759922027588
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 1.9794983668252826
+    },
+    {
+      "operator": "random_walk",
+      "case": 36,
+      "document_row": [
+        "[1M]",
+        "[1M]",
+        "[64K]",
+        "[64K,513]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 262144,
+      "seed": 20261138,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 33554432,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2500109374523163,
+          0.25012651085853577,
+          0.25002026557922363,
+          0.24984228610992432
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0005485149675506307
+      },
+      "seconds": 4.328212318941951
+    },
+    {
+      "operator": "random_walk",
+      "case": 36,
+      "document_row": [
+        "[1M]",
+        "[1M]",
+        "[64K]",
+        "[64K,513]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 262144,
+      "seed": 20261138,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 33554432,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2500109374523163,
+          0.25012651085853577,
+          0.25002026557922363,
+          0.24984228610992432
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0005485149675506307
+      },
+      "seconds": 4.354814326856285
+    },
+    {
+      "operator": "random_walk",
+      "case": 37,
+      "document_row": [
+        "[2M]",
+        "[2M]",
+        "[128K]",
+        "[128K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 524288,
+      "seed": 20261139,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24992114305496216,
+          0.24998915195465088,
+          0.25013697147369385,
+          0.24995273351669312
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 2.0479794018901885
+    },
+    {
+      "operator": "random_walk",
+      "case": 37,
+      "document_row": [
+        "[2M]",
+        "[2M]",
+        "[128K]",
+        "[128K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 524288,
+      "seed": 20261139,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24992114305496216,
+          0.24998915195465088,
+          0.25013697147369385,
+          0.24995273351669312
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 2.072351216804236
+    },
+    {
+      "operator": "random_walk",
+      "case": 38,
+      "document_row": [
+        "[2M]",
+        "[2M]",
+        "[128K]",
+        "[128K,257]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 524288,
+      "seed": 20261140,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 33554432,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2500239610671997,
+          0.2501450777053833,
+          0.24981018900871277,
+          0.2500207722187042
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0005485149675506307
+      },
+      "seconds": 3.972599148750305
+    },
+    {
+      "operator": "random_walk",
+      "case": 38,
+      "document_row": [
+        "[2M]",
+        "[2M]",
+        "[128K]",
+        "[128K,257]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 524288,
+      "seed": 20261140,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 33554432,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2500239610671997,
+          0.2501450777053833,
+          0.24981018900871277,
+          0.2500207722187042
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0005485149675506307
+      },
+      "seconds": 4.381842906586826
+    },
+    {
+      "operator": "random_walk",
+      "case": 39,
+      "document_row": [
+        "[4M]",
+        "[4M]",
+        "[128K]",
+        "[128K,129]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 1048576,
+      "seed": 20261141,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24993795156478882,
+          0.25012415647506714,
+          0.2501019239425659,
+          0.24983596801757812
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 2.155212787911296
+    },
+    {
+      "operator": "random_walk",
+      "case": 39,
+      "document_row": [
+        "[4M]",
+        "[4M]",
+        "[128K]",
+        "[128K,129]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 128,
+      "num_nodes": 1048576,
+      "seed": 20261141,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 16777216,
+        "uniformity_assessed": true,
+        "observed": [
+          0.24993795156478882,
+          0.25012415647506714,
+          0.2501019239425659,
+          0.24983596801757812
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0007342959500374307
+      },
+      "seconds": 2.346658787690103
+    },
+    {
+      "operator": "random_walk",
+      "case": 40,
+      "document_row": [
+        "[4M]",
+        "[4M]",
+        "[128K]",
+        "[128K,257]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 1048576,
+      "seed": 20261142,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 33554432,
+        "uniformity_assessed": true,
+        "observed": [
+          0.25013741850852966,
+          0.25003087520599365,
+          0.24999794363975525,
+          0.24983376264572144
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0005485149675506307
+      },
+      "seconds": 4.251914840191603
+    },
+    {
+      "operator": "random_walk",
+      "case": 40,
+      "document_row": [
+        "[4M]",
+        "[4M]",
+        "[128K]",
+        "[128K,257]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 256,
+      "num_nodes": 1048576,
+      "seed": 20261142,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 33554432,
+        "uniformity_assessed": true,
+        "observed": [
+          0.25013741850852966,
+          0.25003087520599365,
+          0.24999794363975525,
+          0.24983376264572144
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0005485149675506307
+      },
+      "seconds": 4.494251972064376
+    },
+    {
+      "operator": "random_walk",
+      "case": 41,
+      "document_row": [
+        "[4M]",
+        "[4M]",
+        "[256K]",
+        "[256K,513]",
+        "None"
+      ],
+      "dtype": "int32",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 1048576,
+      "seed": 20261143,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 134217728,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2499765381217003,
+          0.2500072866678238,
+          0.2500142529606819,
+          0.250001922249794
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0003242574837753154
+      },
+      "seconds": 17.840655430220068
+    },
+    {
+      "operator": "random_walk",
+      "case": 41,
+      "document_row": [
+        "[4M]",
+        "[4M]",
+        "[256K]",
+        "[256K,513]",
+        "None"
+      ],
+      "dtype": "int64",
+      "p": 1.0,
+      "q": 1.0,
+      "walk_length": 512,
+      "num_nodes": 1048576,
+      "seed": 20261143,
+      "coalesced": false,
+      "optional_returns_tested": [
+        false,
+        true
+      ],
+      "status": "passed",
+      "rule": "exact_transitions_and_stochastic_contract",
+      "uniformity": {
+        "samples": 134217728,
+        "uniformity_assessed": true,
+        "observed": [
+          0.2499765381217003,
+          0.2500072866678238,
+          0.2500142529606819,
+          0.250001922249794
+        ],
+        "expected": 0.25,
+        "tolerance": 0.0003242574837753154
+      },
+      "seconds": 18.34957989025861
+    }
+  ]
+}

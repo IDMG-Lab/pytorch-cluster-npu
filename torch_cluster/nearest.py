@@ -50,7 +50,7 @@ def nearest(
     if batch_y is not None and (batch_y[1:] - batch_y[:-1] < 0).any():
         raise ValueError("'batch_y' is not sorted")
 
-    if x.is_cuda:
+    if x.is_cuda or x.device.type == 'npu':
         if batch_x is not None:
             assert x.size(0) == batch_x.numel()
             batch_size = int(batch_x.max()) + 1

@@ -25,7 +25,11 @@ at::Tensor PackWeight(torch::Tensor rowptr, int64_t e,
     auto w = optional_weight.value();
     switch (w.scalar_type()) {
       case at::kHalf: case at::kBFloat16: case at::kFloat:
-        raw = at::nan_to_num(w.to(at::kFloat), -1.0, c10::nullopt, c10::nullopt).contiguous().view(at::kInt); break;
+        // NaN is ineligible, while +inf must remain strictly larger than the
+        // largest finite weight. nan_to_num's default clamps +inf to that
+        // finite value and can introduce a false greedy tie.
+        raw=w.to(at::kFloat);
+        raw=at::where(at::isnan(raw),at::Scalar(-1.0),raw).contiguous().view(at::kInt); break;
       case at::kInt: case at::kLong:
         kind = 1; raw = w.to(at::kLong).contiguous().view(at::kInt); break;
       case at::kDouble:

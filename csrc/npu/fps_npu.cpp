@@ -1,11 +1,16 @@
 #include "fps_npu.h"
 #include "include/pytorch_npu_helper.hpp"
+#include "include/precise_dtype.hpp"
+#include "include/finite_coordinates.hpp"
 
 #include <ATen/ATen.h>
 #include <torch_npu/csrc/framework/utils/OpPreparation.h>
 
 #include <algorithm>
+#include <ATen/core/grad_mode.h>
 #include <cstdint>
+#include <limits>
+#include <string>
 #include <vector>
 
 namespace {
@@ -56,7 +61,11 @@ torch::Tensor fps_npu(torch::Tensor src,
                 "fps_npu: input 'src' must have at least 2 dimensions");
 
     // 与 CUDA 版一致：src.view({src.size(0), -1}).contiguous()
-    auto src_aos = src.view({src.size(0), -1}).contiguous();
+    // flatten keeps the feature width defined for an empty [0, D] input.
+    auto src_aos = src.flatten(1).contiguous();
+    torch_cluster_npu::check_finite_coordinates(src_aos);
+    TORCH_CHECK(at::logical_and(at::isfinite(ratio),ratio>=0).all().item<bool>(),
+                "fps_npu: ratio must be finite and nonnegative");
 
     const int64_t dim = src_aos.size(1);
     TORCH_CHECK(dim > 0,
@@ -67,6 +76,8 @@ torch::Tensor fps_npu(torch::Tensor src,
     const int64_t batch_size = ptr_contig.numel() - 1;
     TORCH_CHECK(batch_size > 0,
                 "fps_npu: ptr must contain at least two elements");
+    TORCH_CHECK(ratio.numel()==1 || ratio.numel()==batch_size,
+                "fps_npu: ratio must contain one value or one value per batch");
 
     // 同步 ptr 到 CPU，用于构造 padded_point_ptr / padded_src_index / hybrid mode。
     auto ptr_cpu = ptr_contig.to(at::kCPU).contiguous();
@@ -87,14 +98,23 @@ torch::Tensor fps_npu(torch::Tensor src,
     auto deg = ptr_contig.narrow(0, 1, batch_size) -
                ptr_contig.narrow(0, 0, batch_size);
 
-    auto out_ptr = deg.to(ratio.scalar_type()) * ratio;
+    // Low-precision coordinates must not round the integer batch sizes used
+    // to determine sample counts (for example, 10000 in bfloat16).
+    const bool high_precision = src_aos.scalar_type() != at::kFloat;
+    TORCH_CHECK(src_aos.is_floating_point(), "fps_npu: expected floating coordinates");
+    const auto count_dtype = high_precision ? at::kDouble : ratio.scalar_type();
+    auto out_ptr = high_precision
+        ? torch_cluster_npu::as_double(deg) * torch_cluster_npu::as_double(ratio)
+        : deg.to(count_dtype) * ratio.to(count_dtype);
     out_ptr = out_ptr.ceil().to(at::kLong).cumsum(0);
     out_ptr = at::cat({at::zeros({1}, ptr_contig.options()), out_ptr}, 0);
 
     torch::Tensor start;
     if (random_start) {
-        start = at::rand({batch_size}, src_aos.options());
-        start = (start * deg.to(ratio.scalar_type())).to(at::kLong);
+        start = at::rand({batch_size}, src_aos.options().dtype(at::kFloat));
+        start = high_precision
+            ? (torch_cluster_npu::as_double(start) * torch_cluster_npu::as_double(deg)).to(at::kLong)
+            : (start.to(count_dtype) * deg.to(count_dtype)).to(at::kLong);
     } else {
         start = at::zeros({batch_size}, ptr_contig.options());
     }
@@ -107,6 +127,32 @@ torch::Tensor fps_npu(torch::Tensor src,
 
     if (n_out == 0) {
         return at::empty({0}, out_ptr.options());
+    }
+
+    if (high_precision) {
+        at::NoGradGuard guard;
+        // All coordinate arithmetic stays on the NPU. Only the already
+        // existing CSR/count metadata is read by the host to schedule batches.
+        // The native aclnn FPS kernel accepts float32 only.
+        const auto positions = torch_cluster_npu::as_double(src_aos);
+        auto output = at::empty({n_out}, out_ptr.options());
+        for (int64_t batch = 0; batch < batch_size; ++batch) {
+            const int64_t first = ptr_data[batch];
+            const int64_t count = ptr_data[batch + 1] - first;
+            const int64_t samples = out_ptr_data[batch + 1] - out_ptr_data[batch];
+            if (!samples) continue;
+            const auto points = positions.narrow(0, first, count);
+            auto chosen = start.narrow(0, batch, 1);
+            auto distance = at::full({count}, std::numeric_limits<double>::infinity(), points.options());
+            for (int64_t step = 0; step < samples; ++step) {
+                output.narrow(0, out_ptr_data[batch] + step, 1).copy_(chosen + first);
+                if (step + 1 == samples) break;
+                const auto delta = points - points.index_select(0, chosen);
+                distance = at::minimum(distance, (delta * delta).sum(1));
+                chosen = at::argmax(distance, 0, true);
+            }
+        }
+        return output;
     }
 
     // ============================================================
@@ -143,7 +189,12 @@ torch::Tensor fps_npu(torch::Tensor src,
         batch_size >= FPS_BALANCED_BATCH_THRESHOLD &&
         imbalance < FPS_IMBALANCE_THRESHOLD;
 
-    const bool use_inner40 =
+    const char* soc_name = aclrtGetSocName();
+    const bool is_950 = soc_name && std::string(soc_name).find("Ascend950") == 0;
+    // The 910B software barrier used by INNER_40 stalled on the 950 device.
+    // Keep 910B's mode selection unchanged; 950 runs the same FPS algorithm
+    // using the existing per-batch device kernel without cross-core polling.
+    const bool use_inner40 = !is_950 &&
         (!small_data) &&
         (!low_dim) &&
         (!many_balanced_batches);

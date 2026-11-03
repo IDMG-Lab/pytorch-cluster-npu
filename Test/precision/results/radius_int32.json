@@ -1,0 +1,7561 @@
+{
+  "device": "Ascend910B1",
+  "parameters": {
+    "source": "/home/ma-user/work/precision-compare-910b1-20261103/pyg-lib/benchmark/ops/geometry.py",
+    "sha256": "52489648b9e204fe643b5bb14af3df71afde33996919c86bc505317a7532b858",
+    "fps_ratios": [
+      0.125,
+      0.25,
+      0.5
+    ],
+    "grid_sizes": [
+      0.125,
+      0.25,
+      0.5
+    ],
+    "knn_k": [
+      2,
+      8,
+      64
+    ],
+    "radius_attributes": [
+      [
+        1.0,
+        32,
+        false
+      ],
+      [
+        1.0,
+        32,
+        true
+      ],
+      [
+        1.0,
+        100,
+        false
+      ],
+      [
+        2.0,
+        32,
+        false
+      ],
+      [
+        3.0,
+        32,
+        false
+      ]
+    ],
+    "random_walk_p": 1.0,
+    "random_walk_q": 1.0,
+    "fps_random_start": false,
+    "cases": {
+      "fps": [
+        [
+          1024,
+          32,
+          1,
+          0.5
+        ],
+        [
+          1024,
+          32,
+          1,
+          0.125
+        ],
+        [
+          1024,
+          32,
+          1,
+          0.25
+        ],
+        [
+          1024,
+          32,
+          2,
+          0.5
+        ],
+        [
+          4096,
+          32,
+          1,
+          0.5
+        ],
+        [
+          4096,
+          32,
+          1,
+          0.25
+        ],
+        [
+          4096,
+          32,
+          2,
+          0.5
+        ],
+        [
+          4096,
+          64,
+          1,
+          0.5
+        ],
+        [
+          8192,
+          16,
+          1,
+          0.5
+        ],
+        [
+          8192,
+          32,
+          1,
+          0.5
+        ],
+        [
+          8192,
+          64,
+          1,
+          0.5
+        ]
+      ],
+      "grid_cluster": [
+        [
+          1048576,
+          64,
+          0.5
+        ],
+        [
+          1048576,
+          64,
+          0.125
+        ],
+        [
+          4194304,
+          32,
+          0.5
+        ],
+        [
+          4194304,
+          32,
+          0.125
+        ],
+        [
+          4194304,
+          32,
+          0.25
+        ],
+        [
+          4194304,
+          64,
+          0.5
+        ],
+        [
+          8388608,
+          32,
+          0.5
+        ],
+        [
+          8388608,
+          32,
+          0.125
+        ],
+        [
+          8388608,
+          32,
+          0.25
+        ],
+        [
+          8388608,
+          64,
+          0.5
+        ],
+        [
+          33554432,
+          32,
+          0.5
+        ],
+        [
+          33554432,
+          32,
+          0.125
+        ],
+        [
+          33554432,
+          64,
+          0.5
+        ]
+      ],
+      "knn": [
+        [
+          4096,
+          128,
+          2,
+          0,
+          0
+        ],
+        [
+          4096,
+          128,
+          8,
+          0,
+          0
+        ],
+        [
+          4096,
+          128,
+          64,
+          0,
+          0
+        ],
+        [
+          8192,
+          256,
+          8,
+          0,
+          0
+        ],
+        [
+          20000,
+          128,
+          8,
+          0,
+          0
+        ],
+        [
+          32000,
+          3,
+          8,
+          0,
+          0
+        ],
+        [
+          4096,
+          32,
+          64,
+          0,
+          0
+        ],
+        [
+          8192,
+          32,
+          64,
+          0,
+          0
+        ],
+        [
+          16384,
+          32,
+          8,
+          0,
+          0
+        ],
+        [
+          16384,
+          32,
+          8,
+          1,
+          0
+        ]
+      ],
+      "nearest": [
+        [
+          20000,
+          10000,
+          128,
+          0
+        ],
+        [
+          8192,
+          8192,
+          3,
+          0
+        ],
+        [
+          8192,
+          4096,
+          3,
+          0
+        ],
+        [
+          8192,
+          4096,
+          3,
+          1
+        ],
+        [
+          32768,
+          32768,
+          16,
+          0
+        ],
+        [
+          32768,
+          32768,
+          32,
+          0
+        ],
+        [
+          32768,
+          32768,
+          64,
+          0
+        ],
+        [
+          4096,
+          1024,
+          3,
+          0
+        ],
+        [
+          4096,
+          2048,
+          3,
+          1
+        ],
+        [
+          16384,
+          8192,
+          3,
+          0
+        ],
+        [
+          32768,
+          16384,
+          3,
+          0
+        ]
+      ],
+      "graclus_cluster": [
+        [
+          10000,
+          50000,
+          true
+        ],
+        [
+          10000,
+          100000,
+          true
+        ],
+        [
+          5000,
+          10000,
+          true
+        ],
+        [
+          128,
+          16256,
+          true
+        ],
+        [
+          256,
+          65280,
+          true
+        ],
+        [
+          512,
+          261120,
+          true
+        ],
+        [
+          1024,
+          1046528,
+          true
+        ],
+        [
+          2048,
+          4192256,
+          true
+        ],
+        [
+          4096,
+          16773120,
+          true
+        ],
+        [
+          500000,
+          2000000,
+          true
+        ],
+        [
+          1000000,
+          4000000,
+          true
+        ]
+      ],
+      "radius": [
+        [
+          32768,
+          3,
+          1.0,
+          32,
+          false
+        ],
+        [
+          32768,
+          3,
+          2.0,
+          32,
+          false
+        ],
+        [
+          65536,
+          3,
+          1.0,
+          32,
+          false
+        ],
+        [
+          65536,
+          3,
+          3.0,
+          32,
+          false
+        ],
+        [
+          65536,
+          3,
+          1.0,
+          100,
+          false
+        ],
+        [
+          65536,
+          3,
+          1.0,
+          32,
+          true
+        ],
+        [
+          262144,
+          3,
+          1.0,
+          32,
+          false
+        ],
+        [
+          262144,
+          3,
+          2.0,
+          32,
+          false
+        ],
+        [
+          262144,
+          3,
+          1.0,
+          32,
+          true
+        ]
+      ],
+      "random_walk": [
+        [
+          524288,
+          524288,
+          32768,
+          64
+        ],
+        [
+          524288,
+          524288,
+          32768,
+          128
+        ],
+        [
+          524288,
+          524288,
+          32768,
+          256
+        ],
+        [
+          1048576,
+          1048576,
+          65536,
+          128
+        ],
+        [
+          1048576,
+          1048576,
+          65536,
+          256
+        ],
+        [
+          1048576,
+          1048576,
+          65536,
+          512
+        ],
+        [
+          2097152,
+          2097152,
+          131072,
+          128
+        ],
+        [
+          2097152,
+          2097152,
+          131072,
+          256
+        ],
+        [
+          4194304,
+          4194304,
+          131072,
+          128
+        ],
+        [
+          4194304,
+          4194304,
+          131072,
+          256
+        ],
+        [
+          4194304,
+          4194304,
+          262144,
+          512
+        ]
+      ]
+    }
+  },
+  "results": [
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261103,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 146,
+        "edges": 146,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 2.2468936103396118
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261103,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 18,
+        "edges": 18,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.016881082206964493
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261103,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 146,
+        "edges": 146,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00854164594784379
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261103,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 606,
+        "edges": 606,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007721194997429848
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261103,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1646,
+        "edges": 1646,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.008010864723473787
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261103,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 3613,
+        "edges": 3613,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.020673688035458326
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261103,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 3594,
+        "edges": 3594,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.013578874990344048
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261103,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 11025,
+        "edges": 11025,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.01940525695681572
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261103,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4096,
+        "edges": 4096,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0091620571911335
+    },
+    {
+      "operator": "radius",
+      "case": 1,
+      "document_row": [
+        "[128,3]",
+        "[128,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261103,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4096,
+        "edges": 4096,
+        "queries": 128,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00868721678853035
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261104,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 362,
+        "edges": 362,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.008608716074377298
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261104,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 106,
+        "edges": 106,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0076622553169727325
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261104,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 362,
+        "edges": 362,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.009813038166612387
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261104,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2388,
+        "edges": 2388,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.008575136307626963
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261104,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 6196,
+        "edges": 6196,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.010308919008821249
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261104,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1060,
+        "edges": 1060,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00859091617166996
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261104,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 804,
+        "edges": 804,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00837787613272667
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261104,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1060,
+        "edges": 1060,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.010068568866699934
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261104,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 7452,
+        "edges": 7452,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.011555811855942011
+    },
+    {
+      "operator": "radius",
+      "case": 2,
+      "document_row": [
+        "[256,3]",
+        "[256,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261104,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8113,
+        "edges": 8113,
+        "queries": 256,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.012676273938268423
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261105,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1024,
+        "edges": 1024,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.09031102992594242
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261105,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.07701745489612222
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261105,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1024,
+        "edges": 1024,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.15345065807923675
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261105,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1024,
+        "edges": 1024,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0795449991710484
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261105,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1024,
+        "edges": 1024,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.07752062613144517
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261105,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4582,
+        "edges": 4582,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13506800401955843
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261105,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 3648,
+        "edges": 3648,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13760435907170177
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261105,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 9802,
+        "edges": 9802,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.2601633290760219
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261105,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 27967,
+        "edges": 27967,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.20118502760306
+    },
+    {
+      "operator": "radius",
+      "case": 3,
+      "document_row": [
+        "[1024,64]",
+        "[1024,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261105,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 32768,
+        "edges": 32768,
+        "queries": 1024,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.16412481805309653
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261106,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.14234344707801938
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261106,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.14325732924044132
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261106,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.21940011205151677
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261106,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13391905184835196
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261106,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13842621026560664
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261106,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13535358430817723
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261106,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13436821335926652
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261106,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.2110188459046185
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261106,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13702617725357413
+    },
+    {
+      "operator": "radius",
+      "case": 4,
+      "document_row": [
+        "[2048,32]",
+        "[2048,32]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261106,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2048,
+        "edges": 2048,
+        "queries": 2048,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.13462325325235724
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261107,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.051205535884946585
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261107,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.04945376329123974
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261107,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.11235317122191191
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261107,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.05598191497847438
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261107,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.04944063303992152
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261107,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.05295712873339653
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261107,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.047226539347320795
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261107,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.11316586285829544
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261107,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.051746377255767584
+    },
+    {
+      "operator": "radius",
+      "case": 5,
+      "document_row": [
+        "[512,128]",
+        "[512,128]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261107,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 512,
+        "edges": 512,
+        "queries": 512,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.05165630718693137
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261108,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007295394316315651
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261108,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0039054476656019688
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261108,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005205960012972355
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261108,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00505449902266264
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261108,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005090498831123114
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261108,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0048878490924835205
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261108,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.003515547141432762
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261108,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.004851519130170345
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261108,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00481509929522872
+    },
+    {
+      "operator": "radius",
+      "case": 6,
+      "document_row": [
+        "[1,3]",
+        "[1,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261108,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1,
+        "edges": 1,
+        "queries": 1,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.004768589045852423
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261109,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007227652706205845
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261109,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.004729678854346275
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261109,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005872941110283136
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261109,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005836801137775183
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261109,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005812601186335087
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261109,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005749951116740704
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261109,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.004406407941132784
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261109,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005714300088584423
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261109,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005838201381266117
+    },
+    {
+      "operator": "radius",
+      "case": 7,
+      "document_row": [
+        "[4,64]",
+        "[4,64]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261109,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 4,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005804901011288166
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261110,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8,
+        "edges": 8,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007012533023953438
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261110,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0044315592385828495
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261110,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8,
+        "edges": 8,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00573995104059577
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261110,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8,
+        "edges": 8,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005809240974485874
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261110,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 10,
+        "edges": 10,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0067085023038089275
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261110,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 10,
+        "edges": 10,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006163761019706726
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261110,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2,
+        "edges": 2,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006836731918156147
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261110,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 10,
+        "edges": 10,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005482439883053303
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261110,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 40,
+        "edges": 40,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006384021602571011
+    },
+    {
+      "operator": "radius",
+      "case": 8,
+      "document_row": [
+        "[8,3]",
+        "[8,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261110,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 60,
+        "edges": 60,
+        "queries": 8,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006527511868625879
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261111,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 169693,
+        "edges": 169693,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.22971047088503838
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261111,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 160790,
+        "edges": 160790,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.22679621586576104
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261111,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 185640,
+        "edges": 185640,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.3048693719319999
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261111,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 320000,
+        "edges": 320000,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.26922140503302217
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261111,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 320000,
+        "edges": 320000,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.2273934972472489
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261111,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 317902,
+        "edges": 317902,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.32673848420381546
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261111,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 317776,
+        "edges": 317776,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.3161397436633706
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261111,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 977339,
+        "edges": 977339,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.8021491058170795
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261111,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 320000,
+        "edges": 320000,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.26493606716394424
+    },
+    {
+      "operator": "radius",
+      "case": 9,
+      "document_row": [
+        "[10000,3]",
+        "[10000,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261111,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 320000,
+        "edges": 320000,
+        "queries": 10000,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.2540405569598079
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261112,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 12,
+        "edges": 12,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00721735367551446
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261112,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2,
+        "edges": 2,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006208352278918028
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261112,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 12,
+        "edges": 12,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005646830890327692
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261112,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16,
+        "edges": 16,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006525882054120302
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261112,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 18,
+        "edges": 18,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006134212017059326
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261112,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 12,
+        "edges": 12,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006182811688631773
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261112,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2,
+        "edges": 2,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006016200874000788
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261112,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 12,
+        "edges": 12,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005834421142935753
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261112,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 42,
+        "edges": 42,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0065392120741307735
+    },
+    {
+      "operator": "radius",
+      "case": 10,
+      "document_row": [
+        "[10,3]",
+        "[10,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261112,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 76,
+        "edges": 76,
+        "queries": 10,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006545091979205608
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261113,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 112,
+        "edges": 112,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007172773126512766
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261113,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 12,
+        "edges": 12,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0064261420629918575
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261113,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 112,
+        "edges": 112,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006989752873778343
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261113,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 442,
+        "edges": 442,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006957003381103277
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261113,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1168,
+        "edges": 1168,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007241083774715662
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261113,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 530,
+        "edges": 530,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00703792367130518
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261113,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 430,
+        "edges": 430,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006827781908214092
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261113,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 530,
+        "edges": 530,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0070804632268846035
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261113,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2409,
+        "edges": 2409,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.007644183933734894
+    },
+    {
+      "operator": "radius",
+      "case": 11,
+      "document_row": [
+        "[100,3]",
+        "[100,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261113,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 3078,
+        "edges": 3078,
+        "queries": 100,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00808349484577775
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261114,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00046942103654146194
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261114,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0004024510271847248
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261114,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0004027211107313633
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261114,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00038137100636959076
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261114,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00037968065589666367
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261114,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0003804410807788372
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261114,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0003948207013309002
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261114,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0003775111399590969
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261114,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0003798799589276314
+    },
+    {
+      "operator": "radius",
+      "case": 12,
+      "document_row": [
+        "[0,3]",
+        "[0,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261114,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 0,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0003763800486922264
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261115,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2,
+        "edges": 2,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.006094900891184807
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261115,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 0,
+        "edges": 0,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.004086158238351345
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261115,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2,
+        "edges": 2,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005268660373985767
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261115,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005485671106725931
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261115,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 5,
+        "edges": 5,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.0063072023913264275
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261115,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.00582575099542737
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261115,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2,
+        "edges": 2,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005565891042351723
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261115,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4,
+        "edges": 4,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005220289807766676
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261115,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8,
+        "edges": 8,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005445539951324463
+    },
+    {
+      "operator": "radius",
+      "case": 13,
+      "document_row": [
+        "[4,2]",
+        "[2,2]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261115,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8,
+        "edges": 8,
+        "queries": 2,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.005437070038169622
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261116,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33078,
+        "edges": 33078,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.05625216569751501
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261116,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 28982,
+        "edges": 28982,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.05567406490445137
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261116,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33078,
+        "edges": 33078,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.08967779809609056
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261116,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 131059,
+        "edges": 131059,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.09221931314095855
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261116,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 131072,
+        "edges": 131072,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.09201724268496037
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261116,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 130135,
+        "edges": 130135,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.151879264973104
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261116,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 130094,
+        "edges": 130094,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.15303844772279263
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261116,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 398996,
+        "edges": 398996,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.4127758154645562
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261116,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 131072,
+        "edges": 131072,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.11378265311941504
+    },
+    {
+      "operator": "radius",
+      "case": 14,
+      "document_row": [
+        "[4K,3]",
+        "[4K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261116,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 131072,
+        "edges": 131072,
+        "queries": 4096,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.10863047419115901
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261117,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 118153,
+        "edges": 118153,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.16394687816500664
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261117,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 110406,
+        "edges": 110406,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.16596138197928667
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261117,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 120818,
+        "edges": 120818,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.22119893599301577
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261117,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 262144,
+        "edges": 262144,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.18260286282747984
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261117,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 262144,
+        "edges": 262144,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.18505078786984086
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261117,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 208955,
+        "edges": 208955,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.19357245415449142
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261117,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 206160,
+        "edges": 206160,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.19888488436117768
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261117,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 357032,
+        "edges": 357032,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.5429950002580881
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261117,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 260058,
+        "edges": 260058,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.19095455901697278
+    },
+    {
+      "operator": "radius",
+      "case": 15,
+      "document_row": [
+        "[8K,3]",
+        "[8K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261117,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 262039,
+        "edges": 262039,
+        "queries": 8192,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.19089823914691806
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261118,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 393103,
+        "edges": 393103,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.47269440721720457
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261118,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 382104,
+        "edges": 382104,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.4687818200327456
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261118,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 476125,
+        "edges": 476125,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.7103598341345787
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261118,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 524288,
+        "edges": 524288,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.39550663297995925
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261118,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 524288,
+        "edges": 524288,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.38737423811107874
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261118,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 511884,
+        "edges": 511884,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.4651560839265585
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261118,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 511152,
+        "edges": 511152,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.44951152382418513
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261118,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1502993,
+        "edges": 1502993,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.1141430819407105
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261118,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 524267,
+        "edges": 524267,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.44216090999543667
+    },
+    {
+      "operator": "radius",
+      "case": 16,
+      "document_row": [
+        "[16K,3]",
+        "[16K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261118,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 524288,
+        "edges": 524288,
+        "queries": 16384,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.4800211410038173
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261119,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1023870,
+        "edges": 1023870,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.0031049638055265
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261119,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1016906,
+        "edges": 1016906,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.0585127379745245
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261119,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1739408,
+        "edges": 1739408,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 2.584582693874836
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261119,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1048576,
+        "edges": 1048576,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.8093692399561405
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261119,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1048576,
+        "edges": 1048576,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 0.8398127271793783
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261119,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1048576,
+        "edges": 1048576,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 5.252494405023754
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261119,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1048576,
+        "edges": 1048576,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 5.230280152987689
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261119,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 3276800,
+        "edges": 3276800,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 5.952455499209464
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261119,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1048576,
+        "edges": 1048576,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 4.695808919146657
+    },
+    {
+      "operator": "radius",
+      "case": 17,
+      "document_row": [
+        "[32K,3]",
+        "[32K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261119,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 1048576,
+        "edges": 1048576,
+        "queries": 32768,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 4.756835302803665
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261120,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2097152,
+        "edges": 2097152,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.8923857230693102
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261120,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2097152,
+        "edges": 2097152,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.9181645419448614
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261120,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 5429165,
+        "edges": 5429165,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 6.520796286407858
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261120,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2097152,
+        "edges": 2097152,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.689094663131982
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261120,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2097152,
+        "edges": 2097152,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 1.6840906129218638
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261120,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2096162,
+        "edges": 2096162,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 8.166876256931573
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261120,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2096092,
+        "edges": 2096092,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 8.051346010062844
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261120,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 6538556,
+        "edges": 6538556,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 13.170371714048088
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261120,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2097152,
+        "edges": 2097152,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 7.334195533301681
+    },
+    {
+      "operator": "radius",
+      "case": 18,
+      "document_row": [
+        "[64K,3]",
+        "[64K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261120,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 2097152,
+        "edges": 2097152,
+        "queries": 65536,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 7.396936731878668
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261121,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4194304,
+        "edges": 4194304,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 4.287334482185543
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261121,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4194304,
+        "edges": 4194304,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 4.375313926953822
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261121,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 13107200,
+        "edges": 13107200,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 10.727130305022001
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261121,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4194304,
+        "edges": 4194304,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 3.914899324066937
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261121,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4194304,
+        "edges": 4194304,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 3.8778739757835865
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261121,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4145415,
+        "edges": 4145415,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 13.555310325231403
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261121,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4142520,
+        "edges": 4142520,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 13.628640737850219
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261121,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 12670674,
+        "edges": 12670674,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 18.654843285214156
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261121,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4193966,
+        "edges": 4193966,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 13.557892208918929
+    },
+    {
+      "operator": "radius",
+      "case": 19,
+      "document_row": [
+        "[128K,3]",
+        "[128K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261121,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 4194304,
+        "edges": 4194304,
+        "queries": 131072,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 13.841446907725185
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261122,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 10.635392261203378
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261122,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 10.76460452703759
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261122,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 26214400,
+        "edges": 26214400,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 24.03986613918096
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261122,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 9.732482439372689
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261122,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 10.053605836816132
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261122,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 334.7883517309092
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261122,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 334.75619396101683
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261122,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 26214400,
+        "edges": 26214400,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 22.339949914254248
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261122,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 6.750502340961248
+    },
+    {
+      "operator": "radius",
+      "case": 20,
+      "document_row": [
+        "[256K,3]",
+        "[256K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261122,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 8388608,
+        "edges": 8388608,
+        "queries": 262144,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 6.715070939157158
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261123,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16777216,
+        "edges": 16777216,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 17.816822805907577
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261123,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16777216,
+        "edges": 16777216,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 17.256347563117743
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261123,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 52428800,
+        "edges": 52428800,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 43.70019177906215
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261123,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16777216,
+        "edges": 16777216,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 15.174783573951572
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261123,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16777216,
+        "edges": 16777216,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 15.03781791171059
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261123,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16673910,
+        "edges": 16673910,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 17.96345561183989
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261123,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16667820,
+        "edges": 16667820,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 18.264148205984384
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261123,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 51544661,
+        "edges": 51544661,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 39.05728750908747
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261123,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16776068,
+        "edges": 16776068,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 17.15781827736646
+    },
+    {
+      "operator": "radius",
+      "case": 21,
+      "document_row": [
+        "[512K,3]",
+        "[512K,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261123,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 16777216,
+        "edges": 16777216,
+        "queries": 524288,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 17.49377776030451
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261124,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33554432,
+        "edges": 33554432,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 44.01932870410383
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261124,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33554432,
+        "edges": 33554432,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 43.19654585979879
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261124,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 104857600,
+        "edges": 104857600,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 99.20773074496537
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261124,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33554432,
+        "edges": 33554432,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 40.211473047267646
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "uniform",
+      "seed": 20261124,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33554432,
+        "edges": 33554432,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 41.49788989080116
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261124,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33546206,
+        "edges": 33546206,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 38.84039651788771
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261124,
+      "r": 1.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": true,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33545678,
+        "edges": 33545678,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 39.12729585589841
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261124,
+      "r": 1.0,
+      "max_num_neighbors": 100,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 104761483,
+        "edges": 104761483,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 76.38000090327114
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261124,
+      "r": 2.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33554432,
+        "edges": 33554432,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 38.10594931291416
+    },
+    {
+      "operator": "radius",
+      "case": 22,
+      "document_row": [
+        "[1M,3]",
+        "[1M,3]",
+        "[2,E]"
+      ],
+      "dtype": "int32",
+      "distribution": "normal",
+      "seed": 20261124,
+      "r": 3.0,
+      "max_num_neighbors": 32,
+      "ignore_same_index": false,
+      "status": "passed",
+      "rule": "exact_int32_coordinates_and_capped_completeness",
+      "details": {
+        "passed": true,
+        "rule": "exact",
+        "elements": 33554432,
+        "edges": 33554432,
+        "queries": 1048576,
+        "boundary_band": 0.0,
+        "strict_indices": true,
+        "strict_capacity": true,
+        "strict_batch": true,
+        "strict_distance_passed": true,
+        "strict_invalid_edges": 0,
+        "strict_count_mismatches": 0
+      },
+      "seconds": 38.12135039595887
+    }
+  ]
+}

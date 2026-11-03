@@ -12,11 +12,15 @@
 
 #include "radius_npu.h"
 #include "include/pytorch_npu_helper.hpp"
+#include "include/precise_neighbors.hpp"
+#include "include/finite_coordinates.hpp"
 
 #include <ATen/ATen.h>
 
 #include <cstdint>
 #include <vector>
+#include <cmath>
+#include <limits>
 
 namespace {
 
@@ -60,6 +64,87 @@ torch::Tensor radius_native_single(torch::Tensor x, torch::Tensor y, double r,
 
 } // namespace
 
+namespace {
+torch::Tensor radius_precise_segment(torch::Tensor refs,torch::Tensor queries,
+                                    double radius,int64_t cap,bool ignore,
+                                    int64_t ref_offset,int64_t query_offset) {
+  at::NoGradGuard guard;
+  const int64_t n=refs.size(0),m=queries.size(0),d=refs.size(1);
+  auto options=refs.options().dtype(at::kLong);
+  if(!n || !m || !cap || radius<=0)return at::empty({2,0},options);
+  auto r=torch_cluster_npu::as_double(refs),q=torch_cluster_npu::as_double(queries);
+  auto origin=r.slice(0,0,1);
+  auto centered_r=r-origin,centered_q=q-origin;
+  const double extent=std::max(centered_r.abs().amax().item<double>(),
+                               centered_q.abs().amax().item<double>());
+  const double eps=std::numeric_limits<float>::epsilon();
+  const float expanded=std::nextafter(static_cast<float>(
+      (radius+2*std::sqrt(double(d))*eps*extent)*(1+16*(d+1)*eps)),
+      std::numeric_limits<float>::infinity());
+  auto rf=centered_r.to(at::kFloat),qf=centered_q.to(at::kFloat);
+  auto pending=at::arange(m,options);
+  int64_t capacity=std::min<int64_t>(n,std::max<int64_t>(64,cap+16));
+  std::vector<at::Tensor> parts;
+  while(pending.numel()) {
+    // Extreme inputs, or an unusually crowded uncertain boundary, use an
+    // exact device search rather than a narrowing/shortlist assumption.
+    if(!std::isfinite(expanded) || double(expanded)*expanded>=std::numeric_limits<float>::max() || capacity>4096) {
+      for(int64_t i=0;i<pending.numel();++i) {
+        auto query_id=pending.slice(0,i,i+1);
+        auto delta=r-q.index_select(0,query_id);
+        auto valid=delta.square().sum(1)<radius*radius;
+        auto ids=valid.nonzero().reshape({-1});
+        if(ignore)ids=ids.masked_select(ids+ref_offset!=query_id+query_offset);
+        ids=ids.slice(0,0,std::min<int64_t>(cap,ids.numel()));
+        if(ids.numel())parts.push_back(at::stack({query_id.expand_as(ids)+query_offset,ids+ref_offset}));
+      }
+      break;
+    }
+    // Adaptive capacity must not grow an M*capacity*D scratch tensor without
+    // a bound. Dense quantized Int32 coordinates can require multiple rounds
+    // before enough strictly-inside neighbors are found.
+    const int64_t max_edges=std::max<int64_t>(1,8388608/std::max<int64_t>(1,d));
+    const int64_t query_tile=std::max<int64_t>(1,max_edges/capacity);
+    std::vector<at::Tensor> deferred;
+    for(int64_t first=0;first<pending.numel();first+=query_tile) {
+      auto query_ids=pending.slice(0,first,std::min<int64_t>(pending.numel(),first+query_tile));
+      auto candidates=radius_npu(rf,qf.index_select(0,query_ids),std::nullopt,std::nullopt,
+                          expanded,capacity,1,false);
+      auto row=candidates.select(0,0),col=candidates.select(0,1);
+      auto actual_query=query_ids.index_select(0,row);
+      auto delta=r.index_select(0,col)-q.index_select(0,actual_query);
+      auto valid=delta.square().sum(1)<radius*radius;
+      if(ignore)valid=at::logical_and(valid,col+ref_offset!=actual_query+query_offset);
+      auto good_row=row.masked_select(valid),good_col=col.masked_select(valid);
+      auto counts=at::bincount(good_row,std::nullopt,query_ids.numel());
+      auto proposed=at::bincount(row,std::nullopt,query_ids.numel());
+      auto done=at::logical_or(counts>=cap,proposed<capacity);
+      if(capacity==n)done=at::ones_like(done);
+      auto accepted=done.index_select(0,good_row);
+      good_row=good_row.masked_select(accepted);good_col=good_col.masked_select(accepted);
+      if(good_row.numel()) {
+        auto order=at::argsort(good_row,true,0,false);
+        good_row=good_row.index_select(0,order);good_col=good_col.index_select(0,order);
+        auto keep_counts=at::bincount(good_row,std::nullopt,query_ids.numel());
+        auto starts=keep_counts.cumsum(0)-keep_counts;
+        auto rank=at::arange(good_row.numel(),options)-starts.index_select(0,good_row);
+        auto keep=rank<cap;
+        auto selected_rows=good_row.masked_select(keep);
+        parts.push_back(at::stack({query_ids.index_select(0,selected_rows)+query_offset,
+                                  good_col.masked_select(keep)+ref_offset}));
+      }
+      auto retry=query_ids.masked_select(at::logical_not(done));
+      if(retry.numel())deferred.push_back(retry);
+    }
+    if(deferred.empty())break;
+    pending=deferred.size()==1?deferred[0]:at::cat(deferred);
+    capacity=std::min<int64_t>(n,capacity*2);
+  }
+  if(parts.empty())return at::empty({2,0},options);
+  return parts.size()==1?parts[0]:at::cat(parts,1);
+}
+} // namespace
+
 torch::Tensor radius_npu(torch::Tensor x,
                          torch::Tensor y,
                          std::optional<torch::Tensor> ptr_x,
@@ -79,6 +164,24 @@ torch::Tensor radius_npu(torch::Tensor x,
   TORCH_CHECK(x.size(1) == y.size(1),
               "radius_npu: 'x' and 'y' must have the same feature dimension");
   (void)num_workers;
+  torch_cluster_npu::check_finite_coordinates(x,y);
+
+  TORCH_CHECK(std::isfinite(r) && r>=0 && max_num_neighbors>=0,
+              "radius_npu: radius must be finite/nonnegative and capacity nonnegative");
+  if(r==0 || max_num_neighbors==0 || !x.size(0) || !y.size(0))
+    return at::empty({2,0},x.options().dtype(at::kLong));
+  if(x.scalar_type()==at::kDouble || x.scalar_type()==at::kHalf ||
+     x.scalar_type()==at::kBFloat16 || x.scalar_type()==at::kInt) {
+    auto pxh=ptr_x ? ptr_x->cpu().to(at::kLong).contiguous() : at::tensor({0L,x.size(0)},at::kLong);
+    auto pyh=ptr_y ? ptr_y->cpu().to(at::kLong).contiguous() : at::tensor({0L,y.size(0)},at::kLong);
+    TORCH_CHECK(pxh.numel()==pyh.numel() && pxh.numel()>=2,"radius_npu: invalid batch pointers");
+    const auto* ax=pxh.data_ptr<int64_t>();const auto* ay=pyh.data_ptr<int64_t>();
+    std::vector<at::Tensor> parts;
+    for(int64_t b=0;b+1<pxh.numel();++b)parts.push_back(radius_precise_segment(
+        x.slice(0,ax[b],ax[b+1]),y.slice(0,ay[b],ay[b+1]),r,max_num_neighbors,
+        ignore_same_index,ax[b],ay[b]));
+    return parts.size()==1?parts[0]:at::cat(parts,1);
+  }
 
   auto x_c = x.contiguous();
   auto y_c = y.contiguous();

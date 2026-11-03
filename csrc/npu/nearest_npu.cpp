@@ -23,6 +23,8 @@
 
 #include "nearest_npu.h"
 #include "include/pytorch_npu_helper.hpp"
+#include "include/precise_neighbors.hpp"
+#include "include/finite_coordinates.hpp"
 
 #include <ATen/ATen.h>
 
@@ -85,9 +87,17 @@ torch::Tensor nearest_npu(torch::Tensor x,
               "nearest_npu: input 'x' must be on NPU device");
   TORCH_CHECK(y.device().type() == c10::DeviceType::PrivateUse1,
               "nearest_npu: input 'y' must be on NPU device");
+  TORCH_CHECK(ptr_x.device()==x.device() && ptr_y.device()==x.device() &&
+                  ptr_x.scalar_type()==at::kLong && ptr_y.scalar_type()==at::kLong &&
+                  ptr_x.dim()==1 && ptr_y.dim()==1 && ptr_x.numel()>=2 &&
+                  ptr_x.numel()==ptr_y.numel(),
+              "nearest_npu: invalid ptr_x/ptr_y batch pointers");
 
   auto xc = x.contiguous();
   auto yc = y.contiguous();
+  TORCH_CHECK(xc.scalar_type()==yc.scalar_type() && xc.is_floating_point(),
+              "nearest_npu: coordinates must have the same floating dtype");
+  torch_cluster_npu::check_finite_coordinates(xc,yc);
   if (xc.dim() == 1) {
     xc = xc.view({-1, 1});
   }
@@ -97,6 +107,19 @@ torch::Tensor nearest_npu(torch::Tensor x,
 
   const int64_t n_x = xc.size(0);
   auto out = at::empty({n_x}, xc.options().dtype(at::kLong));
+
+  if (xc.scalar_type()!=at::kFloat && n_x && yc.size(0)) {
+    auto px=ptr_x.cpu().to(at::kLong).contiguous();
+    auto py=ptr_y.cpu().to(at::kLong).contiguous();
+    const auto* ax=px.data_ptr<int64_t>();const auto* ay=py.data_ptr<int64_t>();
+    for(int64_t b=0;b+1<px.numel();++b) {
+      if(ax[b]==ax[b+1])continue;
+      TORCH_CHECK(ay[b]<ay[b+1],"nearest_npu: missing reference batch");
+      out.slice(0,ax[b],ax[b+1]).copy_(torch_cluster_npu::precise_neighbors(
+          yc.slice(0,ay[b],ay[b+1]),xc.slice(0,ax[b],ax[b+1]),1).reshape({-1})+ay[b]);
+    }
+    return out;
+  }
 
   const bool fast = xc.scalar_type() == at::kFloat &&
                     yc.scalar_type() == at::kFloat &&

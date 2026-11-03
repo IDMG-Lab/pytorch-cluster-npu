@@ -1,0 +1,2046 @@
+{
+  "device": "Ascend910B1",
+  "backend": "torch_cluster.subgraph_910b",
+  "accuracy": [
+    {
+      "case": 0,
+      "shape": [
+        6,
+        12,
+        4
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 0,
+      "shape": [
+        6,
+        12,
+        4
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 0,
+      "shape": [
+        6,
+        12,
+        4
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 0,
+      "shape": [
+        6,
+        12,
+        4
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 1,
+      "shape": [
+        5,
+        8,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 1,
+      "shape": [
+        5,
+        8,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 1,
+      "shape": [
+        5,
+        8,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 1,
+      "shape": [
+        5,
+        8,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 2,
+      "shape": [
+        8,
+        16,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 2,
+      "shape": [
+        8,
+        16,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 2,
+      "shape": [
+        8,
+        16,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 2,
+      "shape": [
+        8,
+        16,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 3,
+      "shape": [
+        4,
+        6,
+        1
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 3,
+      "shape": [
+        4,
+        6,
+        1
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 3,
+      "shape": [
+        4,
+        6,
+        1
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 3,
+      "shape": [
+        4,
+        6,
+        1
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 4,
+      "shape": [
+        128,
+        1024,
+        128
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 4,
+      "shape": [
+        128,
+        1024,
+        128
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 4,
+      "shape": [
+        128,
+        1024,
+        128
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 4,
+      "shape": [
+        128,
+        1024,
+        128
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 5,
+      "shape": [
+        128,
+        0,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 5,
+      "shape": [
+        128,
+        0,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 5,
+      "shape": [
+        128,
+        0,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 5,
+      "shape": [
+        128,
+        0,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 6,
+      "shape": [
+        8,
+        8,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 6,
+      "shape": [
+        8,
+        8,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 6,
+      "shape": [
+        8,
+        8,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 6,
+      "shape": [
+        8,
+        8,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 7,
+      "shape": [
+        6,
+        14,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 7,
+      "shape": [
+        6,
+        14,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 7,
+      "shape": [
+        6,
+        14,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 7,
+      "shape": [
+        6,
+        14,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 8,
+      "shape": [
+        4,
+        9,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 8,
+      "shape": [
+        4,
+        9,
+        3
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 8,
+      "shape": [
+        4,
+        9,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 8,
+      "shape": [
+        4,
+        9,
+        3
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 9,
+      "shape": [
+        6,
+        10,
+        4
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 9,
+      "shape": [
+        6,
+        10,
+        4
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 9,
+      "shape": [
+        6,
+        10,
+        4
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 9,
+      "shape": [
+        6,
+        10,
+        4
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 10,
+      "shape": [
+        32,
+        992,
+        16
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 10,
+      "shape": [
+        32,
+        992,
+        16
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 10,
+      "shape": [
+        32,
+        992,
+        16
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 10,
+      "shape": [
+        32,
+        992,
+        16
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 11,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 11,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 11,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 11,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 12,
+      "shape": [
+        10000,
+        50000,
+        1000
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 12,
+      "shape": [
+        10000,
+        50000,
+        1000
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 12,
+      "shape": [
+        10000,
+        50000,
+        1000
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 12,
+      "shape": [
+        10000,
+        50000,
+        1000
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 13,
+      "shape": [
+        1000000,
+        4000000,
+        10000
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 13,
+      "shape": [
+        1000000,
+        4000000,
+        10000
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 13,
+      "shape": [
+        1000000,
+        4000000,
+        10000
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 13,
+      "shape": [
+        1000000,
+        4000000,
+        10000
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 14,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 14,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 14,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 14,
+      "shape": [
+        100,
+        500,
+        20
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 15,
+      "shape": [
+        4096,
+        131072,
+        410
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 15,
+      "shape": [
+        4096,
+        131072,
+        410
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 15,
+      "shape": [
+        4096,
+        131072,
+        410
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 15,
+      "shape": [
+        4096,
+        131072,
+        410
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 16,
+      "shape": [
+        16384,
+        524288,
+        1600
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 16,
+      "shape": [
+        16384,
+        524288,
+        1600
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 16,
+      "shape": [
+        16384,
+        524288,
+        1600
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 16,
+      "shape": [
+        16384,
+        524288,
+        1600
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 17,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 17,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 17,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 17,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 18,
+      "shape": [
+        262144,
+        8388608,
+        25600
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 18,
+      "shape": [
+        262144,
+        8388608,
+        25600
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 18,
+      "shape": [
+        262144,
+        8388608,
+        25600
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 18,
+      "shape": [
+        262144,
+        8388608,
+        25600
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 19,
+      "shape": [
+        1000000,
+        33554432,
+        100000
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 19,
+      "shape": [
+        1000000,
+        33554432,
+        100000
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 19,
+      "shape": [
+        1000000,
+        33554432,
+        100000
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 19,
+      "shape": [
+        1000000,
+        33554432,
+        100000
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 20,
+      "shape": [
+        65536,
+        262144,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 20,
+      "shape": [
+        65536,
+        262144,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 20,
+      "shape": [
+        65536,
+        262144,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 20,
+      "shape": [
+        65536,
+        262144,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 21,
+      "shape": [
+        65536,
+        524288,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 21,
+      "shape": [
+        65536,
+        524288,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 21,
+      "shape": [
+        65536,
+        524288,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 21,
+      "shape": [
+        65536,
+        524288,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 22,
+      "shape": [
+        65536,
+        4194304,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 22,
+      "shape": [
+        65536,
+        4194304,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 22,
+      "shape": [
+        65536,
+        4194304,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 22,
+      "shape": [
+        65536,
+        4194304,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 23,
+      "shape": [
+        65536,
+        16777216,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 23,
+      "shape": [
+        65536,
+        16777216,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 23,
+      "shape": [
+        65536,
+        16777216,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 23,
+      "shape": [
+        65536,
+        16777216,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 24,
+      "shape": [
+        65536,
+        2097152,
+        64
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 24,
+      "shape": [
+        65536,
+        2097152,
+        64
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 24,
+      "shape": [
+        65536,
+        2097152,
+        64
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 24,
+      "shape": [
+        65536,
+        2097152,
+        64
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 25,
+      "shape": [
+        65536,
+        2097152,
+        640
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 25,
+      "shape": [
+        65536,
+        2097152,
+        640
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 25,
+      "shape": [
+        65536,
+        2097152,
+        640
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 25,
+      "shape": [
+        65536,
+        2097152,
+        640
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 26,
+      "shape": [
+        65536,
+        2097152,
+        32768
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 26,
+      "shape": [
+        65536,
+        2097152,
+        32768
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 26,
+      "shape": [
+        65536,
+        2097152,
+        32768
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 26,
+      "shape": [
+        65536,
+        2097152,
+        32768
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 27,
+      "shape": [
+        65536,
+        2097152,
+        57600
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 27,
+      "shape": [
+        65536,
+        2097152,
+        57600
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 27,
+      "shape": [
+        65536,
+        2097152,
+        57600
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 27,
+      "shape": [
+        65536,
+        2097152,
+        57600
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 28,
+      "shape": [
+        65536,
+        2097152,
+        65536
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 28,
+      "shape": [
+        65536,
+        2097152,
+        65536
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 28,
+      "shape": [
+        65536,
+        2097152,
+        65536
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 28,
+      "shape": [
+        65536,
+        2097152,
+        65536
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 29,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 29,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 29,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 29,
+      "shape": [
+        65536,
+        2097152,
+        6400
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 30,
+      "shape": [
+        1000000,
+        8388608,
+        100000
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 30,
+      "shape": [
+        1000000,
+        8388608,
+        100000
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 30,
+      "shape": [
+        1000000,
+        8388608,
+        100000
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 30,
+      "shape": [
+        1000000,
+        8388608,
+        100000
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 31,
+      "shape": [
+        1000000,
+        1048576,
+        100000
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 31,
+      "shape": [
+        1000000,
+        1048576,
+        100000
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 31,
+      "shape": [
+        1000000,
+        1048576,
+        100000
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 31,
+      "shape": [
+        1000000,
+        1048576,
+        100000
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 32,
+      "shape": [
+        0,
+        0,
+        0
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 32,
+      "shape": [
+        0,
+        0,
+        0
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 33,
+      "shape": [
+        1,
+        1,
+        1
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 33,
+      "shape": [
+        1,
+        1,
+        1
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 34,
+      "shape": [
+        3,
+        0,
+        0
+      ],
+      "dtype": "torch.int32",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 34,
+      "shape": [
+        3,
+        0,
+        0
+      ],
+      "dtype": "torch.int32",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 34,
+      "shape": [
+        3,
+        0,
+        0
+      ],
+      "dtype": "torch.int64",
+      "skew": false,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    },
+    {
+      "case": 34,
+      "shape": [
+        3,
+        0,
+        0
+      ],
+      "dtype": "torch.int64",
+      "skew": true,
+      "edge_id_modes": [
+        true,
+        false
+      ],
+      "exact": true
+    }
+  ]
+}

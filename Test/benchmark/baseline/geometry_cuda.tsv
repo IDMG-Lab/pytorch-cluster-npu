@@ -1,0 +1,228 @@
+START fps	0	(1024, 32, 1, 0.5)	torch.float32
+READY fps	0	(1024, 32, 1, 0.5)	torch.float32
+fps	0	(1024, 32, 1, 0.5)	torch.float32	9.658426 ms
+START fps	1	(1024, 32, 1, 0.125)	torch.float32
+READY fps	1	(1024, 32, 1, 0.125)	torch.float32
+fps	1	(1024, 32, 1, 0.125)	torch.float32	2.427864 ms
+START fps	2	(1024, 32, 1, 0.25)	torch.float32
+READY fps	2	(1024, 32, 1, 0.25)	torch.float32
+fps	2	(1024, 32, 1, 0.25)	torch.float32	4.839080 ms
+START fps	3	(1024, 32, 2, 0.5)	torch.float32
+READY fps	3	(1024, 32, 2, 0.5)	torch.float32
+fps	3	(1024, 32, 2, 0.5)	torch.float32	2.539554 ms
+START fps	4	(4096, 32, 1, 0.5)	torch.float32
+READY fps	4	(4096, 32, 1, 0.5)	torch.float32
+fps	4	(4096, 32, 1, 0.5)	torch.float32	147.709911 ms
+START fps	5	(4096, 32, 1, 0.25)	torch.float32
+READY fps	5	(4096, 32, 1, 0.25)	torch.float32
+fps	5	(4096, 32, 1, 0.25)	torch.float32	73.838365 ms
+START fps	6	(4096, 32, 2, 0.5)	torch.float32
+READY fps	6	(4096, 32, 2, 0.5)	torch.float32
+fps	6	(4096, 32, 2, 0.5)	torch.float32	37.591756 ms
+START fps	7	(4096, 64, 1, 0.5)	torch.float32
+READY fps	7	(4096, 64, 1, 0.5)	torch.float32
+fps	7	(4096, 64, 1, 0.5)	torch.float32	290.786337 ms
+START fps	8	(8192, 16, 1, 0.5)	torch.float32
+READY fps	8	(8192, 16, 1, 0.5)	torch.float32
+fps	8	(8192, 16, 1, 0.5)	torch.float32	163.918773 ms
+START fps	9	(8192, 32, 1, 0.5)	torch.float32
+READY fps	9	(8192, 32, 1, 0.5)	torch.float32
+fps	9	(8192, 32, 1, 0.5)	torch.float32	585.719949 ms
+START fps	10	(8192, 64, 1, 0.5)	torch.float32
+READY fps	10	(8192, 64, 1, 0.5)	torch.float32
+fps	10	(8192, 64, 1, 0.5)	torch.float32	1157.625923 ms
+START grid_cluster	0	(1048576, 64, 0.5)	torch.float32
+READY grid_cluster	0	(1048576, 64, 0.5)	torch.float32
+grid_cluster	0	(1048576, 64, 0.5)	torch.float32	0.320076 ms
+START grid_cluster	1	(1048576, 64, 0.125)	torch.float32
+READY grid_cluster	1	(1048576, 64, 0.125)	torch.float32
+grid_cluster	1	(1048576, 64, 0.125)	torch.float32	0.320098 ms
+START grid_cluster	2	(4194304, 32, 0.5)	torch.float32
+READY grid_cluster	2	(4194304, 32, 0.5)	torch.float32
+grid_cluster	2	(4194304, 32, 0.5)	torch.float32	0.635760 ms
+START grid_cluster	3	(4194304, 32, 0.125)	torch.float32
+READY grid_cluster	3	(4194304, 32, 0.125)	torch.float32
+grid_cluster	3	(4194304, 32, 0.125)	torch.float32	0.635635 ms
+START grid_cluster	4	(4194304, 32, 0.25)	torch.float32
+READY grid_cluster	4	(4194304, 32, 0.25)	torch.float32
+grid_cluster	4	(4194304, 32, 0.25)	torch.float32	0.636003 ms
+START grid_cluster	5	(4194304, 64, 0.5)	torch.float32
+READY grid_cluster	5	(4194304, 64, 0.5)	torch.float32
+grid_cluster	5	(4194304, 64, 0.5)	torch.float32	1.252919 ms
+START grid_cluster	6	(8388608, 32, 0.5)	torch.float32
+READY grid_cluster	6	(8388608, 32, 0.5)	torch.float32
+grid_cluster	6	(8388608, 32, 0.5)	torch.float32	1.248538 ms
+START grid_cluster	7	(8388608, 32, 0.125)	torch.float32
+READY grid_cluster	7	(8388608, 32, 0.125)	torch.float32
+grid_cluster	7	(8388608, 32, 0.125)	torch.float32	1.248707 ms
+START grid_cluster	8	(8388608, 32, 0.25)	torch.float32
+READY grid_cluster	8	(8388608, 32, 0.25)	torch.float32
+grid_cluster	8	(8388608, 32, 0.25)	torch.float32	1.249109 ms
+START grid_cluster	9	(8388608, 64, 0.5)	torch.float32
+READY grid_cluster	9	(8388608, 64, 0.5)	torch.float32
+grid_cluster	9	(8388608, 64, 0.5)	torch.float32	2.461014 ms
+START grid_cluster	10	(33554432, 32, 0.5)	torch.float32
+READY grid_cluster	10	(33554432, 32, 0.5)	torch.float32
+grid_cluster	10	(33554432, 32, 0.5)	torch.float32	4.928206 ms
+START grid_cluster	11	(33554432, 32, 0.125)	torch.float32
+READY grid_cluster	11	(33554432, 32, 0.125)	torch.float32
+grid_cluster	11	(33554432, 32, 0.125)	torch.float32	4.928819 ms
+START grid_cluster	12	(33554432, 64, 0.5)	torch.float32
+READY grid_cluster	12	(33554432, 64, 0.5)	torch.float32
+grid_cluster	12	(33554432, 64, 0.5)	torch.float32	9.717623 ms
+START knn	0	(4096, 128, 2, 0, 0)	torch.float32
+READY knn	0	(4096, 128, 2, 0, 0)	torch.float32
+knn	0	(4096, 128, 2, 0, 0)	torch.float32	71.922233 ms
+START knn	1	(4096, 128, 8, 0, 0)	torch.float32
+READY knn	1	(4096, 128, 8, 0, 0)	torch.float32
+knn	1	(4096, 128, 8, 0, 0)	torch.float32	74.801130 ms
+START knn	2	(4096, 128, 64, 0, 0)	torch.float32
+READY knn	2	(4096, 128, 64, 0, 0)	torch.float32
+knn	2	(4096, 128, 64, 0, 0)	torch.float32	141.143973 ms
+START knn	3	(8192, 256, 8, 0, 0)	torch.float32
+READY knn	3	(8192, 256, 8, 0, 0)	torch.float32
+knn	3	(8192, 256, 8, 0, 0)	torch.float32	288.603073 ms
+START knn	4	(20000, 128, 8, 0, 0)	torch.float32
+READY knn	4	(20000, 128, 8, 0, 0)	torch.float32
+knn	4	(20000, 128, 8, 0, 0)	torch.float32	361.193484 ms
+START knn	5	(32000, 3, 8, 0, 0)	torch.float32
+READY knn	5	(32000, 3, 8, 0, 0)	torch.float32
+knn	5	(32000, 3, 8, 0, 0)	torch.float32	18.244494 ms
+START knn	6	(4096, 32, 64, 0, 0)	torch.float32
+READY knn	6	(4096, 32, 64, 0, 0)	torch.float32
+knn	6	(4096, 32, 64, 0, 0)	torch.float32	77.908238 ms
+START knn	7	(8192, 32, 64, 0, 0)	torch.float32
+READY knn	7	(8192, 32, 64, 0, 0)	torch.float32
+knn	7	(8192, 32, 64, 0, 0)	torch.float32	119.890602 ms
+START knn	8	(16384, 32, 8, 0, 0)	torch.float32
+READY knn	8	(16384, 32, 8, 0, 0)	torch.float32
+knn	8	(16384, 32, 8, 0, 0)	torch.float32	81.186700 ms
+START knn	9	(16384, 32, 8, 1, 0)	torch.float32
+READY knn	9	(16384, 32, 8, 1, 0)	torch.float32
+knn	9	(16384, 32, 8, 1, 0)	torch.float32	41.356056 ms
+START nearest	0	(20000, 10000, 128, 0)	torch.float32
+READY nearest	0	(20000, 10000, 128, 0)	torch.float32
+nearest	0	(20000, 10000, 128, 0)	torch.float32	105.780954 ms
+START nearest	1	(8192, 8192, 3, 0)	torch.float32
+READY nearest	1	(8192, 8192, 3, 0)	torch.float32
+nearest	1	(8192, 8192, 3, 0)	torch.float32	0.155981 ms
+START nearest	2	(8192, 4096, 3, 0)	torch.float32
+READY nearest	2	(8192, 4096, 3, 0)	torch.float32
+nearest	2	(8192, 4096, 3, 0)	torch.float32	0.107735 ms
+START nearest	3	(8192, 4096, 3, 1)	torch.float32
+READY nearest	3	(8192, 4096, 3, 1)	torch.float32
+nearest	3	(8192, 4096, 3, 1)	torch.float32	0.089609 ms
+START nearest	4	(32768, 32768, 16, 0)	torch.float32
+READY nearest	4	(32768, 32768, 16, 0)	torch.float32
+nearest	4	(32768, 32768, 16, 0)	torch.float32	35.712778 ms
+START nearest	5	(32768, 32768, 32, 0)	torch.float32
+READY nearest	5	(32768, 32768, 32, 0)	torch.float32
+nearest	5	(32768, 32768, 32, 0)	torch.float32	142.726033 ms
+START nearest	6	(32768, 32768, 64, 0)	torch.float32
+READY nearest	6	(32768, 32768, 64, 0)	torch.float32
+nearest	6	(32768, 32768, 64, 0)	torch.float32	286.927946 ms
+START nearest	7	(4096, 1024, 3, 0)	torch.float32
+READY nearest	7	(4096, 1024, 3, 0)	torch.float32
+nearest	7	(4096, 1024, 3, 0)	torch.float32	0.044901 ms
+START nearest	8	(4096, 2048, 3, 1)	torch.float32
+READY nearest	8	(4096, 2048, 3, 1)	torch.float32
+nearest	8	(4096, 2048, 3, 1)	torch.float32	0.042579 ms
+START nearest	9	(16384, 8192, 3, 0)	torch.float32
+READY nearest	9	(16384, 8192, 3, 0)	torch.float32
+nearest	9	(16384, 8192, 3, 0)	torch.float32	0.302985 ms
+START nearest	10	(32768, 16384, 3, 0)	torch.float32
+READY nearest	10	(32768, 16384, 3, 0)	torch.float32
+nearest	10	(32768, 16384, 3, 0)	torch.float32	1.019358 ms
+START graclus_cluster	0	(10000, 50000, True)	torch.float32
+READY graclus_cluster	0	(10000, 50000, True)	torch.float32
+graclus_cluster	0	(10000, 50000, True)	torch.float32	0.588899 ms
+START graclus_cluster	1	(10000, 100000, True)	torch.float32
+READY graclus_cluster	1	(10000, 100000, True)	torch.float32
+graclus_cluster	1	(10000, 100000, True)	torch.float32	0.473610 ms
+START graclus_cluster	2	(5000, 10000, True)	torch.float32
+READY graclus_cluster	2	(5000, 10000, True)	torch.float32
+graclus_cluster	2	(5000, 10000, True)	torch.float32	0.405201 ms
+START graclus_cluster	3	(128, 16256, True)	torch.float32
+READY graclus_cluster	3	(128, 16256, True)	torch.float32
+graclus_cluster	3	(128, 16256, True)	torch.float32	0.443688 ms
+START graclus_cluster	4	(256, 65280, True)	torch.float32
+READY graclus_cluster	4	(256, 65280, True)	torch.float32
+graclus_cluster	4	(256, 65280, True)	torch.float32	0.792122 ms
+START graclus_cluster	5	(512, 261120, True)	torch.float32
+READY graclus_cluster	5	(512, 261120, True)	torch.float32
+graclus_cluster	5	(512, 261120, True)	torch.float32	1.562555 ms
+START graclus_cluster	6	(1024, 1046528, True)	torch.float32
+READY graclus_cluster	6	(1024, 1046528, True)	torch.float32
+graclus_cluster	6	(1024, 1046528, True)	torch.float32	3.167527 ms
+START graclus_cluster	7	(2048, 4192256, True)	torch.float32
+READY graclus_cluster	7	(2048, 4192256, True)	torch.float32
+graclus_cluster	7	(2048, 4192256, True)	torch.float32	7.876352 ms
+START graclus_cluster	8	(4096, 16773120, True)	torch.float32
+READY graclus_cluster	8	(4096, 16773120, True)	torch.float32
+graclus_cluster	8	(4096, 16773120, True)	torch.float32	19.379664 ms
+START graclus_cluster	9	(500000, 2000000, True)	torch.float32
+READY graclus_cluster	9	(500000, 2000000, True)	torch.float32
+graclus_cluster	9	(500000, 2000000, True)	torch.float32	0.826431 ms
+START graclus_cluster	10	(1000000, 4000000, True)	torch.float32
+READY graclus_cluster	10	(1000000, 4000000, True)	torch.float32
+graclus_cluster	10	(1000000, 4000000, True)	torch.float32	1.069168 ms
+START radius	0	(32768, 3, 1.0, 32, False)	torch.float32
+READY radius	0	(32768, 3, 1.0, 32, False)	torch.float32
+radius	0	(32768, 3, 1.0, 32, False)	torch.float32	6.015177 ms
+START radius	1	(32768, 3, 2.0, 32, False)	torch.float32
+READY radius	1	(32768, 3, 2.0, 32, False)	torch.float32
+radius	1	(32768, 3, 2.0, 32, False)	torch.float32	5.819679 ms
+START radius	2	(65536, 3, 1.0, 32, False)	torch.float32
+READY radius	2	(65536, 3, 1.0, 32, False)	torch.float32
+radius	2	(65536, 3, 1.0, 32, False)	torch.float32	12.234997 ms
+START radius	3	(65536, 3, 3.0, 32, False)	torch.float32
+READY radius	3	(65536, 3, 3.0, 32, False)	torch.float32
+radius	3	(65536, 3, 3.0, 32, False)	torch.float32	0.673709 ms
+START radius	4	(65536, 3, 1.0, 100, False)	torch.float32
+READY radius	4	(65536, 3, 1.0, 100, False)	torch.float32
+radius	4	(65536, 3, 1.0, 100, False)	torch.float32	12.726443 ms
+START radius	5	(65536, 3, 1.0, 32, True)	torch.float32
+READY radius	5	(65536, 3, 1.0, 32, True)	torch.float32
+radius	5	(65536, 3, 1.0, 32, True)	torch.float32	11.966619 ms
+START radius	6	(262144, 3, 1.0, 32, False)	torch.float32
+READY radius	6	(262144, 3, 1.0, 32, False)	torch.float32
+radius	6	(262144, 3, 1.0, 32, False)	torch.float32	56.100126 ms
+START radius	7	(262144, 3, 2.0, 32, False)	torch.float32
+READY radius	7	(262144, 3, 2.0, 32, False)	torch.float32
+radius	7	(262144, 3, 2.0, 32, False)	torch.float32	38.158108 ms
+START radius	8	(262144, 3, 1.0, 32, True)	torch.float32
+READY radius	8	(262144, 3, 1.0, 32, True)	torch.float32
+radius	8	(262144, 3, 1.0, 32, True)	torch.float32	59.097987 ms
+START random_walk	0	(524288, 524288, 32768, 64)	torch.int32
+READY random_walk	0	(524288, 524288, 32768, 64)	torch.int32
+random_walk	0	(524288, 524288, 32768, 64)	torch.int32	0.096460 ms
+START random_walk	1	(524288, 524288, 32768, 128)	torch.int32
+READY random_walk	1	(524288, 524288, 32768, 128)	torch.int32
+random_walk	1	(524288, 524288, 32768, 128)	torch.int32	0.197278 ms
+START random_walk	2	(524288, 524288, 32768, 256)	torch.int32
+READY random_walk	2	(524288, 524288, 32768, 256)	torch.int32
+random_walk	2	(524288, 524288, 32768, 256)	torch.int32	0.387365 ms
+START random_walk	3	(1048576, 1048576, 65536, 128)	torch.int32
+READY random_walk	3	(1048576, 1048576, 65536, 128)	torch.int32
+random_walk	3	(1048576, 1048576, 65536, 128)	torch.int32	0.235821 ms
+START random_walk	4	(1048576, 1048576, 65536, 256)	torch.int32
+READY random_walk	4	(1048576, 1048576, 65536, 256)	torch.int32
+random_walk	4	(1048576, 1048576, 65536, 256)	torch.int32	0.475149 ms
+START random_walk	5	(1048576, 1048576, 65536, 512)	torch.int32
+READY random_walk	5	(1048576, 1048576, 65536, 512)	torch.int32
+random_walk	5	(1048576, 1048576, 65536, 512)	torch.int32	0.963071 ms
+START random_walk	6	(2097152, 2097152, 131072, 128)	torch.int32
+READY random_walk	6	(2097152, 2097152, 131072, 128)	torch.int32
+random_walk	6	(2097152, 2097152, 131072, 128)	torch.int32	0.384869 ms
+START random_walk	7	(2097152, 2097152, 131072, 256)	torch.int32
+READY random_walk	7	(2097152, 2097152, 131072, 256)	torch.int32
+random_walk	7	(2097152, 2097152, 131072, 256)	torch.int32	0.791896 ms
+START random_walk	8	(4194304, 4194304, 131072, 128)	torch.int32
+READY random_walk	8	(4194304, 4194304, 131072, 128)	torch.int32
+random_walk	8	(4194304, 4194304, 131072, 128)	torch.int32	0.392127 ms
+START random_walk	9	(4194304, 4194304, 131072, 256)	torch.int32
+READY random_walk	9	(4194304, 4194304, 131072, 256)	torch.int32
+random_walk	9	(4194304, 4194304, 131072, 256)	torch.int32	0.807194 ms
+START random_walk	10	(4194304, 4194304, 262144, 512)	torch.int32
+READY random_walk	10	(4194304, 4194304, 262144, 512)	torch.int32
+random_walk	10	(4194304, 4194304, 262144, 512)	torch.int32	3.434368 ms

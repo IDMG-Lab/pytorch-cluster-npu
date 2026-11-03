@@ -1,0 +1,3338 @@
+{
+  "device": "Ascend910B1",
+  "results": [
+    {
+      "operator": "graclus",
+      "case": 1,
+      "document_row": [
+        "[30]",
+        "[30]",
+        "[30]",
+        "[10]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261103,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 6,
+        "paired_nodes": 8,
+        "greedy_rounds": 2
+      },
+      "seconds": 2.1159733212552965
+    },
+    {
+      "operator": "graclus",
+      "case": 1,
+      "document_row": [
+        "[30]",
+        "[30]",
+        "[30]",
+        "[10]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261103,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 6,
+        "paired_nodes": 8,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0043795169331133366
+    },
+    {
+      "operator": "graclus",
+      "case": 1,
+      "document_row": [
+        "[30]",
+        "[30]",
+        "[30]",
+        "[10]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261103,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 6,
+        "paired_nodes": 8,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0030668750405311584
+    },
+    {
+      "operator": "graclus",
+      "case": 1,
+      "document_row": [
+        "[30]",
+        "[30]",
+        "[30]",
+        "[10]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261103,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 7,
+        "paired_nodes": 6,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.013126970268785954
+    },
+    {
+      "operator": "graclus",
+      "case": 1,
+      "document_row": [
+        "[30]",
+        "[30]",
+        "[30]",
+        "[10]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261103,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 6,
+        "paired_nodes": 8,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0033866451121866703
+    },
+    {
+      "operator": "graclus",
+      "case": 1,
+      "document_row": [
+        "[30]",
+        "[30]",
+        "[30]",
+        "[10]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261103,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 6,
+        "paired_nodes": 8,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0026635942049324512
+    },
+    {
+      "operator": "graclus",
+      "case": 2,
+      "document_row": [
+        "[500]",
+        "[500]",
+        "[500]",
+        "[100]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261104,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 59,
+        "paired_nodes": 82,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0031222752295434475
+    },
+    {
+      "operator": "graclus",
+      "case": 2,
+      "document_row": [
+        "[500]",
+        "[500]",
+        "[500]",
+        "[100]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261104,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 59,
+        "paired_nodes": 82,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0027853548526763916
+    },
+    {
+      "operator": "graclus",
+      "case": 2,
+      "document_row": [
+        "[500]",
+        "[500]",
+        "[500]",
+        "[100]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261104,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 57,
+        "paired_nodes": 86,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0028235348872840405
+    },
+    {
+      "operator": "graclus",
+      "case": 2,
+      "document_row": [
+        "[500]",
+        "[500]",
+        "[500]",
+        "[100]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261104,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 55,
+        "paired_nodes": 90,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.003218485042452812
+    },
+    {
+      "operator": "graclus",
+      "case": 2,
+      "document_row": [
+        "[500]",
+        "[500]",
+        "[500]",
+        "[100]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261104,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 55,
+        "paired_nodes": 90,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0032487339340150356
+    },
+    {
+      "operator": "graclus",
+      "case": 2,
+      "document_row": [
+        "[500]",
+        "[500]",
+        "[500]",
+        "[100]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261104,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 55,
+        "paired_nodes": 90,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.002933434210717678
+    },
+    {
+      "operator": "graclus",
+      "case": 3,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[1000]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261105,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 597,
+        "paired_nodes": 806,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.005435178056359291
+    },
+    {
+      "operator": "graclus",
+      "case": 3,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[1000]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261105,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 589,
+        "paired_nodes": 822,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.005115657113492489
+    },
+    {
+      "operator": "graclus",
+      "case": 3,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[1000]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261105,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 583,
+        "paired_nodes": 834,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.005119246896356344
+    },
+    {
+      "operator": "graclus",
+      "case": 3,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[1000]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261105,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 593,
+        "paired_nodes": 814,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.005373647902160883
+    },
+    {
+      "operator": "graclus",
+      "case": 3,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[1000]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261105,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 587,
+        "paired_nodes": 826,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.004795497749000788
+    },
+    {
+      "operator": "graclus",
+      "case": 3,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[1000]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261105,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 587,
+        "paired_nodes": 826,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.004762416705489159
+    },
+    {
+      "operator": "graclus",
+      "case": 4,
+      "document_row": [
+        "[50000]",
+        "[50000]",
+        "[50000]",
+        "[10000]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261106,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5821,
+        "paired_nodes": 8358,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.031349918339401484
+    },
+    {
+      "operator": "graclus",
+      "case": 4,
+      "document_row": [
+        "[50000]",
+        "[50000]",
+        "[50000]",
+        "[10000]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261106,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5820,
+        "paired_nodes": 8360,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.029630435165017843
+    },
+    {
+      "operator": "graclus",
+      "case": 4,
+      "document_row": [
+        "[50000]",
+        "[50000]",
+        "[50000]",
+        "[10000]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261106,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5830,
+        "paired_nodes": 8340,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.029654985293745995
+    },
+    {
+      "operator": "graclus",
+      "case": 4,
+      "document_row": [
+        "[50000]",
+        "[50000]",
+        "[50000]",
+        "[10000]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261106,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5851,
+        "paired_nodes": 8298,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.030941578093916178
+    },
+    {
+      "operator": "graclus",
+      "case": 4,
+      "document_row": [
+        "[50000]",
+        "[50000]",
+        "[50000]",
+        "[10000]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261106,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5830,
+        "paired_nodes": 8340,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.02897332375869155
+    },
+    {
+      "operator": "graclus",
+      "case": 4,
+      "document_row": [
+        "[50000]",
+        "[50000]",
+        "[50000]",
+        "[10000]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261106,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5830,
+        "paired_nodes": 8340,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.028999353758990765
+    },
+    {
+      "operator": "graclus",
+      "case": 5,
+      "document_row": [
+        "[10000]",
+        "[10000]",
+        "[10000]",
+        "[5000]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261107,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3330,
+        "paired_nodes": 3340,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.008577452972531319
+    },
+    {
+      "operator": "graclus",
+      "case": 5,
+      "document_row": [
+        "[10000]",
+        "[10000]",
+        "[10000]",
+        "[5000]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261107,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3348,
+        "paired_nodes": 3304,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.008178242016583681
+    },
+    {
+      "operator": "graclus",
+      "case": 5,
+      "document_row": [
+        "[10000]",
+        "[10000]",
+        "[10000]",
+        "[5000]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261107,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3324,
+        "paired_nodes": 3352,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.008270383346825838
+    },
+    {
+      "operator": "graclus",
+      "case": 5,
+      "document_row": [
+        "[10000]",
+        "[10000]",
+        "[10000]",
+        "[5000]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261107,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3318,
+        "paired_nodes": 3364,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.008941784035414457
+    },
+    {
+      "operator": "graclus",
+      "case": 5,
+      "document_row": [
+        "[10000]",
+        "[10000]",
+        "[10000]",
+        "[5000]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261107,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3338,
+        "paired_nodes": 3324,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.008110051974654198
+    },
+    {
+      "operator": "graclus",
+      "case": 5,
+      "document_row": [
+        "[10000]",
+        "[10000]",
+        "[10000]",
+        "[5000]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261107,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3338,
+        "paired_nodes": 3324,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.00814974308013916
+    },
+    {
+      "operator": "graclus",
+      "case": 6,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[200]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261108,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 104,
+        "paired_nodes": 192,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004631016869097948
+    },
+    {
+      "operator": "graclus",
+      "case": 6,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[200]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261108,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 104,
+        "paired_nodes": 192,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004630786832422018
+    },
+    {
+      "operator": "graclus",
+      "case": 6,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[200]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261108,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 103,
+        "paired_nodes": 194,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004603917244821787
+    },
+    {
+      "operator": "graclus",
+      "case": 6,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[200]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261108,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 103,
+        "paired_nodes": 194,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.005148038268089294
+    },
+    {
+      "operator": "graclus",
+      "case": 6,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[200]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261108,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 105,
+        "paired_nodes": 190,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004893567878752947
+    },
+    {
+      "operator": "graclus",
+      "case": 6,
+      "document_row": [
+        "[5000]",
+        "[5000]",
+        "[5000]",
+        "[200]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261108,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 105,
+        "paired_nodes": 190,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.00469832681119442
+    },
+    {
+      "operator": "graclus",
+      "case": 7,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[4]",
+        "[4]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261109,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0028523351065814495
+    },
+    {
+      "operator": "graclus",
+      "case": 7,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[4]",
+        "[4]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261109,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.002555054146796465
+    },
+    {
+      "operator": "graclus",
+      "case": 7,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[4]",
+        "[4]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261109,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0025107641704380512
+    },
+    {
+      "operator": "graclus",
+      "case": 7,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[4]",
+        "[4]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261109,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.002801074180752039
+    },
+    {
+      "operator": "graclus",
+      "case": 7,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[4]",
+        "[4]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261109,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0028140940703451633
+    },
+    {
+      "operator": "graclus",
+      "case": 7,
+      "document_row": [
+        "[4]",
+        "[4]",
+        "[4]",
+        "[4]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261109,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.002569312695413828
+    },
+    {
+      "operator": "graclus",
+      "case": 8,
+      "document_row": [
+        "[98]",
+        "[98]",
+        "[98]",
+        "[50]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261110,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 34,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0028556939214468002
+    },
+    {
+      "operator": "graclus",
+      "case": 8,
+      "document_row": [
+        "[98]",
+        "[98]",
+        "[98]",
+        "[50]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261110,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 34,
+        "paired_nodes": 32,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0026542237028479576
+    },
+    {
+      "operator": "graclus",
+      "case": 8,
+      "document_row": [
+        "[98]",
+        "[98]",
+        "[98]",
+        "[50]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261110,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 34,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0025940043851733208
+    },
+    {
+      "operator": "graclus",
+      "case": 8,
+      "document_row": [
+        "[98]",
+        "[98]",
+        "[98]",
+        "[50]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261110,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 35,
+        "paired_nodes": 30,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0030851741321384907
+    },
+    {
+      "operator": "graclus",
+      "case": 8,
+      "document_row": [
+        "[98]",
+        "[98]",
+        "[98]",
+        "[50]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261110,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 34,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0028990739956498146
+    },
+    {
+      "operator": "graclus",
+      "case": 8,
+      "document_row": [
+        "[98]",
+        "[98]",
+        "[98]",
+        "[50]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261110,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 34,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0026631439104676247
+    },
+    {
+      "operator": "graclus",
+      "case": 9,
+      "document_row": [
+        "[0]",
+        "[0]",
+        "None",
+        "[1]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261111,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1,
+        "paired_nodes": 0,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0050054881721735
+    },
+    {
+      "operator": "graclus",
+      "case": 10,
+      "document_row": [
+        "[1]",
+        "[1]",
+        "None",
+        "[2]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261112,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 0,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0034648459404706955
+    },
+    {
+      "operator": "graclus",
+      "case": 11,
+      "document_row": [
+        "[6]",
+        "[6]",
+        "None",
+        "[5]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261113,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.002168973907828331
+    },
+    {
+      "operator": "graclus",
+      "case": 12,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "None",
+        "[5]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261114,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 4,
+        "paired_nodes": 2,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0021466631442308426
+    },
+    {
+      "operator": "graclus",
+      "case": 13,
+      "document_row": [
+        "[500000]",
+        "[500000]",
+        "None",
+        "[100000]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261115,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 56913,
+        "paired_nodes": 86174,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.4236608548089862
+    },
+    {
+      "operator": "graclus",
+      "case": 14,
+      "document_row": [
+        "[200000]",
+        "[200000]",
+        "None",
+        "[50000]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261116,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 29291,
+        "paired_nodes": 41418,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.14451768016442657
+    },
+    {
+      "operator": "graclus",
+      "case": 15,
+      "document_row": [
+        "[0]",
+        "[0]",
+        "None",
+        "[100]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261117,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 100,
+        "paired_nodes": 0,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0013475818559527397
+    },
+    {
+      "operator": "graclus",
+      "case": 16,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "None",
+        "[4]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261118,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.002290173899382353
+    },
+    {
+      "operator": "graclus",
+      "case": 17,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[8]",
+        "[4]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261119,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.002789244055747986
+    },
+    {
+      "operator": "graclus",
+      "case": 17,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[8]",
+        "[4]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261119,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0025921440683305264
+    },
+    {
+      "operator": "graclus",
+      "case": 17,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[8]",
+        "[4]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261119,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0025374540127813816
+    },
+    {
+      "operator": "graclus",
+      "case": 17,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[8]",
+        "[4]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261119,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0029040141962468624
+    },
+    {
+      "operator": "graclus",
+      "case": 17,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[8]",
+        "[4]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261119,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0027792039327323437
+    },
+    {
+      "operator": "graclus",
+      "case": 17,
+      "document_row": [
+        "[8]",
+        "[8]",
+        "[8]",
+        "[4]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261119,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.002551593817770481
+    },
+    {
+      "operator": "graclus",
+      "case": 18,
+      "document_row": [
+        "[6]",
+        "[6]",
+        "None",
+        "[3]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261120,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 2,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0020652730017900467
+    },
+    {
+      "operator": "graclus",
+      "case": 19,
+      "document_row": [
+        "[3]",
+        "[3]",
+        "None",
+        "[3]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261121,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 0,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.00212247297167778
+    },
+    {
+      "operator": "graclus",
+      "case": 20,
+      "document_row": [
+        "[0]",
+        "[0]",
+        "None",
+        "[0]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261122,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 0,
+        "greedy_rounds": 0
+      },
+      "seconds": 0.00046302005648612976
+    },
+    {
+      "operator": "graclus",
+      "case": 21,
+      "document_row": [
+        "[0]",
+        "[0]",
+        "None",
+        "[0]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261123,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 0,
+        "greedy_rounds": 0
+      },
+      "seconds": 0.0004388699308037758
+    },
+    {
+      "operator": "graclus",
+      "case": 22,
+      "document_row": [
+        "[100]",
+        "[100]",
+        "None",
+        "[20]"
+      ],
+      "weight_dtype": "none",
+      "index_dtype": "int64",
+      "seed": 20261124,
+      "weighted": false,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 11,
+        "paired_nodes": 18,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.0022561727091670036
+    },
+    {
+      "operator": "graclus",
+      "case": 23,
+      "document_row": [
+        "[12]",
+        "[12]",
+        "[12]",
+        "[4]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261125,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.002903764136135578
+    },
+    {
+      "operator": "graclus",
+      "case": 23,
+      "document_row": [
+        "[12]",
+        "[12]",
+        "[12]",
+        "[4]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261125,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0025388840585947037
+    },
+    {
+      "operator": "graclus",
+      "case": 23,
+      "document_row": [
+        "[12]",
+        "[12]",
+        "[12]",
+        "[4]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261125,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0024648336693644524
+    },
+    {
+      "operator": "graclus",
+      "case": 23,
+      "document_row": [
+        "[12]",
+        "[12]",
+        "[12]",
+        "[4]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261125,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2,
+        "paired_nodes": 4,
+        "greedy_rounds": 1
+      },
+      "seconds": 0.002677374053746462
+    },
+    {
+      "operator": "graclus",
+      "case": 23,
+      "document_row": [
+        "[12]",
+        "[12]",
+        "[12]",
+        "[4]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261125,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.002750794403254986
+    },
+    {
+      "operator": "graclus",
+      "case": 23,
+      "document_row": [
+        "[12]",
+        "[12]",
+        "[12]",
+        "[4]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261125,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 3,
+        "paired_nodes": 2,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0025612139143049717
+    },
+    {
+      "operator": "graclus",
+      "case": 24,
+      "document_row": [
+        "[56]",
+        "[56]",
+        "[56]",
+        "[8]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261126,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 4,
+        "paired_nodes": 8,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.002787503879517317
+    },
+    {
+      "operator": "graclus",
+      "case": 24,
+      "document_row": [
+        "[56]",
+        "[56]",
+        "[56]",
+        "[8]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261126,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 4,
+        "paired_nodes": 8,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0032532247714698315
+    },
+    {
+      "operator": "graclus",
+      "case": 24,
+      "document_row": [
+        "[56]",
+        "[56]",
+        "[56]",
+        "[8]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261126,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5,
+        "paired_nodes": 6,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0028729448094964027
+    },
+    {
+      "operator": "graclus",
+      "case": 24,
+      "document_row": [
+        "[56]",
+        "[56]",
+        "[56]",
+        "[8]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261126,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5,
+        "paired_nodes": 6,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0029467949643731117
+    },
+    {
+      "operator": "graclus",
+      "case": 24,
+      "document_row": [
+        "[56]",
+        "[56]",
+        "[56]",
+        "[8]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261126,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5,
+        "paired_nodes": 6,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0034062862396240234
+    },
+    {
+      "operator": "graclus",
+      "case": 24,
+      "document_row": [
+        "[56]",
+        "[56]",
+        "[56]",
+        "[8]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261126,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 5,
+        "paired_nodes": 6,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0029615149833261967
+    },
+    {
+      "operator": "graclus",
+      "case": 25,
+      "document_row": [
+        "[240]",
+        "[240]",
+        "[240]",
+        "[16]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261127,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 9,
+        "paired_nodes": 14,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.003056645393371582
+    },
+    {
+      "operator": "graclus",
+      "case": 25,
+      "document_row": [
+        "[240]",
+        "[240]",
+        "[240]",
+        "[16]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261127,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 8,
+        "paired_nodes": 16,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0027121840976178646
+    },
+    {
+      "operator": "graclus",
+      "case": 25,
+      "document_row": [
+        "[240]",
+        "[240]",
+        "[240]",
+        "[16]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261127,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 8,
+        "paired_nodes": 16,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0025917338207364082
+    },
+    {
+      "operator": "graclus",
+      "case": 25,
+      "document_row": [
+        "[240]",
+        "[240]",
+        "[240]",
+        "[16]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261127,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 9,
+        "paired_nodes": 14,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.00334520498290658
+    },
+    {
+      "operator": "graclus",
+      "case": 25,
+      "document_row": [
+        "[240]",
+        "[240]",
+        "[240]",
+        "[16]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261127,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 8,
+        "paired_nodes": 16,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0032254946418106556
+    },
+    {
+      "operator": "graclus",
+      "case": 25,
+      "document_row": [
+        "[240]",
+        "[240]",
+        "[240]",
+        "[16]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261127,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 8,
+        "paired_nodes": 16,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.0029678340069949627
+    },
+    {
+      "operator": "graclus",
+      "case": 26,
+      "document_row": [
+        "[992]",
+        "[992]",
+        "[992]",
+        "[32]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261128,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 17,
+        "paired_nodes": 30,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.003275924827903509
+    },
+    {
+      "operator": "graclus",
+      "case": 26,
+      "document_row": [
+        "[992]",
+        "[992]",
+        "[992]",
+        "[32]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261128,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 17,
+        "paired_nodes": 30,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.0030552144162356853
+    },
+    {
+      "operator": "graclus",
+      "case": 26,
+      "document_row": [
+        "[992]",
+        "[992]",
+        "[992]",
+        "[32]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261128,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 17,
+        "paired_nodes": 30,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.0030148541554808617
+    },
+    {
+      "operator": "graclus",
+      "case": 26,
+      "document_row": [
+        "[992]",
+        "[992]",
+        "[992]",
+        "[32]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261128,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 17,
+        "paired_nodes": 30,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.0035065850242972374
+    },
+    {
+      "operator": "graclus",
+      "case": 26,
+      "document_row": [
+        "[992]",
+        "[992]",
+        "[992]",
+        "[32]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261128,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 17,
+        "paired_nodes": 30,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0034584449604153633
+    },
+    {
+      "operator": "graclus",
+      "case": 26,
+      "document_row": [
+        "[992]",
+        "[992]",
+        "[992]",
+        "[32]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261128,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 17,
+        "paired_nodes": 30,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.0031771748326718807
+    },
+    {
+      "operator": "graclus",
+      "case": 27,
+      "document_row": [
+        "[4032]",
+        "[4032]",
+        "[4032]",
+        "[64]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261129,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 32,
+        "paired_nodes": 64,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004367116838693619
+    },
+    {
+      "operator": "graclus",
+      "case": 27,
+      "document_row": [
+        "[4032]",
+        "[4032]",
+        "[4032]",
+        "[64]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261129,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 62,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004070785827934742
+    },
+    {
+      "operator": "graclus",
+      "case": 27,
+      "document_row": [
+        "[4032]",
+        "[4032]",
+        "[4032]",
+        "[64]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261129,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 62,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004045397043228149
+    },
+    {
+      "operator": "graclus",
+      "case": 27,
+      "document_row": [
+        "[4032]",
+        "[4032]",
+        "[4032]",
+        "[64]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261129,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 33,
+        "paired_nodes": 62,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.004555586725473404
+    },
+    {
+      "operator": "graclus",
+      "case": 27,
+      "document_row": [
+        "[4032]",
+        "[4032]",
+        "[4032]",
+        "[64]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261129,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 32,
+        "paired_nodes": 64,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.004226185847073793
+    },
+    {
+      "operator": "graclus",
+      "case": 27,
+      "document_row": [
+        "[4032]",
+        "[4032]",
+        "[4032]",
+        "[64]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261129,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 32,
+        "paired_nodes": 64,
+        "greedy_rounds": 2
+      },
+      "seconds": 0.004100407008081675
+    },
+    {
+      "operator": "graclus",
+      "case": 28,
+      "document_row": [
+        "[16256]",
+        "[16256]",
+        "[16256]",
+        "[128]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261130,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 65,
+        "paired_nodes": 126,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.009599125012755394
+    },
+    {
+      "operator": "graclus",
+      "case": 28,
+      "document_row": [
+        "[16256]",
+        "[16256]",
+        "[16256]",
+        "[128]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261130,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 64,
+        "paired_nodes": 128,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.009079694282263517
+    },
+    {
+      "operator": "graclus",
+      "case": 28,
+      "document_row": [
+        "[16256]",
+        "[16256]",
+        "[16256]",
+        "[128]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261130,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 65,
+        "paired_nodes": 126,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.009265373926609755
+    },
+    {
+      "operator": "graclus",
+      "case": 28,
+      "document_row": [
+        "[16256]",
+        "[16256]",
+        "[16256]",
+        "[128]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261130,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 65,
+        "paired_nodes": 126,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.00934813404455781
+    },
+    {
+      "operator": "graclus",
+      "case": 28,
+      "document_row": [
+        "[16256]",
+        "[16256]",
+        "[16256]",
+        "[128]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261130,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 65,
+        "paired_nodes": 126,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.009779585059732199
+    },
+    {
+      "operator": "graclus",
+      "case": 28,
+      "document_row": [
+        "[16256]",
+        "[16256]",
+        "[16256]",
+        "[128]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261130,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 65,
+        "paired_nodes": 126,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.009757275227457285
+    },
+    {
+      "operator": "graclus",
+      "case": 29,
+      "document_row": [
+        "[65280]",
+        "[65280]",
+        "[65280]",
+        "[256]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261131,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 129,
+        "paired_nodes": 254,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.03418361209332943
+    },
+    {
+      "operator": "graclus",
+      "case": 29,
+      "document_row": [
+        "[65280]",
+        "[65280]",
+        "[65280]",
+        "[256]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261131,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 128,
+        "paired_nodes": 256,
+        "greedy_rounds": 4
+      },
+      "seconds": 0.030777846928685904
+    },
+    {
+      "operator": "graclus",
+      "case": 29,
+      "document_row": [
+        "[65280]",
+        "[65280]",
+        "[65280]",
+        "[256]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261131,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 128,
+        "paired_nodes": 256,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.03342805057764053
+    },
+    {
+      "operator": "graclus",
+      "case": 29,
+      "document_row": [
+        "[65280]",
+        "[65280]",
+        "[65280]",
+        "[256]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261131,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 129,
+        "paired_nodes": 254,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.03491358319297433
+    },
+    {
+      "operator": "graclus",
+      "case": 29,
+      "document_row": [
+        "[65280]",
+        "[65280]",
+        "[65280]",
+        "[256]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261131,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 129,
+        "paired_nodes": 254,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.036413406021893024
+    },
+    {
+      "operator": "graclus",
+      "case": 29,
+      "document_row": [
+        "[65280]",
+        "[65280]",
+        "[65280]",
+        "[256]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261131,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 129,
+        "paired_nodes": 254,
+        "greedy_rounds": 3
+      },
+      "seconds": 0.036745195742696524
+    },
+    {
+      "operator": "graclus",
+      "case": 30,
+      "document_row": [
+        "[261120]",
+        "[261120]",
+        "[261120]",
+        "[512]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261132,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 257,
+        "paired_nodes": 510,
+        "greedy_rounds": 6
+      },
+      "seconds": 0.18337947921827435
+    },
+    {
+      "operator": "graclus",
+      "case": 30,
+      "document_row": [
+        "[261120]",
+        "[261120]",
+        "[261120]",
+        "[512]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261132,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 256,
+        "paired_nodes": 512,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.16970410803332925
+    },
+    {
+      "operator": "graclus",
+      "case": 30,
+      "document_row": [
+        "[261120]",
+        "[261120]",
+        "[261120]",
+        "[512]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261132,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 256,
+        "paired_nodes": 512,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.19026649976149201
+    },
+    {
+      "operator": "graclus",
+      "case": 30,
+      "document_row": [
+        "[261120]",
+        "[261120]",
+        "[261120]",
+        "[512]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261132,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 256,
+        "paired_nodes": 512,
+        "greedy_rounds": 6
+      },
+      "seconds": 0.18710944522172213
+    },
+    {
+      "operator": "graclus",
+      "case": 30,
+      "document_row": [
+        "[261120]",
+        "[261120]",
+        "[261120]",
+        "[512]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261132,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 256,
+        "paired_nodes": 512,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.19446340622380376
+    },
+    {
+      "operator": "graclus",
+      "case": 30,
+      "document_row": [
+        "[261120]",
+        "[261120]",
+        "[261120]",
+        "[512]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261132,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 256,
+        "paired_nodes": 512,
+        "greedy_rounds": 5
+      },
+      "seconds": 0.19606313901022077
+    },
+    {
+      "operator": "graclus",
+      "case": 31,
+      "document_row": [
+        "[1046528]",
+        "[1046528]",
+        "[1046528]",
+        "[1024]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261133,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 512,
+        "paired_nodes": 1024,
+        "greedy_rounds": 6
+      },
+      "seconds": 0.9068669099360704
+    },
+    {
+      "operator": "graclus",
+      "case": 31,
+      "document_row": [
+        "[1046528]",
+        "[1046528]",
+        "[1046528]",
+        "[1024]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261133,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 512,
+        "paired_nodes": 1024,
+        "greedy_rounds": 6
+      },
+      "seconds": 0.9584503890946507
+    },
+    {
+      "operator": "graclus",
+      "case": 31,
+      "document_row": [
+        "[1046528]",
+        "[1046528]",
+        "[1046528]",
+        "[1024]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261133,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 513,
+        "paired_nodes": 1022,
+        "greedy_rounds": 7
+      },
+      "seconds": 0.8946887319907546
+    },
+    {
+      "operator": "graclus",
+      "case": 31,
+      "document_row": [
+        "[1046528]",
+        "[1046528]",
+        "[1046528]",
+        "[1024]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261133,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 513,
+        "paired_nodes": 1022,
+        "greedy_rounds": 6
+      },
+      "seconds": 0.8600685587152839
+    },
+    {
+      "operator": "graclus",
+      "case": 31,
+      "document_row": [
+        "[1046528]",
+        "[1046528]",
+        "[1046528]",
+        "[1024]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261133,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 512,
+        "paired_nodes": 1024,
+        "greedy_rounds": 2
+      },
+      "seconds": 1.1976861241273582
+    },
+    {
+      "operator": "graclus",
+      "case": 31,
+      "document_row": [
+        "[1046528]",
+        "[1046528]",
+        "[1046528]",
+        "[1024]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261133,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 512,
+        "paired_nodes": 1024,
+        "greedy_rounds": 2
+      },
+      "seconds": 1.2200214769691229
+    },
+    {
+      "operator": "graclus",
+      "case": 32,
+      "document_row": [
+        "[4192256]",
+        "[4192256]",
+        "[4192256]",
+        "[2048]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261134,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1024,
+        "paired_nodes": 2048,
+        "greedy_rounds": 6
+      },
+      "seconds": 4.798671584110707
+    },
+    {
+      "operator": "graclus",
+      "case": 32,
+      "document_row": [
+        "[4192256]",
+        "[4192256]",
+        "[4192256]",
+        "[2048]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261134,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1025,
+        "paired_nodes": 2046,
+        "greedy_rounds": 6
+      },
+      "seconds": 4.538375987671316
+    },
+    {
+      "operator": "graclus",
+      "case": 32,
+      "document_row": [
+        "[4192256]",
+        "[4192256]",
+        "[4192256]",
+        "[2048]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261134,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1024,
+        "paired_nodes": 2048,
+        "greedy_rounds": 7
+      },
+      "seconds": 4.705156551674008
+    },
+    {
+      "operator": "graclus",
+      "case": 32,
+      "document_row": [
+        "[4192256]",
+        "[4192256]",
+        "[4192256]",
+        "[2048]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261134,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1025,
+        "paired_nodes": 2046,
+        "greedy_rounds": 7
+      },
+      "seconds": 4.616204936988652
+    },
+    {
+      "operator": "graclus",
+      "case": 32,
+      "document_row": [
+        "[4192256]",
+        "[4192256]",
+        "[4192256]",
+        "[2048]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261134,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1025,
+        "paired_nodes": 2046,
+        "greedy_rounds": 4
+      },
+      "seconds": 11.92250053724274
+    },
+    {
+      "operator": "graclus",
+      "case": 32,
+      "document_row": [
+        "[4192256]",
+        "[4192256]",
+        "[4192256]",
+        "[2048]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261134,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 1025,
+        "paired_nodes": 2046,
+        "greedy_rounds": 4
+      },
+      "seconds": 12.080677459016442
+    },
+    {
+      "operator": "graclus",
+      "case": 33,
+      "document_row": [
+        "[16773120]",
+        "[16773120]",
+        "[16773120]",
+        "[4096]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261135,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2048,
+        "paired_nodes": 4096,
+        "greedy_rounds": 7
+      },
+      "seconds": 25.622003209777176
+    },
+    {
+      "operator": "graclus",
+      "case": 33,
+      "document_row": [
+        "[16773120]",
+        "[16773120]",
+        "[16773120]",
+        "[4096]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261135,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2048,
+        "paired_nodes": 4096,
+        "greedy_rounds": 5
+      },
+      "seconds": 25.64326756214723
+    },
+    {
+      "operator": "graclus",
+      "case": 33,
+      "document_row": [
+        "[16773120]",
+        "[16773120]",
+        "[16773120]",
+        "[4096]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261135,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2048,
+        "paired_nodes": 4096,
+        "greedy_rounds": 8
+      },
+      "seconds": 25.76485354732722
+    },
+    {
+      "operator": "graclus",
+      "case": 33,
+      "document_row": [
+        "[16773120]",
+        "[16773120]",
+        "[16773120]",
+        "[4096]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261135,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2049,
+        "paired_nodes": 4094,
+        "greedy_rounds": 8
+      },
+      "seconds": 26.53503400972113
+    },
+    {
+      "operator": "graclus",
+      "case": 33,
+      "document_row": [
+        "[16773120]",
+        "[16773120]",
+        "[16773120]",
+        "[4096]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261135,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2048,
+        "paired_nodes": 4096,
+        "greedy_rounds": 2
+      },
+      "seconds": 103.43161598732695
+    },
+    {
+      "operator": "graclus",
+      "case": 33,
+      "document_row": [
+        "[16773120]",
+        "[16773120]",
+        "[16773120]",
+        "[4096]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261135,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 2048,
+        "paired_nodes": 4096,
+        "greedy_rounds": 2
+      },
+      "seconds": 104.29505173908547
+    },
+    {
+      "operator": "graclus",
+      "case": 34,
+      "document_row": [
+        "[2000000]",
+        "[2000000]",
+        "[2000000]",
+        "[500000]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261136,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 300080,
+        "paired_nodes": 399840,
+        "greedy_rounds": 4
+      },
+      "seconds": 2.291456411127001
+    },
+    {
+      "operator": "graclus",
+      "case": 34,
+      "document_row": [
+        "[2000000]",
+        "[2000000]",
+        "[2000000]",
+        "[500000]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261136,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 299775,
+        "paired_nodes": 400450,
+        "greedy_rounds": 4
+      },
+      "seconds": 2.1849992158822715
+    },
+    {
+      "operator": "graclus",
+      "case": 34,
+      "document_row": [
+        "[2000000]",
+        "[2000000]",
+        "[2000000]",
+        "[500000]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261136,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 300020,
+        "paired_nodes": 399960,
+        "greedy_rounds": 4
+      },
+      "seconds": 2.1576983062550426
+    },
+    {
+      "operator": "graclus",
+      "case": 34,
+      "document_row": [
+        "[2000000]",
+        "[2000000]",
+        "[2000000]",
+        "[500000]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261136,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 299916,
+        "paired_nodes": 400168,
+        "greedy_rounds": 4
+      },
+      "seconds": 2.341154403053224
+    },
+    {
+      "operator": "graclus",
+      "case": 34,
+      "document_row": [
+        "[2000000]",
+        "[2000000]",
+        "[2000000]",
+        "[500000]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261136,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 299905,
+        "paired_nodes": 400190,
+        "greedy_rounds": 4
+      },
+      "seconds": 2.1114388601854444
+    },
+    {
+      "operator": "graclus",
+      "case": 34,
+      "document_row": [
+        "[2000000]",
+        "[2000000]",
+        "[2000000]",
+        "[500000]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261136,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 299905,
+        "paired_nodes": 400190,
+        "greedy_rounds": 4
+      },
+      "seconds": 2.1682152710855007
+    },
+    {
+      "operator": "graclus",
+      "case": 35,
+      "document_row": [
+        "[4000000]",
+        "[4000000]",
+        "[4000000]",
+        "[1000000]"
+      ],
+      "weight_dtype": "float16",
+      "index_dtype": "int64",
+      "seed": 20261137,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 600357,
+        "paired_nodes": 799286,
+        "greedy_rounds": 4
+      },
+      "seconds": 4.847938837017864
+    },
+    {
+      "operator": "graclus",
+      "case": 35,
+      "document_row": [
+        "[4000000]",
+        "[4000000]",
+        "[4000000]",
+        "[1000000]"
+      ],
+      "weight_dtype": "bfloat16",
+      "index_dtype": "int64",
+      "seed": 20261137,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 600043,
+        "paired_nodes": 799914,
+        "greedy_rounds": 4
+      },
+      "seconds": 4.8172709522768855
+    },
+    {
+      "operator": "graclus",
+      "case": 35,
+      "document_row": [
+        "[4000000]",
+        "[4000000]",
+        "[4000000]",
+        "[1000000]"
+      ],
+      "weight_dtype": "float32",
+      "index_dtype": "int64",
+      "seed": 20261137,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 600010,
+        "paired_nodes": 799980,
+        "greedy_rounds": 4
+      },
+      "seconds": 4.812298804987222
+    },
+    {
+      "operator": "graclus",
+      "case": 35,
+      "document_row": [
+        "[4000000]",
+        "[4000000]",
+        "[4000000]",
+        "[1000000]"
+      ],
+      "weight_dtype": "float64",
+      "index_dtype": "int64",
+      "seed": 20261137,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 599948,
+        "paired_nodes": 800104,
+        "greedy_rounds": 4
+      },
+      "seconds": 4.795704311225563
+    },
+    {
+      "operator": "graclus",
+      "case": 35,
+      "document_row": [
+        "[4000000]",
+        "[4000000]",
+        "[4000000]",
+        "[1000000]"
+      ],
+      "weight_dtype": "int32",
+      "index_dtype": "int64",
+      "seed": 20261137,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 599600,
+        "paired_nodes": 800800,
+        "greedy_rounds": 4
+      },
+      "seconds": 4.818306973204017
+    },
+    {
+      "operator": "graclus",
+      "case": 35,
+      "document_row": [
+        "[4000000]",
+        "[4000000]",
+        "[4000000]",
+        "[1000000]"
+      ],
+      "weight_dtype": "int64",
+      "index_dtype": "int64",
+      "seed": 20261137,
+      "weighted": true,
+      "data": "pyg-lib symmetric random edges and uniform nonnegative weights",
+      "status": "passed",
+      "rule": "exact_matching_and_weighted_greedy_contract",
+      "details": {
+        "groups": 599600,
+        "paired_nodes": 800800,
+        "greedy_rounds": 4
+      },
+      "seconds": 4.801001559011638
+    }
+  ]
+}

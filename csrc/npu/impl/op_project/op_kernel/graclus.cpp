@@ -612,12 +612,12 @@ class KernelGraclus {
               }
             }
             PipeBarrier<PIPE_ALL>();
-            ReduceMax(reduced,scores,tmp,padded,false);PipeBarrier<PIPE_ALL>();
+            ReduceMax(reduced,scores,tmp,padded,false);Sync<HardEvent::V_S>();
             float maximum=reduced.GetValue(0);
             if(maximum<0 || maximum<best) continue;
             if(vectorFilter) {
               auto mask=edges.Get<uint8_t>();
-              CompareScalar(mask,scores,maximum,CMPMODE::EQ,padded);PipeBarrier<PIPE_ALL>();
+              CompareScalar(mask,scores,maximum,CMPMODE::EQ,padded);Sync<HardEvent::V_S>();
               auto words=mask.ReinterpretCast<uint32_t>();
               for(uint32_t word=0;word<(len+31)/32;word++) {
                 uint32_t bits=words.GetValue(word);
@@ -647,6 +647,27 @@ class KernelGraclus {
                   haveWide=true;bestWide=key;chosen=v;
                 }
               } else if(TieBetter(u,v,chosen)) chosen=v;
+            }
+          }
+        }
+        if constexpr(Weighted && !Wide && Mode==1) {
+          // A vector mask must never turn an available edge into a permanent
+          // singleton. Verify an empty proposal directly from the original
+          // row, with an explicit DMA-to-scalar event. This also covers a
+          // reduction/mask corner without changing the common vector path.
+          if(chosen<0) {
+            for(uint32_t off=first;off<last;off+=tile) {
+              const uint32_t len=last-off<tile?last-off:tile;
+              CopyIn(columns,ci[off],len);CopyIn(floatWeight,wf[off],len);
+              Sync<HardEvent::MTE2_S>();
+              auto words=columns.ReinterpretCast<int32_t>();
+              for(uint32_t j=0;j<len;++j) {
+                const uint32_t v=uint32_t(words.GetValue(2*j));
+                const float w=floatWeight.GetValue(j);
+                if(v==u || !(w>=0) || Status<Mode>(v)>=0)continue;
+                if(w>best || (w==best && TieBetter(u,v,chosen))) {best=w;chosen=v;}
+              }
+              Sync<HardEvent::S_MTE2>();
             }
           }
         }

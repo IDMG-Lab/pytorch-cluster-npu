@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "project": "/home/ma-user/work/pytorch-cluster-npu",
+  "imported_module": "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/__init__.py",
+  "regressions": 327,
+  "controls": 7,
+  "smoke": {
+    "fps": true,
+    "grid_cluster": true,
+    "nearest": true,
+    "knn": true,
+    "radius": true,
+    "graclus": true,
+    "random_walk": true,
+    "subgraph": true
+  },
+  "native_runtime_local": true,
+  "source_and_binary_files_verified": 107,
+  "native_files_verified": 43,
+  "full_matrix_rerun": false,
+  "loaded_libraries": [
+    "/home/ma-user/work/pytorch-cluster-npu/.precision_910b_runtime/opp/vendors/precision910bfix/op_api/lib/libcust_opapi.so",
+    "/home/ma-user/work/pytorch-cluster-npu/.precision_910b_runtime/opp/vendors/precision910bfix/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64/libcust_opmaster_rt2.0.so",
+    "/home/ma-user/work/pytorch-cluster-npu/.precision_910b_runtime/opp/vendors/precision910bfix/op_proto/lib/linux/aarch64/libcust_opsproto_rt2.0.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_fps_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_graclus_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_grid_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_knn_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_nearest_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_radius_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_rw_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_sampler_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_subgraph_npu.so",
+    "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_version_npu.so"
+  ],
+  "layout_verified": true,
+  "worker_probes": {
+    "nearest": {
+      "records": 8,
+      "passed": true
+    },
+    "graclus": {
+      "records": 6,
+      "passed": true
+    },
+    "knn": {
+      "records": 24,
+      "passed": true
+    },
+    "fps": {
+      "records": 24,
+      "passed": true
+    },
+    "radius": {
+      "records": 40,
+      "passed": true
+    },
+    "grid_cluster": {
+      "records": 24,
+      "passed": true
+    },
+    "random_walk": {
+      "records": 2,
+      "passed": true
+    },
+    "subgraph": {
+      "records": 12,
+      "passed": true
+    },
+    "radius_int32": {
+      "records": 10,
+      "passed": true
+    }
+  },
+  "performance_cases": 84,
+  "performance_passed": 84,
+  "workflow_probe_records": 150,
+  "harness_tests": 14
+}

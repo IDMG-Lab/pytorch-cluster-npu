@@ -5,7 +5,7 @@ import pytest
 import torch
 import torch_npu  # noqa: F401
 import torch_cluster
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'benchmarks'))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from graclus_reference import assert_matching, matching_reference, phase_reference
 
 pytestmark = pytest.mark.skipif(not torch.npu.is_available(), reason='NPU unavailable')

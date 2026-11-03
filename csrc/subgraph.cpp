@@ -96,3 +96,24 @@ static SubgraphResult subgraph(torch::Tensor rowptr, torch::Tensor col,
 
 static auto registry =
     torch::RegisterOperators().op("torch_cluster::subgraph", &subgraph);
+
+static SubgraphResult subgraph_950(torch::Tensor rowptr, torch::Tensor col,
+                                  torch::Tensor nodes) {
+#ifdef WITH_NPU
+  return subgraph_950_npu(rowptr, col, nodes);
+#else
+  AT_ERROR("subgraph_950 requires an NPU build");
+#endif
+}
+
+static SubgraphResult subgraph_910b(torch::Tensor rowptr, torch::Tensor col,
+                                   torch::Tensor nodes) {
+#ifdef WITH_NPU
+  return subgraph_910b_npu(rowptr, col, nodes);
+#else
+  AT_ERROR("subgraph_910b requires an NPU build");
+#endif
+}
+
+static auto registry_950 = torch::RegisterOperators().op("torch_cluster::subgraph_950", &subgraph_950);
+static auto registry_910b = torch::RegisterOperators().op("torch_cluster::subgraph_910b", &subgraph_910b);

@@ -32,7 +32,7 @@ def graclus_cluster(
     """
 
     if num_nodes is None:
-        num_nodes = max(int(row.max()), int(col.max())) + 1
+        num_nodes = max(int(row.max()), int(col.max())) + 1 if row.numel() else 0
 
     # Remove self-loops.
     mask = row != col
@@ -40,6 +40,11 @@ def graclus_cluster(
 
     if weight is not None:
         weight = weight[mask]
+
+    # Empty graphs and graphs reduced to self-loops contain only isolated
+    # vertices. In particular, avoid CANN's unsupported randperm(0).
+    if row.numel() == 0:
+        return torch.arange(num_nodes, dtype=torch.long, device=row.device)
 
     # Randomly shuffle nodes.
     if weight is None:

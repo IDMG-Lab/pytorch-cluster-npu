@@ -1,0 +1,16 @@
+START subgraph	0	(65536, 4194304, 6400)	torch.int32
+subgraph	0	(65536, 4194304, 6400)	torch.int32	2.292626 ms
+START subgraph	1	(65536, 16777216, 6400)	torch.int32
+subgraph	1	(65536, 16777216, 6400)	torch.int32	5.074346 ms
+START subgraph	2	(65536, 2097152, 32768)	torch.int32
+subgraph	2	(65536, 2097152, 32768)	torch.int32	9.317874 ms
+START subgraph	3	(65536, 2097152, 57600)	torch.int32
+subgraph	3	(65536, 2097152, 57600)	torch.int32	4.587184 ms
+START subgraph	4	(65536, 2097152, 65536)	torch.int32
+subgraph	4	(65536, 2097152, 65536)	torch.int32	3.315235 ms
+START subgraph	5	(65536, 2097152, 6400)	torch.int32
+subgraph	5	(65536, 2097152, 6400)	torch.int32	1.330157 ms
+START subgraph	6	(1000000, 8388608, 100000)	torch.int32
+subgraph	6	(1000000, 8388608, 100000)	torch.int32	11.919088 ms
+START subgraph	7	(1000000, 1048576, 100000)	torch.int32
+subgraph	7	(1000000, 1048576, 100000)	torch.int32	3.807254 ms

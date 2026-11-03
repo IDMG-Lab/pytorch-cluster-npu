@@ -1,0 +1,28 @@
+{
+  "backup": "/home/ma-user/work/pytorch-cluster-npu-cleanup-backup/project",
+  "removed": [
+    "validation",
+    "test",
+    "decision_precision.py",
+    "test_precision_repairs.py",
+    "test_precision_boundaries.py",
+    "env_cann83.sh",
+    "CANN9\u5b9e\u9a8c\u73af\u5883.md",
+    "NPU\u6d4b\u8bd5\u5165\u53e3.md",
+    "\u9a8c\u6536.docx",
+    "pyg-lib\u6027\u80fd\u6d4b\u8bd5\u7ed3\u679c.md",
+    "pyg-lib_cuda\u6d4b\u8bd5\u811a\u672c.zip",
+    "fusion_result.json",
+    "npu_cann9_opt_20261016_final.tar.gz",
+    "npu_cann9_opt_20261016_archives_sha256.json",
+    "npu_cann9_opt_20261016",
+    "npu_cann9_retest_20261016_182330",
+    "npu_cann9_opt_20261016_records.zip",
+    "npu_cann9_retest_20261016_182330_records.tar.gz",
+    "npu_cann9_retest_20261016_182330_evidence.tar.gz",
+    "npu_optimization_20261016",
+    "npu_performance_20261013",
+    "npu_performance_20261016"
+  ],
+  "bytes_removed": 151635959
+}

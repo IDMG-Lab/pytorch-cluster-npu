@@ -22,6 +22,7 @@ public:
     py.SetGlobalBuffer((__gm__ int64_t*)ptrY, batches + 1);
     output.SetGlobalBuffer((__gm__ int64_t*)out,
                            static_cast<uint64_t>(2) * m * k);
+    pipe.InitBuffer(outputBuf,((k+3)/4*4)*sizeof(int64_t));
   }
 
   __aicore__ inline void Process() {
@@ -67,16 +68,28 @@ public:
           }
         }
       }
-      for (uint32_t slot = 0; slot < k; ++slot) {
-        const uint64_t position = static_cast<uint64_t>(queryId) * k + slot;
-        output.SetValue(position, queryId);
-        output.SetValue(plane + position, bestId[slot]);
-      }
+      const uint64_t position=static_cast<uint64_t>(queryId)*k;
+      auto local=outputBuf.Get<int64_t>();
+      for(uint32_t slot=0;slot<k;++slot)local.SetValue(slot,int64_t(queryId));
+      Sync<HardEvent::S_MTE3>();
+      DataCopyExtParams copy{1,uint32_t(k*sizeof(int64_t)),0,0,0};
+      DataCopyPad(output[position],local,copy);
+      Sync<HardEvent::MTE3_S>();
+      for(uint32_t slot=0;slot<k;++slot)local.SetValue(slot,bestId[slot]);
+      Sync<HardEvent::S_MTE3>();
+      DataCopyPad(output[plane+position],local,copy);
+      Sync<HardEvent::MTE3_S>();
     }
-    DataCacheCleanAndInvalid<int64_t, CacheLine::ENTIRE_DATA_CACHE>(output);
+    // Each DMA writes exactly k elements. Scalar cached GM stores followed
+    // by a whole-cache clean can overwrite another core's neighboring query
+    // (or the other output plane) when their cache lines overlap.
   }
 
 private:
+  template<HardEvent Event>
+  __aicore__ inline void Sync() {SetFlag<Event>(0);WaitFlag<Event>(0);}
+  TPipe pipe;
+  TBuf<TPosition::VECCALC> outputBuf;
   GlobalTensor<float> xGm, yGm;
   GlobalTensor<int64_t> px, py, output;
   float query[1024];

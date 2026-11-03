@@ -1,0 +1,178 @@
+{
+  "controls": {
+    "passed": true,
+    "records": 7
+  },
+  "expected_records": 4315,
+  "full_cann_combination_coverage_claimed": false,
+  "int32_radius": {
+    "complete": true,
+    "expected": 220,
+    "failed_records": [],
+    "passed": true,
+    "records": 220
+  },
+  "matrix_passed": true,
+  "native_matches_tested_revision": true,
+  "operators": {
+    "fps": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 936,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 936,
+      "statuses": {
+        "passed": 936
+      }
+    },
+    "graclus": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 145,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 145,
+      "statuses": {
+        "passed": 145
+      }
+    },
+    "grid_cluster": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 888,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 888,
+      "statuses": {
+        "passed": 888
+      }
+    },
+    "knn": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 936,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 936,
+      "statuses": {
+        "passed": 936
+      }
+    },
+    "nearest": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 312,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 312,
+      "statuses": {
+        "passed": 288,
+        "validation_passed": 24
+      }
+    },
+    "radius": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 880,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 880,
+      "statuses": {
+        "passed": 880
+      }
+    },
+    "random_walk": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 82,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 82,
+      "statuses": {
+        "passed": 82
+      }
+    },
+    "subgraph": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 136,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 136,
+      "statuses": {
+        "exact": 136
+      }
+    }
+  },
+  "precision_passed": true,
+  "regressions": {
+    "expected": 327,
+    "failed_or_skipped": [],
+    "passed": true,
+    "records": 327,
+    "source_matches_tested_revision": true,
+    "source_predates_execution": true,
+    "test_sha256": {
+      "Test/precision/regression/test_boundaries.py": "c00fdc529ea414af2059939bdba8832c09ef1359b625f7f1edf781b6085adc77",
+      "Test/precision/regression/test_repairs.py": "a6ce19c9dace4c11ab110ac8b5a1fc90030d1b4fecee17472a5851a40a3927e6"
+    }
+  },
+  "scope": "284 functional document rows, uploaded pyg-lib attribute combinations, existing subgraph additions",
+  "source_matches_tested_revision": true,
+  "original_checkout_verification": {
+    "project": "/home/ma-user/work/pytorch-cluster-npu",
+    "regressions": 327,
+    "controls": 7,
+    "smoke": {
+      "fps": true,
+      "grid_cluster": true,
+      "nearest": true,
+      "knn": true,
+      "radius": true,
+      "graclus": true,
+      "random_walk": true,
+      "subgraph": true
+    },
+    "byte_identical_tested_files": 107,
+    "byte_identical_native_files": 43,
+    "full_matrix_rerun": false,
+    "loaded_libraries": [
+      "/home/ma-user/work/pytorch-cluster-npu/.precision_910b_runtime/opp/vendors/precision910bfix/op_api/lib/libcust_opapi.so",
+      "/home/ma-user/work/pytorch-cluster-npu/.precision_910b_runtime/opp/vendors/precision910bfix/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64/libcust_opmaster_rt2.0.so",
+      "/home/ma-user/work/pytorch-cluster-npu/.precision_910b_runtime/opp/vendors/precision910bfix/op_proto/lib/linux/aarch64/libcust_opsproto_rt2.0.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_fps_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_graclus_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_grid_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_knn_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_nearest_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_radius_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_rw_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_sampler_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_subgraph_npu.so",
+      "/home/ma-user/work/pytorch-cluster-npu/torch_cluster/_version_npu.so"
+    ]
+  },
+  "result_origin": {
+    "matrix": "Accepted reference, unchanged runtime artifacts",
+    "int32_radius": "Accepted reference, unchanged runtime artifacts",
+    "regressions": "Rerun through Test/precision/run.py",
+    "controls": "Rerun through Test/precision/run.py"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "precision_gate_sha256": "9b8fff926991f15e15b3b266440e23a9e503e65013605911be43be811ac8962c",
+  "runner_sha256": "32739311ac4979bacef4bb457a69604fb7dc9d4d4bd1b6474fdf27aa826d51b6",
+  "geometry_script_sha256": "52489648b9e204fe643b5bb14af3df71afde33996919c86bc505317a7532b858",
+  "subgraph_script_sha256": "93850f63e06c27ffab0f9543989111d5b68eca5f9d14a3de1b0a1d3bb9d9a853",
+  "baseline_sha256": {
+    "geometry_cuda.tsv": "40689168776df8925d7c4b0297665fe34c3efbee8e6fe773d8b975a12587b20d",
+    "subgraph_cpu.tsv": "0839a69e296e15cdeef7da7d7a0689a990882c5cdab764f0326f2df7ae1e5ba9"
+  },
+  "device": "Ascend910B1",
+  "architecture": "aarch64",
+  "torch": "2.7.1+cpu",
+  "torch_npu": "2.7.1.post4",
+  "warmup": 20,
+  "iterations": 100
+}

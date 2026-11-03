@@ -1,0 +1,48 @@
+{
+  "performance_cases": 84,
+  "performance_passed": 84,
+  "performance_requirement_met": true,
+  "performance_by_operator": {
+    "fps": {
+      "cases": 11,
+      "passed": 11,
+      "min_relative_performance": 0.43940087919958226
+    },
+    "grid_cluster": {
+      "cases": 13,
+      "passed": 13,
+      "min_relative_performance": 0.18133468536409092
+    },
+    "knn": {
+      "cases": 10,
+      "passed": 10,
+      "min_relative_performance": 0.32741084371746804
+    },
+    "nearest": {
+      "cases": 11,
+      "passed": 11,
+      "min_relative_performance": 0.10462383791132703
+    },
+    "graclus_cluster": {
+      "cases": 11,
+      "passed": 11,
+      "min_relative_performance": 0.10942132487303242
+    },
+    "radius": {
+      "cases": 9,
+      "passed": 9,
+      "min_relative_performance": 0.39598830263250967
+    },
+    "random_walk": {
+      "cases": 11,
+      "passed": 11,
+      "min_relative_performance": 0.10576452865714175
+    },
+    "subgraph": {
+      "cases": 8,
+      "passed": 8,
+      "min_relative_performance": 0.5898800120813477
+    }
+  },
+  "result_origin": "Measured through Test/performance/run.py in the original checkout after directory consolidation."
+}

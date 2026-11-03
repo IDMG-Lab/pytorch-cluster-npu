@@ -20,6 +20,8 @@
 
 #include "knn_npu.h"
 #include "include/pytorch_npu_helper.hpp"
+#include "include/precise_neighbors.hpp"
+#include "include/finite_coordinates.hpp"
 #include <algorithm>
 #include <climits>
 #include <vector>
@@ -138,6 +140,33 @@ torch::Tensor knn_npu(torch::Tensor x, torch::Tensor y,
   TORCH_CHECK(k > 0 && k <= 100, "knn_npu: k must be in [1,100]");
   TORCH_CHECK(x.size(0) <= INT32_MAX && y.size(0) <= INT32_MAX && x.size(1) <= INT32_MAX,
               "knn_npu: dimensions exceed tiling range");
+  TORCH_CHECK(x.scalar_type()==y.scalar_type() && x.is_floating_point(),
+              "knn_npu: coordinates must have the same floating dtype");
+  torch_cluster_npu::check_finite_coordinates(x,y);
+  if(x.scalar_type()!=at::kFloat) {
+    if(cosine) {
+      x=torch_cluster_npu::as_double(x);y=torch_cluster_npu::as_double(y);
+      auto xn=x.square().sum(1,true).sqrt(),yn=y.square().sum(1,true).sqrt();
+      TORCH_CHECK(!xn.eq(0).any().item<bool>() && !yn.eq(0).any().item<bool>(),
+                  "knn_npu: cosine distance is undefined for zero vectors");
+      x=x/xn;y=y/yn;
+    }
+    auto px=ptr_x ? ptr_x->cpu().to(at::kLong).contiguous() : at::tensor({0L,x.size(0)},at::kLong);
+    auto py=ptr_y ? ptr_y->cpu().to(at::kLong).contiguous() : at::tensor({0L,y.size(0)},at::kLong);
+    TORCH_CHECK(px.numel()==py.numel() && px.numel()>=2,"knn_npu: invalid batch pointers");
+    const auto* ax=px.data_ptr<int64_t>();const auto* ay=py.data_ptr<int64_t>();
+    std::vector<at::Tensor> chunks;
+    for(int64_t b=0;b+1<px.numel();++b) {
+      const int64_t count=std::min<int64_t>(k,ax[b+1]-ax[b]);
+      if(!count || ay[b]==ay[b+1])continue;
+      auto selected=torch_cluster_npu::precise_neighbors(x.slice(0,ax[b],ax[b+1]),
+                                                         y.slice(0,ay[b],ay[b+1]),count)+ax[b];
+      auto queries=at::arange(ay[b],ay[b+1],y.options().dtype(at::kLong)).unsqueeze(1).expand_as(selected);
+      chunks.push_back(at::stack({queries.reshape({-1}),selected.reshape({-1})}));
+    }
+    if(chunks.empty())return at::empty({2,0},y.options().dtype(at::kLong));
+    return chunks.size()==1?chunks[0]:at::cat(chunks,1);
+  }
   if (!ptr_x.has_value() && !ptr_y.has_value() && !cosine &&
       x.scalar_type() == at::kFloat && y.scalar_type() == at::kFloat &&
       k <= x.size(0) && x.size(0) <= 16777216 && y.size(0) > 0 &&

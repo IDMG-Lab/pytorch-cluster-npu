@@ -1,0 +1,139 @@
+{
+  "controls": {
+    "passed": true,
+    "records": 7
+  },
+  "expected_records": 4315,
+  "full_cann_combination_coverage_claimed": false,
+  "int32_radius": {
+    "complete": true,
+    "expected": 220,
+    "failed_records": [],
+    "passed": true,
+    "records": 220
+  },
+  "matrix_passed": true,
+  "native_matches_tested_revision": true,
+  "operators": {
+    "fps": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 936,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 936,
+      "statuses": {
+        "passed": 936
+      }
+    },
+    "graclus": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 145,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 145,
+      "statuses": {
+        "passed": 145
+      }
+    },
+    "grid_cluster": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 888,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 888,
+      "statuses": {
+        "passed": 888
+      }
+    },
+    "knn": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 936,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 936,
+      "statuses": {
+        "passed": 936
+      }
+    },
+    "nearest": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 312,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 312,
+      "statuses": {
+        "passed": 288,
+        "validation_passed": 24
+      }
+    },
+    "radius": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 880,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 880,
+      "statuses": {
+        "passed": 880
+      }
+    },
+    "random_walk": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 82,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 82,
+      "statuses": {
+        "passed": 82
+      }
+    },
+    "subgraph": {
+      "complete": true,
+      "duplicates": 0,
+      "expected": 136,
+      "extra": [],
+      "failed_records": [],
+      "missing": [],
+      "passed": true,
+      "records": 136,
+      "statuses": {
+        "exact": 136
+      }
+    }
+  },
+  "precision_passed": true,
+  "regressions": {
+    "expected": 327,
+    "failed_or_skipped": [],
+    "passed": true,
+    "records": 327,
+    "source_matches_tested_revision": true,
+    "source_predates_execution": true,
+    "test_sha256": {
+      "test_precision_boundaries.py": "fd7e60652f72fb0bff3c630e59680fe5c48aafe38f47c0df7028160cbf2fa22f",
+      "test_precision_repairs.py": "1e9f6e9e8e8015ad97e92405693f5a90b024535e8c3ebbb9ced8cd3f90eced94"
+    }
+  },
+  "scope": "284 functional document rows, uploaded pyg-lib attribute combinations, existing subgraph additions",
+  "source_matches_tested_revision": true
+}
